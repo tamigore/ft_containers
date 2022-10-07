@@ -16,11 +16,13 @@ NAME = ft_containers
 
 DIR_S = srcs/
 
-SOURCES = stack.cpp
-# main.cpp
+SOURCES =	main.cpp	\
+			stack.cpp	\
+			vector.cpp
 
-HEADER = stack.hpp
-# vector.hpp
+HEADER =	ft.hpp		\
+			stack.hpp	\
+			vector.hpp
 # map.hpp
 
 INC = inc/
@@ -36,7 +38,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CXX) $(OBJS) $(FLAGS) -o $(NAME)
 
-$(OBJS): $(SRCS) $(INC)$(HEADER)
+$(OBJS): $(SRCS)
 	$(CXX) -c $(SRCS) $(FLAGS) -I $(INC)
 
 bonus: all

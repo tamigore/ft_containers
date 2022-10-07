@@ -36,10 +36,10 @@ class MutantStack : public ft::stack<T>
 		iterator end() { return this->c.end(); }
 };
 
-int main()
+int stack_test()
 {
-	ft::stack<int/*, std::vector<int>*/ >	test_stack_int;
-	ft::stack<int/*, std::vector<int>*/ >	f_stack_int;
+	ft::stack<int>							test_stack_int;
+	ft::stack<int>							f_stack_int;
 	ft::stack<Buffer, std::vector<Buffer> >	f_stack_deq_buffer;
 	std::stack<int>							s_stack_int;
 	std::stack<Buffer, std::deque<Buffer> >	s_stack_deq_buffer;
@@ -57,6 +57,7 @@ int main()
 	f_stack_int.push(5);
 	f_stack_int.push(4);
 	f_stack_int.push(5);
+	f_stack_int.push(2);
 
 	s_stack_int.push(100);
 	s_stack_int.push(10);

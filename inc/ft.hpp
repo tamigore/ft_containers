@@ -18,6 +18,9 @@
 #include "iterator.hpp"
 #include "stack.hpp"
 
+int vector_test();
+int stack_test();
+
 namespace ft
 {
     template< class T, class Alloc = T>

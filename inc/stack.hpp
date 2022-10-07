@@ -50,143 +50,48 @@ namespace ft
 
 			void pop() { c.pop_back(); }
 
+		friend bool	operator==(const stack<T, Container> &x, const stack<T, Container> &y)
+		{
+			if (x.c == y.c)
+				return (true);
+			return (false);
+		};
 
+		friend bool	operator<(const stack<T, Container> &x, const stack<T, Container> &y)
+		{
+			if (x.c < y.c)
+				return (true);
+			return (false);
+		};
+
+		friend bool	operator<=(const stack<T, Container> &x, const stack<T, Container> &y)
+		{
+			if (x.c <= y.c)
+				return (true);
+			return (false);
+		};
+
+		friend bool	operator!=(const stack<T, Container> &x, const stack<T, Container> &y)
+		{
+			if (x.c != y.c)
+				return (true);
+			return (false);
+		};
+
+		friend bool	operator>(const stack<T, Container> &x, const stack<T, Container> &y)
+		{
+			if (x.c > y.c)
+				return (true);
+			return (false);
+		};
+
+		friend bool	operator>=(const stack<T, Container> &x, const stack<T, Container> &y)
+		{
+			if (x.c >= y.c)
+				return (true);
+			return (false);
+		};
 	};
-
-	template <class T, class Container>
-	bool	operator==(const stack<T, Container> &x, const stack<T, Container> &y)
-	{
-		if (x == y)
-			return (true);
-		return (false);
-	};
-
-	template <class T, class Container>
-	bool	operator<(const stack<T, Container> &x, const stack<T, Container> &y)
-	{
-		if (x < y)
-			return (true);
-		return (false);
-	};
-
-	template <class T, class Container>
-	bool	operator<=(const stack<T, Container> &x, const stack<T, Container> &y)
-	{
-		if (x <= y)
-			return (true);
-		return (false);
-	};
-
-	template <class T, class Container>
-	bool	operator!=(const stack<T, Container> &x, const stack<T, Container> &y)
-	{
-		if (x != y)
-			return (true);
-		return (false);
-	};
-
-	template <class T, class Container>
-	bool	operator>(const stack<T, Container> &x, const stack<T, Container> &y)
-	{
-		if (x > y)
-			return (true);
-		return (false);
-	};
-
-	template <class T, class Container>
-	bool	operator>=(const stack<T, Container> &x, const stack<T, Container> &y)
-	{
-		if (x >= y)
-			return (true);
-		return (false);
-	};
-
-	// template <class T, class Container>
-	// bool	operator==(const stack<T, Container> &x, const stack<T, Container> &y)
-	// {
-	// 	while (!x.empty() || !y.empty())
-	// 	{
-	// 		if (x.top() != y.top())
-	// 			return (false);
-	// 		x.pop();
-	// 		y.pop();
-	// 	}
-	// 	if (x.empty() && y.empty())
-	// 		return (true);
-	// 	else
-	// 		return (false);
-	// };
-
-	// template <class T, class Container>
-	// bool	operator<(const stack<T, Container> &x, const stack<T, Container> &y)
-	// {
-	// 	while (!x.empty() || !y.empty())
-	// 	{
-	// 		if (x.top() >= y.top())
-	// 			return (false);
-	// 		x.pop();
-	// 		y.pop();
-	// 	}
-	// 	if (x.empty() && !y.empty())
-	// 		return (false);
-	// 	else
-	// 		return (true);
-	// };
-
-	// template <class T, class Container>
-	// bool	operator<=(const stack<T, Container> &x, const stack<T, Container> &y)
-	// {
-	// 	while (!x.empty() || !y.empty())
-	// 	{
-	// 		if (x.top() > y.top())
-	// 			return (false);
-	// 		x.pop();
-	// 		y.pop();
-	// 	}
-	// 	if (x.empty() && !y.empty())
-	// 		return (false);
-	// 	else
-	// 		return (true);
-	// };
-
-	// template <class T, class Container>
-	// bool	operator!=(const stack<T, Container> &x, const stack<T, Container> &y)
-	// {
-	// 	if (!(x == y))
-	// 		return (true);
-	// 	return (false);
-	// };
-
-	// template <class T, class Container>
-	// bool	operator>(const stack<T, Container> &x, const stack<T, Container> &y)
-	// {
-	// 	while (!x.empty() || !y.empty())
-	// 	{
-	// 		if (x.top() <= y.top())
-	// 			return (false);
-	// 		x.pop();
-	// 		y.pop();
-	// 	}
-	// 	if (x.empty() && !y.empty())
-	// 		return (true);
-	// 	return (false);
-	// };
-
-	// template <class T, class Container>
-	// bool	operator>=(const stack<T, Container> &x, const stack<T, Container> &y)
-	// {
-	// 	while (!x.empty() || !y.empty())
-	// 	{
-	// 		if (x.top() < y.top())
-	// 			return (false);
-	// 		x.pop();
-	// 		y.pop();
-	// 	}
-	// 	if ((x.empty() && !y.empty()) || (x.empty() && y.empty()))
-	// 		return (true);
-	// 	else
-	// 		return (false);
-	// };
 }
 
 #endif
