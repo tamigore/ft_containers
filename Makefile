@@ -18,11 +18,14 @@ DIR_S = srcs/
 
 SOURCES =	main.cpp	\
 			stack.cpp	\
-			vector.cpp
+			vector.cpp	\
+			pair.cpp
 
 HEADER =	ft.hpp		\
 			stack.hpp	\
-			vector.hpp
+			vector.hpp	\
+			pair.hpp	\
+			usefull.hpp
 # map.hpp
 
 INC = inc/
