@@ -14,6 +14,7 @@
 # define _VECTOR_HPP_
 
 #include <iostream>
+#include <iterator>
 #include <algorithm>
 #include <stdexcept>
 #include <string>
@@ -26,8 +27,8 @@ namespace ft
 	{
 		public:
 			// types:
+			typedef T								value_type;
 			typedef Alloc							allocator_type;
-			typedef typename Alloc::value_type 		value_type; 
 			typedef typename Alloc::reference 		reference;
 			typedef typename Alloc::const_reference	const_reference;
 			typedef typename Alloc::difference_type	difference_type;
@@ -101,7 +102,11 @@ namespace ft
 	};
 
 	template <class T, class Alloc>
-	bool operator==(const vector<T,Alloc>& x, const vector<T,Alloc>& y);
+	bool operator==(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
+	{
+		if (x.)
+	}
+
 	template <class T, class Alloc>
 	bool operator< (const vector<T,Alloc>& x, const vector<T,Alloc>& y);
 	template <class T, class Alloc>

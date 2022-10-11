@@ -5,14 +5,22 @@
 int vector_test()
 {
 	// Create a vector containing integers
-	std::vector<int>	std_vec = {7, 5, 16, 8};
-	ft::vector<int>		ft_vec = {7, 5, 16, 8};
+	std::vector<int>	std_vec;
+	ft::vector<int>		ft_vec;
 
 	// Add two more integers to vector
 	ft_vec.push_back(25);
 	ft_vec.push_back(13);
+	ft_vec.push_back(2);
+	ft_vec.push_back(1);
+	ft_vec.push_back(5);
+	ft_vec.push_back(3);
 	std_vec.push_back(25);
 	std_vec.push_back(13);
+	std_vec.push_back(2);
+	std_vec.push_back(1);
+	std_vec.push_back(5);
+	std_vec.push_back(3);
  
 	// Print out the vector
 	for (int n = 0; n < ft_vec.size() && n < std_vec.size(); n++)

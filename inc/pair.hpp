@@ -5,7 +5,7 @@ namespace ft
 {
 	// Pair<x, y> 
 	template <class T1, class T2>
-	struct pair
+	class pair
 	{
 		public :
 			typedef T1	first_type;

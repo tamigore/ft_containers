@@ -14,7 +14,7 @@ namespace ft
 		return (s.str());
 	}
 
-	// https://cplusplus.com/reference/functional/binary_function/?kw=binary_function
+	//binary_function https://cplusplus.com/reference/functional/binary_function/?kw=binary_function
 	template <class Arg1, class Arg2, class Result>
 	struct binary_function
 	{
@@ -28,6 +28,10 @@ namespace ft
 	{
 		bool operator() (const T& x, const T& y) const { return (x < y); }
 	};
+
+	//enable_if https://en.cppreference.com/w/cpp/types/enable_if
+	template< bool B, class T = void > struct enable_if {};
+	template<class T> struct enable_if<true, T> { typedef T type; };
 }
 
 #endif
