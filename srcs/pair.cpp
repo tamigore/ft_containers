@@ -2,5 +2,6 @@
 
 int pair_test()
 {
+	
 	return (1);
 }
