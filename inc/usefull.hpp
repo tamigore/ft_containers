@@ -2,6 +2,7 @@
 # define _USEFULL_HPP_
 
 # include <iostream>
+# include <strstream>
 
 namespace ft
 {
@@ -10,9 +11,38 @@ namespace ft
 	std::string to_string(T obj)
 	{
 		// Stream used to convert to string
-		std::ostringstream s;
-		s << obj;
-		return (s.str());
+		std::ostringstream ss;
+		ss << obj;
+		return (ss.str());
+	}
+
+	// distance https://en.cppreference.com/w/cpp/iterator/distance
+	template<class It>
+	typename std::iterator_traits<It>::difference_type 
+		do_distance(It first, It last, std::input_iterator_tag)
+	{
+		typename std::iterator_traits<It>::difference_type result = 0;
+		while (first != last)
+		{
+			++first;
+			++result;
+		}
+		return result;
+	}
+	
+	template<class It>
+	typename std::iterator_traits<It>::difference_type 
+		do_distance(It first, It last, std::random_access_iterator_tag)
+	{
+		return last - first;
+	}
+	
+	template<class It>
+	typename std::iterator_traits<It>::difference_type
+		distance(It first, It last)
+	{
+		return do_distance(first, last,
+			typename std::iterator_traits<It>::iterator_category());
 	}
 
 	// binary_function https://cplusplus.com/reference/functional/binary_function/?kw=binary_function
@@ -83,8 +113,7 @@ namespace ft
 	struct is_integral_type<unsigned long long int> : public is_integral_res<true, unsigned long long int> {};
 
 	template <typename T>
-	struct is_integral : public is_integral_type<T> { };
-
+	struct is_integral : public is_integral_type<T> {};
 	// End of is_integral
 }
 
