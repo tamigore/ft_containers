@@ -1,4 +1,4 @@
-#include "../inc/stack.hpp"
+#include "ft.hpp"
 #include <stack>
 #include <iostream>
 #include <string>

@@ -2,8 +2,8 @@
 # define _ITERATOR_HPP_
 
 # include <cstddef>
-# include <iostream>
-# include "ft.hpp"
+
+# include "usefull.hpp"
 
 namespace ft
 {
@@ -41,9 +41,9 @@ namespace ft
 	struct iterator_traits<T*>
 	{
 		typedef std::ptrdiff_t					difference_type;
-		typedef typename T						value_type;
-		typedef typename *T						pointer;
-		typedef typename &T						reference;
+		typedef T								value_type;
+		typedef T*								pointer;
+		typedef T&								reference;
 		typedef std::random_access_iterator_tag	iterator_category;
 	};
 			
@@ -52,11 +52,11 @@ namespace ft
 	{
 		typedef std::ptrdiff_t					difference_type;
 		typedef T								value_type;
-		typedef const *T						pointer;
-		typedef const &T						reference;
+		typedef const T*						pointer;
+		typedef const T&						reference;
 		typedef std::random_access_iterator_tag	iterator_category;
 	};
-
+// };
 	template< class Iter >
 	class reverse_iterator { };
 
@@ -65,12 +65,12 @@ namespace ft
 	{
 		public:
 			typedef typename ft::iterator<std::random_access_iterator_tag, T>::iterator_category	iterator_category;
-			typedef typename ft::iterator<std::random_access_iterator_tag, T>::value_type		value_type;
-			typedef typename ft::iterator<std::random_access_iterator_tag, T>::difference_type	difference_type;
-			typedef typename T*																	pointer;
-			typedef typename T&																	reference;
+			typedef typename ft::iterator<std::random_access_iterator_tag, T>::value_type			value_type;
+			typedef typename ft::iterator<std::random_access_iterator_tag, T>::difference_type		difference_type;
+			typedef T*																				pointer;
+			typedef T&																				reference;
 
-			random_access_iterator(void) : _elem(u_nullptr) {}
+			random_access_iterator(void) : _elem(ft_nullptr) {}
 
 			random_access_iterator(pointer elem) : _elem(elem) {}
 

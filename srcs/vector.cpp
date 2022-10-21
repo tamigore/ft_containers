@@ -23,7 +23,7 @@ int vector_test()
 	std_vec.push_back(3);
  
 	// Print out the vector
-	for (int n = 0; n < ft_vec.size() && n < std_vec.size(); n++)
+	for (size_t n = 0; n < ft_vec.size() && n < std_vec.size(); n++)
 	{
 		std::cout << "std_vec[" << n << "] = " << std_vec[n] << std::endl;
 		std::cout << "ft_vec[" << n << "] = " << ft_vec[n] << std::endl;

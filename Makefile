@@ -16,16 +16,16 @@ NAME = ft_containers
 
 DIR_S = srcs/
 
-SOURCES =	main.cpp	\
-			stack.cpp	\
-			vector.cpp	\
-			pair.cpp
+SOURCES =	main.cpp
+# stack.cpp	\
+# vector.cpp	\
+# pair.cpp
 
 HEADER =	ft.hpp		\
 			stack.hpp	\
 			vector.hpp	\
-			pair.hpp	\
-			usefull.hpp
+			usefull.hpp	\
+			pair.hpp
 # map.hpp
 
 INC = inc/

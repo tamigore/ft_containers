@@ -3,46 +3,21 @@
 
 # include "map.hpp"
 # include "vector.hpp"
-# include "iterator.hpp"
 # include "stack.hpp"
-# include "usefull.hpp"
 
-# include <cstddef>
-# include <limits>
-# include <sstream>
-# include <typeinfo>
-# include <iostream>
-
-int vector_test();
-int stack_test();
-
-static class nullptr_t
-{
-	public:
-		// For conversion to any type of null non-member pointer.
-		template<class T>
-		operator T*() const { return (0); }
-
-		// For conversion to any type of null member pointer.
-		template<class C, class T>
-		operator T C::*() const { return (0); }
-
-	private:
-		// It's imposible to get an address of a nullptr.
-		void operator&() const;
-
-} ft_nullptr = {};
+// int vector_test();
+// int stack_test();
 
 namespace ft
 {
-	template< class T, class Alloc = T>
-	class vector;
+	// template < class T, class Allocator = std::allocator<T> >
+	// class vector;
 
-	template< class T, class Alloc = T>
-	class map;
+	// template< class T, class Alloc = T>
+	// class map;
 	
-	template <class T, class Container = std::vector<T> >
-	class stack;
+	// template <class T, class Container = std::vector<T> >
+	// class stack;
 }
 
 #endif

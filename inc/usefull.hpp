@@ -2,21 +2,38 @@
 # define _USEFULL_HPP_
 
 # include <iostream>
-# include <strstream>
+
+class nullptr_ft
+{
+	public:
+		// For conversion to any type of null non-member pointer.
+		template<class T>
+		operator T*() const { return (0); }
+
+		// For conversion to any type of null member pointer.
+		template<class C, class T>
+		operator T C::*() const { return (0); }
+
+	private:
+		// It's imposible to get an address of a nullptr.
+		void operator&() const;
+
+}	ft_nullptr = {};
 
 namespace ft
 {
 	// to_string https://en.cppreference.com/w/cpp/string/basic_string/to_string
-	template <typename T>
-	std::string to_string(T obj)
-	{
-		// Stream used to convert to string
-		std::ostringstream ss;
-		ss << obj;
-		return (ss.str());
-	}
+	// template <typename T>
+	// std::string to_string(T obj)
+	// {
+	// 	// Stream used to convert to string
+	// 	std::ostringstream ss;
+	// 	ss << obj;
+	// 	return (ss.str());
+	// }
 
 	// distance https://en.cppreference.com/w/cpp/iterator/distance
+
 	template<class It>
 	typename std::iterator_traits<It>::difference_type 
 		do_distance(It first, It last, std::input_iterator_tag)
