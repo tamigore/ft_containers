@@ -63,7 +63,7 @@ namespace ft
 			vector(InputIterator first, InputIterator last, const Allocator& alloc = Allocator())
 				: _alloc(alloc)
 			{
-				size_type dist = ft::distance(first - last);
+				size_type dist = ft::distance(first, last);
 				_start = _alloc.allocate(dist);
 				_end = _start;
 				_capacity = _start + dist;
@@ -96,7 +96,7 @@ namespace ft
 				}
 			}
 			
-			vector& operator=( const vector& other )
+			vector& operator=(const vector& other)
 			{
 				if (*this == other)
 					return (*this);
@@ -105,7 +105,7 @@ namespace ft
 				return (*this);
 			}
 
-			void assign( size_type count, const T& value )
+			void assign(size_type count, const T& value)
 			{
 				if (!empty())
 					clear();
@@ -113,7 +113,7 @@ namespace ft
 			};
 
 			template< class InputIt >
-			void assign( InputIt first, InputIt last )
+			void assign(typename enable_if<!is_integral<InputIt>::value, InputIt>::type first, InputIt last)//typename enable_if<!is_integral<InputIt>::value, InputIt>::type last)
 			{
 				if (!empty())
 					clear();
@@ -126,14 +126,20 @@ namespace ft
 			iterator	begin(void)
 				{ return (_start); }
 
+			const_iterator begin() const
+				{ return (_start); }
+
 			iterator	end(void)
+				{ return (_end); }
+
+			const_iterator end() const
 				{ return (_end); }
 
 			iterator	rbegin(void)
 				{ return (_end - 1); }
 			
 			iterator	rend(void)
-				{ return (begin - 1); }
+				{ return (_start - 1); }
 
 			// 23.2.4.2 capacity:
 			size_type size() const
@@ -152,7 +158,7 @@ namespace ft
 				{
 					while (count < size())
 					{
-						end--;
+						_end--;
 						_alloc.destroy(_end);
 					}
 				}
@@ -239,9 +245,9 @@ namespace ft
 				_end--;
 			}
 
-			iterator insert( const_iterator pos, const T& value )
+			iterator insert(const_iterator pos, const T& value)
 			{
-				size_type len = pos - _start;
+				size_type len = pos - begin();
 				size_type i = 0;
 
 				if (size() + 1 > this->max_size())
@@ -278,11 +284,12 @@ namespace ft
 					_alloc.construct(_end - i, value);
 					_end++;
 				}
+				return (pos);
 			}
 
-			iterator insert( const_iterator pos, size_type count, const T& value )
+			iterator insert(const_iterator pos, size_type count, const T& value)
 			{
-				size_type len = pos - _start;
+				size_type len = pos - begin();
 				size_type i = 0;
 
 				if (count == 0)
@@ -325,10 +332,11 @@ namespace ft
 					while (count--)
 						_alloc.construct(_end - i++, value);
 				}
+				return (pos);
 			}
 
-			template <class InputIterator>
-			void insert(iterator position, InputIterator first, InputIterator last)
+			template<class InputIt>
+			iterator insert(const_iterator position, typename enable_if<!is_integral<InputIt>::value, InputIt>::type first, InputIt last) // typename enable_if<!is_integral<InputIt>::value, InputIt>::type last)
 			{
 				size_type len = position - begin();
 				size_type i = 0;
@@ -359,7 +367,7 @@ namespace ft
 						{
 							while (i - len < dist)
 							{
-								_alloc.construct(_end++, first[0]);
+								_alloc.construct(_end++, *first);
 								first++;
 								i++;
 							}
@@ -381,10 +389,11 @@ namespace ft
 						_alloc.construct(_end - i, *(_end - i - dist));
 					while (dist--)
 					{
-						_alloc.construct(_end - dist - i, first[0]);
+						_alloc.construct(_end - dist - i, *first);
 						first++;
 					}
 				}
+				return (position);
 			}
 
 			iterator erase(iterator position)
@@ -392,6 +401,7 @@ namespace ft
 				if (position == end())
 					return (end());
 				clear();
+				return (position);
 			}
 
 			iterator erase(iterator first, iterator last)
@@ -399,6 +409,7 @@ namespace ft
 				if (first == last)
 					return (last);
 				clear();
+				return (first);
 			}
 
 			void swap( vector& other )

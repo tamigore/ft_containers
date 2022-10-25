@@ -3,7 +3,7 @@
 
 # include <cstddef>
 
-# include "usefull.hpp"
+# include "utility.hpp"
 
 namespace ft
 {
@@ -56,9 +56,35 @@ namespace ft
 		typedef const T&						reference;
 		typedef std::random_access_iterator_tag	iterator_category;
 	};
-// };
-	template< class Iter >
-	class reverse_iterator { };
+
+	template< class It >
+	class reverse_iterator : ft::iterator<std::random_access_iterator_tag, It>
+	{
+		protected:
+			It current;
+		
+		public:
+			reverse_iterator();
+			
+			explicit reverse_iterator(It itr) : current(itr) {}
+			
+			// 	requires (!std::is_same_v<U, It> && std::convertible_to<const U&, It>)
+			template<class U>
+			explicit reverse_iterator(const U& other) : current(other.base()) {}
+		
+			It operator*() const
+			{
+				return (*current); // <== returns the content of prev
+			}
+		
+			reverse_iterator& operator++() { --current; return *this; }
+			reverse_iterator operator++(int) { It tmp = *this; ++(*this); return tmp; }
+		
+			reverse_iterator& operator--() { ++current; return *this; }
+			reverse_iterator operator--(int) { It tmp = *this; --(*this); return tmp; }
+		
+			It base() const { return current; }
+	};
 
 	template <typename T>
 	class random_access_iterator : ft::iterator<std::random_access_iterator_tag, T>
