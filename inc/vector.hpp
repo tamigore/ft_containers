@@ -44,9 +44,9 @@ namespace ft
 			explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
 				: _alloc(alloc)
 			{
-				_start = _alloc.allocate(count);
+				_start = _alloc.allocate(count + 1);
 				_end = _start;
-				_capacity = _start + count;
+				_capacity = _start + count + 1;
 				while (count--)
 				{
 					_alloc.construct(_end, value);
@@ -59,17 +59,19 @@ namespace ft
 			// appropthrowriate arguments for the element constructions, or if
 			// the range specified by [first,last) is not valid, it causes
 			// undefined behavior.
-			template <class InputIterator>
-			vector(InputIterator first, InputIterator last, const Allocator& alloc = Allocator())
+			template <class InputIt>
+			vector(InputIt first, typename enable_if<!is_integral<InputIt>::value, InputIt>::type last, const Allocator& alloc = Allocator())
 				: _alloc(alloc)
 			{
-				size_type dist = ft::distance(first, last);
-				_start = _alloc.allocate(dist);
+				size_type	dist = ft::distance(first, last);
+
+				_start = _alloc.allocate(dist + 1);
 				_end = _start;
-				_capacity = _start + dist;
-				for (size_type i = 0; i < dist; i++)
+				_capacity = _start + dist + 1;
+				while (first != last)
 				{
-					_alloc.construct(_end, first[i]);
+					_alloc.construct(_end, *first);
+					first++;
 					_end++;
 				}
 			}
@@ -86,7 +88,8 @@ namespace ft
 				: _alloc(x._alloc), _start(ft_nullptr), _end(ft_nullptr), _capacity(ft_nullptr)
 			{
 				size_type dist = x.size();
-				_start = _alloc.allocate(dist);
+				
+				_start = _alloc.allocate(x.capacity());
 				_end = _start;
 				_capacity = _start + dist;
 				for (size_type i = 0; i < dist; i++)
@@ -113,7 +116,7 @@ namespace ft
 			};
 
 			template< class InputIt >
-			void assign(typename enable_if<!is_integral<InputIt>::value, InputIt>::type first, InputIt last)//typename enable_if<!is_integral<InputIt>::value, InputIt>::type last)
+			void assign(InputIt first, typename enable_if<!is_integral<InputIt>::value, InputIt>::type last)
 			{
 				if (!empty())
 					clear();
@@ -135,11 +138,17 @@ namespace ft
 			const_iterator end() const
 				{ return (_end); }
 
-			iterator	rbegin(void)
-				{ return (_end - 1); }
+			reverse_iterator	rbegin(void)
+				{ return (reverse_iterator(end())); }
+
+			const_reverse_iterator	rbegin(void) const
+				{ return (reverse_iterator(end())); }
 			
-			iterator	rend(void)
-				{ return (_start - 1); }
+			reverse_iterator	rend(void)
+				{ return (reverse_iterator(begin())); }
+
+			const_reverse_iterator	rend(void) const
+				{ return (reverse_iterator(begin())); }
 
 			// 23.2.4.2 capacity:
 			size_type size() const
@@ -252,7 +261,7 @@ namespace ft
 
 				if (size() + 1 > this->max_size())
 					throw (std::length_error("vector::insert (one))"));
-				if (capacity() <= size() + 1)
+				if (capacity() < size() + 1)
 				{
 					pointer		old_start = _start;
 					pointer		old_end = _end;
@@ -296,7 +305,7 @@ namespace ft
 					return (end());
 				if (count + size() > this->max_size())
 					throw (std::length_error("vector::insert (fill)"));
-				if (capacity() <= size() + count)
+				if (capacity() < size() + count)
 				{
 					pointer		old_start = _start;
 					pointer		old_end = _end;
@@ -336,18 +345,17 @@ namespace ft
 			}
 
 			template<class InputIt>
-			iterator insert(const_iterator position, typename enable_if<!is_integral<InputIt>::value, InputIt>::type first, InputIt last) // typename enable_if<!is_integral<InputIt>::value, InputIt>::type last)
+			iterator insert(const_iterator position, InputIt first, typename enable_if<!is_integral<InputIt>::value, InputIt>::type last)
 			{
 				size_type len = position - begin();
 				size_type i = 0;
 				size_type dist = ft::distance(first, last);
 
-
 				// if (dist == 0)
 				// 	insert(position, *first);
 				if (dist + size() > this->max_size())
 					throw (std::length_error("vector::insert (fill)"));
-				if (capacity() <= size() + dist)
+				if (capacity() < size() + dist)
 				{
 					pointer		old_start = _start;
 					pointer		old_end = _end;
@@ -400,7 +408,14 @@ namespace ft
 			{
 				if (position == end())
 					return (end());
-				clear();
+				size_type dist = position - begin();
+				while (dist < size())
+				{
+					*(_start + dist) = *(_start + dist + 1);
+					dist++;
+				}
+				_end--;
+				_alloc.destroy(_end);
 				return (position);
 			}
 
@@ -408,11 +423,21 @@ namespace ft
 			{
 				if (first == last)
 					return (last);
-				clear();
-				return (first);
+				size_type dist = ft::distance(first, last);
+				size_type pos = first - begin();
+				std::cout << "dist = " << dist << " | pos = " << pos << std::endl;
+				for (size_type i = 0; i < dist; i++)
+					*(_start + pos + i) = *(_start + pos + dist + i);
+				for (size_type i = 0; i < dist; i++)
+					_alloc.destroy(_end - i);
+				while (dist--)
+					_end--;
+				if (last == end())
+					return (end());
+				return (last);
 			}
 
-			void swap( vector& other )
+			void swap(vector& other)
 			{
 				vector tmp(*this);
 				*this = other;

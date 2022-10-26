@@ -60,6 +60,28 @@ void	printSize(ft::vector<T>  &vct, bool print_content = true)
 	std::cout << "###############################################" << std::endl;
 }
 
+template <typename T>
+void	printSize_std(std::vector<T>  &vct, bool print_content = true)
+{
+	const int size = vct.size();
+	const int capacity = vct.capacity();
+	const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
+	// Cannot limit capacity's max value because it's implementation dependent
+
+	std::cout << "size: " << size << std::endl;
+	std::cout << "capacity: " << isCapacityOk << std::endl;
+	std::cout << "max_size: " << vct.max_size() << std::endl;
+	if (print_content)
+	{
+		typename std::vector<T>::iterator it = vct.begin();
+		typename std::vector<T>::iterator ite = vct.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << *it << std::endl;
+	}
+	std::cout << "###############################################" << std::endl;
+}
+
 int stack_test()
 {
 	ft::stack<int>							test_stack_int;
@@ -215,13 +237,59 @@ int		assigne(void)
 	return (0);
 }
 
+void	vec_erase_test()
+{
+	ft::vector<char>	ft_v0;
+	std::vector<char>	std_v0;
+	ft_v0.push_back('1');
+	std_v0.push_back('1');
+	ft_v0.push_back('0');
+	std_v0.push_back('0');
+	ft_v0.push_back('a');
+	std_v0.push_back('a');
+	ft_v0.push_back('c');
+	std_v0.push_back('c');
+	ft_v0.push_back('k');
+	std_v0.push_back('k');
+	printSize(ft_v0);
+	printSize_std(std_v0);
+	ft_v0.erase(ft_v0.begin() + 2);
+	std_v0.erase(std_v0.begin() + 2);
+	ft_v0.erase(ft_v0.begin());
+	std_v0.erase(std_v0.begin());
+	printSize(ft_v0);
+	printSize_std(std_v0);
+	ft_v0.push_back('z');
+	std_v0.push_back('z');
+	ft_v0.push_back('y');
+	std_v0.push_back('y');
+	ft_v0.push_back('x');
+	std_v0.push_back('x');
+	ft_v0.push_back('w');
+	std_v0.push_back('w');
+	printSize(ft_v0);
+	printSize_std(std_v0);
+	ft_v0.erase(ft_v0.begin() + 1, ft_v0.end() - 3);
+	std_v0.erase(std_v0.begin() + 1, std_v0.end() - 3);
+	printSize(ft_v0);
+	printSize_std(std_v0);
+	ft_v0.erase(ft_v0.begin(), ft_v0.end());
+	std_v0.erase(std_v0.begin(), std_v0.end());
+	printSize(ft_v0);
+	printSize_std(std_v0);
+}
+
 int main(int argc, char** argv)
 {
 	(void)argc;
 	(void)argv;
-	stack_test();
-	vector_test();
-	assigne();
-	ft::vector<char>	vide1;
-	std::vector<char>	vide2;
+	// stack_test();
+	// vector_test();
+	// assigne();
+	ft::vector<int>		ft_v1;
+	std::vector<int>	std_v1;
+	ft::vector<int>		ft_v2;
+	std::vector<int>	std_v2;
+
+	vec_erase_test();
 }
