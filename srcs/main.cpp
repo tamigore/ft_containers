@@ -1,87 +1,5 @@
 #include "ft.hpp"
 
-#include <vector>
-#include <stack>
-#include <iostream>
-#include <string>
-#include <deque>
-#include <stdlib.h>
-
-#define MAX_RAM 4294967296
-#define BUFFER_SIZE 4096
-
-struct Buffer
-{
-	int idx;
-	char buff[BUFFER_SIZE];
-};
-
-
-#define COUNT (MAX_RAM / (int)sizeof(Buffer))
-
-template<typename T>
-class MutantStack : public ft::stack<T>
-{
-	public:
-		MutantStack() {}
-		MutantStack(const MutantStack<T>& src) { *this = src; }
-		MutantStack<T>& operator=(const MutantStack<T>& rhs) 
-		{
-			this->c = rhs.c;
-			return *this;
-		}
-		~MutantStack() {}
-
-		typedef typename ft::stack<T>::container_type::iterator iterator;
-
-		iterator begin() { return this->c.begin(); }
-		iterator end() { return this->c.end(); }
-};
-
-template <typename T>
-void	printSize(ft::vector<T>  &vct, bool print_content = true)
-{
-	const int size = vct.size();
-	const int capacity = vct.capacity();
-	const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
-	// Cannot limit capacity's max value because it's implementation dependent
-
-	std::cout << "size: " << size << std::endl;
-	std::cout << "capacity: " << isCapacityOk << std::endl;
-	std::cout << "max_size: " << vct.max_size() << std::endl;
-	if (print_content)
-	{
-		typename ft::vector<T>::iterator it = vct.begin();
-		typename ft::vector<T>::iterator ite = vct.end();
-		std::cout << std::endl << "Content is:" << std::endl;
-		for (; it != ite; ++it)
-			std::cout << "- " << *it << std::endl;
-	}
-	std::cout << "###############################################" << std::endl;
-}
-
-template <typename T>
-void	printSize_std(std::vector<T>  &vct, bool print_content = true)
-{
-	const int size = vct.size();
-	const int capacity = vct.capacity();
-	const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
-	// Cannot limit capacity's max value because it's implementation dependent
-
-	std::cout << "size: " << size << std::endl;
-	std::cout << "capacity: " << isCapacityOk << std::endl;
-	std::cout << "max_size: " << vct.max_size() << std::endl;
-	if (print_content)
-	{
-		typename std::vector<T>::iterator it = vct.begin();
-		typename std::vector<T>::iterator ite = vct.end();
-		std::cout << std::endl << "Content is:" << std::endl;
-		for (; it != ite; ++it)
-			std::cout << "- " << *it << std::endl;
-	}
-	std::cout << "###############################################" << std::endl;
-}
-
 int stack_test()
 {
 	ft::stack<int>							test_stack_int;
@@ -197,44 +115,33 @@ int vector_test()
 	return (1);
 }
 
-int		assigne(void)
+void	vec_bidirectionalit_test(void)
 {
-	ft::vector<int> vct(7);
-	ft::vector<int> vct_two(4);
-	ft::vector<int> vct_three;
-	ft::vector<int> vct_four;
+	std::list<int> lst;
+	std::list<int>::iterator lst_it;
+	for (int i = 1; i < 5; ++i)
+			lst.push_back(i * 3);
 
-	for (unsigned long int i = 0; i < vct.size(); ++i)
-		vct[i] = (vct.size() - i) * 3;
-	for (unsigned long int i = 0; i < vct_two.size(); ++i)
-		vct_two[i] = (vct_two.size() - i) * 5;
-	printSize(vct);
-	printSize(vct_two);
+	ft::vector<int>		ft_vct(lst.begin(), lst.end());
+	std::vector<int>	std_vct(lst.begin(), lst.end());
+	printSize(ft_vct);
+	printSize_std(std_vct);
 
-	vct_three.assign(vct.begin(), vct.end());
-	vct.assign(vct_two.begin(), vct_two.end());
-	vct_two.assign(2, 42);
-	vct_four.assign(4, 21);
+	lst_it = lst.begin();
+	for (int i = 1; lst_it != lst.end(); ++i)
+			*lst_it++ = i * 5;
+	ft_vct.assign(lst.begin(), lst.end());
+	lst_it = lst.begin();
+	for (int i = 1; lst_it != lst.end(); ++i)
+			*lst_it++ = i * 5;
+	std_vct.assign(lst.begin(), lst.end());
+	printSize(ft_vct);
+	printSize_std(std_vct);
 
-	std::cout << "\t### After assign(): ###" << std::endl;
-
-	printSize(vct);
-	printSize(vct_two);
-	printSize(vct_three);
-	printSize(vct_four);
-
-	vct_four.assign(6, 84);
-	printSize(vct_four);
-
-	std::cout << "\t### assign() on enough capacity and low size: ###" << std::endl;
-
-	vct.assign(5, 53);
-	vct_two.assign(vct_three.begin(), vct_three.begin() + 3);
-
-	printSize(vct);
-	printSize(vct_two);
-
-	return (0);
+	ft_vct.insert(ft_vct.end(), lst.rbegin(), lst.rend());
+	std_vct.insert(std_vct.end(), lst.rbegin(), lst.rend());
+	printSize(ft_vct);
+	printSize_std(std_vct);
 }
 
 void	vec_erase_test()
@@ -279,17 +186,114 @@ void	vec_erase_test()
 	printSize_std(std_v0);
 }
 
+void	vec_assign_test()
+{
+	ft::vector<int> ft_vct(7);
+	ft::vector<int> ft_vct_two(4);
+	ft::vector<int> ft_vct_three;
+	ft::vector<int> ft_vct_four;
+	std::vector<int> std_vct(7);
+	std::vector<int> std_vct_two(4);
+	std::vector<int> std_vct_three;
+	std::vector<int> std_vct_four;
+
+	for (unsigned long int i = 0; i < ft_vct.size(); ++i)
+			ft_vct[i] = (ft_vct.size() - i) * 3;
+	for (unsigned long int i = 0; i < ft_vct_two.size(); ++i)
+			ft_vct_two[i] = (ft_vct_two.size() - i) * 5;
+	for (unsigned long int i = 0; i < std_vct.size(); ++i)
+			std_vct[i] = (std_vct.size() - i) * 3;
+	for (unsigned long int i = 0; i < std_vct_two.size(); ++i)
+			std_vct_two[i] = (std_vct_two.size() - i) * 5;
+	printSize(ft_vct);
+	printSize_std(std_vct);
+	printSize(ft_vct_two);
+	printSize_std(std_vct_two);
+
+	ft_vct_three.assign(ft_vct.begin(), ft_vct.end());
+	ft_vct.assign(ft_vct_two.begin(), ft_vct_two.end());
+	ft_vct_two.assign(2, 42);
+	ft_vct_four.assign(4, 21);
+	std_vct_three.assign(std_vct.begin(), std_vct.end());
+	std_vct.assign(std_vct_two.begin(), std_vct_two.end());
+	std_vct_two.assign(2, 42);
+	std_vct_four.assign(4, 21);
+
+	std::cout << "\t### After assign(): ###" << std::endl;
+
+	printSize(ft_vct);
+	printSize_std(std_vct);
+	printSize(ft_vct_two);
+	printSize_std(std_vct_two);
+	printSize(ft_vct_three);
+	printSize_std(std_vct_three);
+	printSize(ft_vct_four);
+	printSize_std(std_vct_four);
+
+	ft_vct_four.assign(6, 84);
+	std_vct_four.assign(6, 84);
+	printSize(ft_vct_four);
+	printSize_std(std_vct_four);
+
+	std::cout << "\t### assign() on enough capacity and low size: ###" << std::endl;
+
+	ft_vct.assign(5, 53);
+	ft_vct_two.assign(ft_vct_three.begin(), ft_vct_three.begin() + 3);
+	std_vct.assign(5, 53);
+	std_vct_two.assign(std_vct_three.begin(), std_vct_three.begin() + 3);
+
+	printSize(ft_vct);
+	printSize_std(std_vct);
+	printSize(ft_vct_two);
+	printSize_std(std_vct_two);
+
+}
+
+void    checkErase(ft::vector<int> const &vct, ft::vector<int>::const_iterator const &it)
+{
+	static int i = 0;
+	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
+	printSize(vct);
+}
+
+int             main(void)
+{
+	ft::vector<int> vct(10);
+
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+			vct[i] = std::string((vct.size() - i), i + 65);
+	printSize(vct);
+
+	checkErase(vct, vct.erase(vct.begin() + 2));
+
+	checkErase(vct, vct.erase(vct.begin()));
+	checkErase(vct, vct.erase(vct.end() - 1));
+
+	checkErase(vct, vct.erase(vct.begin(), vct.begin() + 3));
+	checkErase(vct, vct.erase(vct.end() - 3, vct.end() - 1));
+
+	vct.push_back("Hello");
+	vct.push_back("Hi there");
+	printSize(vct);
+	checkErase(vct, vct.erase(vct.end() - 3, vct.end()));
+
+	vct.push_back("ONE");
+	vct.push_back("TWO");
+	vct.push_back("THREE");
+	vct.push_back("FOUR");
+	printSize(vct);
+	checkErase(vct, vct.erase(vct.begin(), vct.end()));
+
+	return (0);
+}
+
 int main(int argc, char** argv)
 {
 	(void)argc;
 	(void)argv;
 	// stack_test();
 	// vector_test();
-	// assigne();
-	ft::vector<int>		ft_v1;
-	std::vector<int>	std_v1;
-	ft::vector<int>		ft_v2;
-	std::vector<int>	std_v2;
-
-	vec_erase_test();
+	// vec_erase_test();
+	// vec_assign_test();
+	// vec_bidirectionalit_test();
 }

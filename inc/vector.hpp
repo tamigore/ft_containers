@@ -112,7 +112,15 @@ namespace ft
 			{
 				if (!empty())
 					clear();
-				insert(begin(), count, value);
+				_start = _alloc.allocate(count);
+				_end = _start;
+				_capacity = _start + count;
+				for (size_type i = 0; i < count; i++)
+				{
+					_alloc.construct(_end, value);
+					_end++;
+				}
+				// insert(begin(), count, value);
 			};
 
 			template< class InputIt >
@@ -120,7 +128,17 @@ namespace ft
 			{
 				if (!empty())
 					clear();
-				insert(begin(), first, last);
+				size_type dist = ft::distance(first, last);
+				_start = _alloc.allocate(dist);
+				_end = _start;
+				_capacity = _start + dist;
+				for (size_type i = 0; i < dist; i++)
+				{
+					_alloc.construct(_end, *first);
+					first++;
+					_end++;
+				}
+				// insert(begin(), first, last);
 			};
 
 			allocator_type get_allocator() const
@@ -348,11 +366,8 @@ namespace ft
 			iterator insert(const_iterator position, InputIt first, typename enable_if<!is_integral<InputIt>::value, InputIt>::type last)
 			{
 				size_type len = position - begin();
-				size_type i = 0;
 				size_type dist = ft::distance(first, last);
 
-				// if (dist == 0)
-				// 	insert(position, *first);
 				if (dist + size() > this->max_size())
 					throw (std::length_error("vector::insert (fill)"));
 				if (capacity() < size() + dist)
@@ -371,13 +386,12 @@ namespace ft
 					_capacity = _start + new_cap;
 					while (old_start != old_end)
 					{
-						if (i == len)
+						if (len == 0)
 						{
-							while (i - len < dist)
+							while (first != last)
 							{
 								_alloc.construct(_end++, *first);
 								first++;
-								i++;
 							}
 						}
 						else
@@ -386,12 +400,21 @@ namespace ft
 							old_start++;
 						}
 						_end++;
-						i++;
+						len--;
+					}
+					if (len == 0)
+					{
+						while (first != last)
+						{
+							_alloc.construct(_end++, *first);
+							first++;
+						}
 					}
 					_alloc.deallocate(old_start - old_size, old_cap);
 				}
 				else
 				{
+					size_type i = 0;
 					_end = _end + dist;
 					while (i++ < len)
 						_alloc.construct(_end - i, *(_end - i - dist));
@@ -425,7 +448,6 @@ namespace ft
 					return (last);
 				size_type dist = ft::distance(first, last);
 				size_type pos = first - begin();
-				std::cout << "dist = " << dist << " | pos = " << pos << std::endl;
 				for (size_type i = 0; i < dist; i++)
 					*(_start + pos + i) = *(_start + pos + dist + i);
 				for (size_type i = 0; i < dist; i++)
