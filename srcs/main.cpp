@@ -249,43 +249,123 @@ void	vec_assign_test()
 
 }
 
-void    checkErase(ft::vector<int> const &vct, ft::vector<int>::const_iterator const &it)
+void    checkErase(ft::vector<std::string> const &vct, ft::vector<std::string>::const_iterator const &it)
 {
 	static int i = 0;
+	std::cout << "_ft_" << std::endl;
 	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
 	printSize(vct);
 }
 
-int             main(void)
+void    checkErase(std::vector<std::string> const &vct, std::vector<std::string>::const_iterator const &it)
 {
-	ft::vector<int> vct(10);
-
-	for (unsigned long int i = 0; i < vct.size(); ++i)
-			vct[i] = std::string((vct.size() - i), i + 65);
-	printSize(vct);
-
-	checkErase(vct, vct.erase(vct.begin() + 2));
-
-	checkErase(vct, vct.erase(vct.begin()));
-	checkErase(vct, vct.erase(vct.end() - 1));
-
-	checkErase(vct, vct.erase(vct.begin(), vct.begin() + 3));
-	checkErase(vct, vct.erase(vct.end() - 3, vct.end() - 1));
-
-	vct.push_back("Hello");
-	vct.push_back("Hi there");
-	printSize(vct);
-	checkErase(vct, vct.erase(vct.end() - 3, vct.end()));
-
-	vct.push_back("ONE");
-	vct.push_back("TWO");
-	vct.push_back("THREE");
-	vct.push_back("FOUR");
-	printSize(vct);
-	checkErase(vct, vct.erase(vct.begin(), vct.end()));
-
-	return (0);
+	static int i = 0;
+	std::cout << "_std_" << std::endl;
+	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
+	printSize_std(vct);
 }
+
+void	vec_erased_test(void)
+{
+	ft::vector<std::string>		ft_vct(10);
+	std::vector<std::string>	std_vct(10);
+
+	for (unsigned long int i = 0; i < ft_vct.size(); ++i)
+			ft_vct[i] = std::string((ft_vct.size() - i), i + 65);
+	for (unsigned long int i = 0; i < std_vct.size(); ++i)
+			std_vct[i] = std::string((std_vct.size() - i), i + 65);
+	printSize(ft_vct);
+	printSize_std(std_vct);
+
+	checkErase(ft_vct, ft_vct.erase(ft_vct.begin() + 2));
+	checkErase(std_vct, std_vct.erase(std_vct.begin() + 2));
+	
+	checkErase(ft_vct, ft_vct.erase(ft_vct.begin()));
+	checkErase(std_vct, std_vct.erase(std_vct.begin()));
+	checkErase(ft_vct, ft_vct.erase(ft_vct.end() - 1));
+	checkErase(std_vct, std_vct.erase(std_vct.end() - 1));
+
+	checkErase(ft_vct, ft_vct.erase(ft_vct.begin(), ft_vct.begin() + 3));
+	checkErase(std_vct, std_vct.erase(std_vct.begin(), std_vct.begin() + 3));
+	checkErase(ft_vct, ft_vct.erase(ft_vct.end() - 3, ft_vct.end() - 1));
+	checkErase(std_vct, std_vct.erase(std_vct.end() - 3, std_vct.end() - 1));
+
+	ft_vct.push_back("Hello");
+	ft_vct.push_back("Hi there");
+	std_vct.push_back("Hello");
+	std_vct.push_back("Hi there");
+	printSize(ft_vct);
+	printSize_std(std_vct);
+	checkErase(ft_vct, ft_vct.erase(ft_vct.end() - 3, ft_vct.end()));
+	checkErase(std_vct, std_vct.erase(std_vct.end() - 3, std_vct.end()));
+
+	ft_vct.push_back("ONE");
+	ft_vct.push_back("TWO");
+	ft_vct.push_back("THREE");
+	ft_vct.push_back("FOUR");
+	std_vct.push_back("ONE");
+	std_vct.push_back("TWO");
+	std_vct.push_back("THREE");
+	std_vct.push_back("FOUR");
+	printSize(ft_vct);
+	printSize_std(std_vct);
+	checkErase(ft_vct, ft_vct.erase(ft_vct.begin(), ft_vct.end()));
+	checkErase(std_vct, std_vct.erase(std_vct.begin(), std_vct.end()));
+}
+
+void	vec_insert_test(void)
+{
+	ft::vector<int> ft_vec(10);
+	ft::vector<int> ft_vec2;
+	ft::vector<int> ft_vec3;
+	std::vector<int> std_vec(10);
+	std::vector<int> std_vec2;
+	std::vector<int> std_vec3;
+
+	for (unsigned long int i = 0; i < ft_vec.size(); ++i)
+		ft_vec[i] = (ft_vec.size() - i) * 3;
+	for (unsigned long int i = 0; i < std_vec.size(); ++i)
+		std_vec[i] = (std_vec.size() - i) * 3;
+	printSizeVs(ft_vec, std_vec);
+
+	// ft_vec2.resize(4);
+	// std_vec2.resize(4);
+	ft_vec2.insert(ft_vec2.end(), 42);
+	std_vec2.insert(std_vec2.end(), 42);
+	printSizeVs(ft_vec2, std_vec2);
+
+	ft_vec2.insert(ft_vec2.begin(), 2, 21);
+	std_vec2.insert(std_vec2.begin(), 2, 21);
+	printSizeVs(ft_vec2, std_vec2);
+
+	// std::cout << *(ft_vec2.end() - 2) << " || " << (ft_vec2._end - 2) << std::endl;
+	ft_vec2.insert(ft_vec2.end() - 2, 42);
+	std_vec2.insert(std_vec2.end() - 2, 42);
+	printSizeVs(ft_vec2, std_vec2);
+
+	ft_vec2.insert(ft_vec2.end(), 2, 84);
+	std_vec2.insert(std_vec2.end(), 2, 84);
+	printSizeVs(ft_vec2, std_vec2);
+
+	ft_vec2.resize(4);
+	std_vec2.resize(4);
+	printSizeVs(ft_vec2, std_vec2);
+
+	ft_vec2.insert(ft_vec2.begin() + 2, ft_vec.begin(), ft_vec.end());
+	ft_vec.clear();
+	std_vec2.insert(std_vec2.begin() + 2, std_vec.begin(), std_vec.end());
+	std_vec.clear();
+	printSizeVs(ft_vec2, std_vec2);
+
+	for (int i = 0; i < 5; ++i)
+			ft_vec3.insert(ft_vec3.end(), i);
+	for (int i = 0; i < 5; ++i)
+			std_vec3.insert(std_vec3.end(), i);
+	ft_vec3.insert(ft_vec3.begin() + 1, 2, 111);
+	std_vec3.insert(std_vec3.begin() + 1, 2, 111);
+	printSizeVs(ft_vec3, std_vec3);
+}
+
 
 int main(int argc, char** argv)
 {
@@ -296,4 +376,6 @@ int main(int argc, char** argv)
 	// vec_erase_test();
 	// vec_assign_test();
 	// vec_bidirectionalit_test();
+	// vec_erased_test();
+	vec_insert_test();
 }

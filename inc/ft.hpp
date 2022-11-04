@@ -48,7 +48,42 @@ class MutantStack : public ft::stack<T>
 };
 
 template <typename T>
-void	printSize(ft::vector<T>  &vct, bool print_content = true)
+void	printSizeVs(ft::vector<T> const &ft_vec, std::vector<T> const &std_vec, bool print_content = true)
+{
+	std::cout << "___________________ft vs std___________________" << std::endl;
+	const int ft_size = ft_vec.size();
+	const int ft_capacity = ft_vec.capacity();
+	const int std_size = std_vec.size();
+	const int std_capacity = std_vec.capacity();
+
+	std::cout << "ft_size: " << ft_size << " == std_size: " << std_size <<std::endl;
+	std::cout << "ft_capacity: " << ft_capacity << " == " << std_capacity << " :std_capacity || capacity is ok ? : " << ((ft_capacity >= ft_size) ? "OK" : "KO") << std::endl;
+	std::cout << "ft_max_size: " << (ft_vec.max_size() == std_vec.max_size() ? "OK" : "KO") << std::endl;
+	if (print_content)
+	{
+		typename ft::vector<T>::const_iterator it = ft_vec.begin();
+		typename ft::vector<T>::const_iterator ite = ft_vec.end();
+		typename std::vector<T>::const_iterator s_it = std_vec.begin();
+		typename std::vector<T>::const_iterator s_ite = std_vec.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		int i = 0;
+		for (; it != ite; ++it)
+		{
+			if (s_it >= s_ite)
+				std::cout << "to much elem" << std::endl;
+			else
+			{
+				std::cout << i << "- ft: |" << *it  << "| == |" << *s_it << "| :std" << std::endl;
+				s_it++;
+			}
+			i++;
+		}
+	}
+	std::cout << "_______________________________________________" << std::endl;
+}
+
+template <typename T>
+void	printSize(ft::vector<T> const &vct, bool print_content = true)
 {
 	std::cout << "______________________ft_______________________" << std::endl;
 	const int size = vct.size();
@@ -61,8 +96,8 @@ void	printSize(ft::vector<T>  &vct, bool print_content = true)
 	std::cout << "max_size: " << vct.max_size() << std::endl;
 	if (print_content)
 	{
-		typename ft::vector<T>::iterator it = vct.begin();
-		typename ft::vector<T>::iterator ite = vct.end();
+		typename ft::vector<T>::const_iterator it = vct.begin();
+		typename ft::vector<T>::const_iterator ite = vct.end();
 		std::cout << std::endl << "Content is:" << std::endl;
 		for (; it != ite; ++it)
 			std::cout << "- " << *it << std::endl;
@@ -71,7 +106,7 @@ void	printSize(ft::vector<T>  &vct, bool print_content = true)
 }
 
 template <typename T>
-void	printSize_std(std::vector<T>  &vct, bool print_content = true)
+void	printSize_std(std::vector<T> const &vct, bool print_content = true)
 {
 	std::cout << "______________________std______________________" << std::endl;
 	const int size = vct.size();
@@ -84,8 +119,8 @@ void	printSize_std(std::vector<T>  &vct, bool print_content = true)
 	std::cout << "max_size: " << vct.max_size() << std::endl;
 	if (print_content)
 	{
-		typename std::vector<T>::iterator it = vct.begin();
-		typename std::vector<T>::iterator ite = vct.end();
+		typename std::vector<T>::const_iterator it = vct.begin();
+		typename std::vector<T>::const_iterator ite = vct.end();
 		std::cout << std::endl << "Content is:" << std::endl;
 		for (; it != ite; ++it)
 			std::cout << "- " << *it << std::endl;

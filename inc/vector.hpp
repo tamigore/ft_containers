@@ -179,8 +179,11 @@ namespace ft
 			{
 				if (count > this->max_size())
 					throw (std::length_error("vector::resize"));
-				else if (count > size())
-					insert(_end, count, value);
+				std::cout << "size = " << size() << " | count = " <<  count << std::endl;
+				if (count > size())
+				{
+					insert(end(), count, value);
+				}
 				else
 				{
 					while (count < size())
@@ -274,157 +277,160 @@ namespace ft
 
 			iterator insert(const_iterator pos, const T& value)
 			{
-				size_type len = pos - begin();
-				size_type i = 0;
+				size_type	len = pos - begin();
+				size_type	i = 0;
+				iterator	ret = pos;
 
 				if (size() + 1 > this->max_size())
 					throw (std::length_error("vector::insert (one))"));
+				// std::cout << "len = " << len  << " || end_size = " << end() - begin() << std::endl;
+				// if (_start + len)
+					// std::cout << "vec[len] = " << *(_start + len) << "|| pointer = " << _start + len << std::endl;
 				if (capacity() < size() + 1)
 				{
 					pointer		old_start = _start;
-					pointer		old_end = _end;
 					size_type	old_size = size();
 					size_type	old_cap = capacity();
-					size_type	new_cap = (capacity() > 0 ? capacity() * 2 : 2);
+					size_type	new_cap = (capacity() > 0 ? capacity() * 2 : 1);
 
+					// std::cout << "allocate" << std::endl;
 					_start = _alloc.allocate(new_cap);
 					_end = _start;
 					_capacity = _start + new_cap;
-					while (old_start != old_end)
+					while (size() < old_size + 1)
 					{
-						if (i == len)
-							_alloc.construct(_end, value);
-						else
+						// std::cout << "construct :" << (i == len ? value : *(old_start + i)) << std::endl;
+						if (i == len && ret == pos)
 						{
-							_alloc.construct(_end, *old_start);
-							old_start++;
+							ret = _end;
+							_alloc.construct(_end++, value);
 						}
-						_end++;
-						i++;
+						if (i < old_size)
+							_alloc.construct(_end++, *(old_start + i++));
 					}
-					_alloc.deallocate(old_start - old_size, old_cap);
+					// std::cout << "deallocate" << std::endl;
+					_alloc.deallocate(old_start, old_cap);
 				}
 				else
 				{
 					while (i++ < len)
 						_alloc.construct(_end - i, *(_end - i - 1));
 					_alloc.construct(_end - i, value);
-					_end++;
+					ret = _end++ - i;
 				}
-				return (pos);
+				return (ret);
 			}
 
 			iterator insert(const_iterator pos, size_type count, const T& value)
 			{
-				size_type len = pos - begin();
-				size_type i = 0;
+				size_type	len = pos - begin();
+				size_type	i = 0;
+				iterator	ret = pos;
 
 				if (count == 0)
-					return (end());
+					return (pos);
 				if (count + size() > this->max_size())
 					throw (std::length_error("vector::insert (fill)"));
 				if (capacity() < size() + count)
 				{
 					pointer		old_start = _start;
-					pointer		old_end = _end;
 					size_type	old_size = size();
 					size_type	old_cap = capacity();
 					size_type	new_cap = (capacity() > 0 ?
 						(capacity() * 2 < count + size() ?
-						capacity() + count + size() : capacity() * 2)
+						capacity() + count : capacity() * 2)
 						: count + 1);
 
+					// std::cout << "allocate" << std::endl;
 					_start = _alloc.allocate(new_cap);
 					_end = _start;
 					_capacity = _start + new_cap;
-					while (old_start != old_end)
+					// std::cout << "len = " << len << std::endl;
+					// std::cout << "old_size + count = " << old_size + count << std::endl;
+					while (size() < old_size + count)
 					{
-						if (i == len)
-							_alloc.construct(_end, value);
-						else
+						if (i == len && ret == pos)
 						{
-							_alloc.construct(_end, *old_start);
-							old_start++;
+							ret = _end;
+							while (count--)
+							{
+								// std::cout << size() << " - construct :" << value << std::endl;
+								_alloc.construct(_end++, value);
+							}
 						}
-						_end++;
-						i++;
+						// if (i < old_size)
+						// {
+							// std::cout << size() << " - construct :" << *(old_start + i) << std::endl;
+							_alloc.construct(_end++, *(old_start + i++));
+						// }
 					}
-					_alloc.deallocate(old_start - old_size, old_cap);
+					// std::cout << "deallocate" << std::endl;
+					_alloc.deallocate(old_start, old_cap);
 				}
 				else
 				{
-					_end = _end + count;
+					std::cout << "len = " << len << std::endl;
 					while (i++ < len)
 						_alloc.construct(_end - i, *(_end - i - count));
 					while (count--)
 						_alloc.construct(_end - i++, value);
+					ret = _end - i + 1;
+					_end = _end + count;
 				}
-				return (pos);
+				return (ret);
 			}
 
 			template<class InputIt>
-			iterator insert(const_iterator position, InputIt first, typename enable_if<!is_integral<InputIt>::value, InputIt>::type last)
+			iterator insert(const_iterator pos, InputIt first, typename enable_if<!is_integral<InputIt>::value, InputIt>::type last)
 			{
-				size_type len = position - begin();
-				size_type dist = ft::distance(first, last);
+				size_type	len = pos - begin();
+				size_type	dist = ft::distance(first, last);
+				size_type	i = 0;
+				iterator	ret = pos;
 
+				if (first == last)
+					return (pos);
 				if (dist + size() > this->max_size())
 					throw (std::length_error("vector::insert (fill)"));
 				if (capacity() < size() + dist)
 				{
 					pointer		old_start = _start;
-					pointer		old_end = _end;
 					size_type	old_size = size();
 					size_type	old_cap = capacity();
 					size_type	new_cap = (capacity() > 0 ?
 						(capacity() * 2 < dist + size() ?
-						capacity() + dist + size() : capacity() * 2)
+						capacity() + dist : capacity() * 2)
 						: dist + 1);
 
+					// std::cout << "allocate" << std::endl;
 					_start = _alloc.allocate(new_cap);
 					_end = _start;
 					_capacity = _start + new_cap;
-					while (old_start != old_end)
+					while (size() < old_size + dist)
 					{
-						if (len == 0)
+						// std::cout << "construct :" << (i == len ? *first : *(old_start + i)) << std::endl;
+						if (i == len && ret == pos)
 						{
+							ret = _end;
 							while (first != last)
-							{
-								_alloc.construct(_end++, *first);
-								first++;
-							}
+								_alloc.construct(_end++, *(first++));
 						}
-						else
-						{
-							_alloc.construct(_end, *old_start);
-							old_start++;
-						}
-						_end++;
-						len--;
+						// if (i < old_size)
+							_alloc.construct(_end++, *(old_start + i++));
 					}
-					if (len == 0)
-					{
-						while (first != last)
-						{
-							_alloc.construct(_end++, *first);
-							first++;
-						}
-					}
-					_alloc.deallocate(old_start - old_size, old_cap);
+					// std::cout << "deallocate" << std::endl;
+					_alloc.deallocate(old_start, old_cap);
 				}
 				else
 				{
-					size_type i = 0;
 					_end = _end + dist;
 					while (i++ < len)
 						_alloc.construct(_end - i, *(_end - i - dist));
+					ret = _end - dist - i;
 					while (dist--)
-					{
-						_alloc.construct(_end - dist - i, *first);
-						first++;
-					}
+						_alloc.construct(_end - dist - i, *(first++));
 				}
-				return (position);
+				return (ret);
 			}
 
 			iterator erase(iterator position)
@@ -448,15 +454,13 @@ namespace ft
 					return (last);
 				size_type dist = ft::distance(first, last);
 				size_type pos = first - begin();
-				for (size_type i = 0; i < dist; i++)
+				for (size_type i = 0; i < size() - dist; i++)
 					*(_start + pos + i) = *(_start + pos + dist + i);
-				for (size_type i = 0; i < dist; i++)
-					_alloc.destroy(_end - i);
 				while (dist--)
-					_end--;
+					_alloc.destroy(_end--);
 				if (last == end())
 					return (end());
-				return (last);
+				return (first);
 			}
 
 			void swap(vector& other)
