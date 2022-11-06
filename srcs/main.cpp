@@ -274,8 +274,7 @@ void	vec_erased_test(void)
 			ft_vct[i] = std::string((ft_vct.size() - i), i + 65);
 	for (unsigned long int i = 0; i < std_vct.size(); ++i)
 			std_vct[i] = std::string((std_vct.size() - i), i + 65);
-	printSize(ft_vct);
-	printSize_std(std_vct);
+	printSizeVs(ft_vct, std_vct);
 
 	checkErase(ft_vct, ft_vct.erase(ft_vct.begin() + 2));
 	checkErase(std_vct, std_vct.erase(std_vct.begin() + 2));
@@ -361,6 +360,7 @@ void	vec_insert_test(void)
 			ft_vec3.insert(ft_vec3.end(), i);
 	for (int i = 0; i < 5; ++i)
 			std_vec3.insert(std_vec3.end(), i);
+	printSizeVs(ft_vec3, std_vec3);
 	ft_vec3.insert(ft_vec3.begin() + 1, 2, 111);
 	std_vec3.insert(std_vec3.begin() + 1, 2, 111);
 	printSizeVs(ft_vec3, std_vec3);

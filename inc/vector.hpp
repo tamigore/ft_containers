@@ -283,9 +283,6 @@ namespace ft
 
 				if (size() + 1 > this->max_size())
 					throw (std::length_error("vector::insert (one))"));
-				// std::cout << "len = " << len  << " || end_size = " << end() - begin() << std::endl;
-				// if (_start + len)
-					// std::cout << "vec[len] = " << *(_start + len) << "|| pointer = " << _start + len << std::endl;
 				if (capacity() < size() + 1)
 				{
 					pointer		old_start = _start;
@@ -293,13 +290,11 @@ namespace ft
 					size_type	old_cap = capacity();
 					size_type	new_cap = (capacity() > 0 ? capacity() * 2 : 1);
 
-					// std::cout << "allocate" << std::endl;
 					_start = _alloc.allocate(new_cap);
 					_end = _start;
 					_capacity = _start + new_cap;
 					while (size() < old_size + 1)
 					{
-						// std::cout << "construct :" << (i == len ? value : *(old_start + i)) << std::endl;
 						if (i == len && ret == pos)
 						{
 							ret = _end;
@@ -308,15 +303,17 @@ namespace ft
 						if (i < old_size)
 							_alloc.construct(_end++, *(old_start + i++));
 					}
-					// std::cout << "deallocate" << std::endl;
 					_alloc.deallocate(old_start, old_cap);
 				}
 				else
 				{
-					while (i++ < len)
-						_alloc.construct(_end - i, *(_end - i - 1));
-					_alloc.construct(_end - i, value);
-					ret = _end++ - i;
+					i = len;
+					while (i++ < size())
+						_alloc.construct(_start + i + 1, *(_start + i));
+					i = len;
+					_end++;
+					_alloc.construct(_start + i, value);
+					ret = _start + i;
 				}
 				return (ret);
 			}
@@ -341,41 +338,35 @@ namespace ft
 						capacity() + count : capacity() * 2)
 						: count + 1);
 
-					// std::cout << "allocate" << std::endl;
 					_start = _alloc.allocate(new_cap);
 					_end = _start;
 					_capacity = _start + new_cap;
-					// std::cout << "len = " << len << std::endl;
-					// std::cout << "old_size + count = " << old_size + count << std::endl;
 					while (size() < old_size + count)
 					{
 						if (i == len && ret == pos)
 						{
 							ret = _end;
 							while (count--)
-							{
-								// std::cout << size() << " - construct :" << value << std::endl;
 								_alloc.construct(_end++, value);
-							}
 						}
-						// if (i < old_size)
-						// {
-							// std::cout << size() << " - construct :" << *(old_start + i) << std::endl;
+						else if (i < old_size)
 							_alloc.construct(_end++, *(old_start + i++));
-						// }
 					}
-					// std::cout << "deallocate" << std::endl;
 					_alloc.deallocate(old_start, old_cap);
 				}
 				else
 				{
-					std::cout << "len = " << len << std::endl;
-					while (i++ < len)
-						_alloc.construct(_end - i, *(_end - i - count));
-					while (count--)
-						_alloc.construct(_end - i++, value);
-					ret = _end - i + 1;
-					_end = _end + count;
+					_end += count;
+					i = size() - 1;
+					ret = _start + len;
+					while (i >= len)
+					{
+						if (i < len + count)
+							_alloc.construct(_start + i, value);
+						else
+							_alloc.construct(_start + i, *(_start + i - count));
+						i--;
+					}
 				}
 				return (ret);
 			}
