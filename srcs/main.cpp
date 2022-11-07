@@ -366,6 +366,60 @@ void	vec_insert_test(void)
 	printSizeVs(ft_vec3, std_vec3);
 }
 
+void	test_copy_construct(void)
+{
+	ft::vector<int>		ft_vct(5);
+	ft::vector<int>::iterator it = ft_vct.begin(), ite = ft_vct.end();
+	std::vector<int>	std_vct(5);
+	std::vector<int>::iterator sit = std_vct.begin(), site = std_vct.end();
+
+	std::cout << "len: " << (ite - it) << std::endl;
+	std::cout << "len: " << (site - sit) << std::endl;
+	for (; it != ite; ++it)
+			*it = (ite - it);
+	for (; sit != site; ++sit)
+			*sit = (site - sit);
+
+	it = ft_vct.begin();
+	sit = std_vct.begin();
+	ft::vector<int> ft_vct_range(it, --(--ite));
+	std::vector<int> std_vct_range(sit, --(--site));
+	for (int i = 0; it != ite; ++it)
+			*it = ++i * 5;
+	for (int i = 0; sit != site; ++sit)
+			*sit = ++i * 5;
+
+	it = ft_vct.begin();
+	sit = std_vct.begin();
+	ft::vector<int> ft_vct_copy(ft_vct);
+	std::vector<int> std_vct_copy(std_vct);
+	for (int i = 0; it != ite; ++it)
+			*it = ++i * 7;
+	for (int i = 0; sit != site; ++sit)
+			*sit = ++i * 7;
+	ft_vct_copy.push_back(42);
+	ft_vct_copy.push_back(21);
+	std_vct_copy.push_back(42);
+	std_vct_copy.push_back(21);
+
+	std::cout << "\t-- PART ONE --" << std::endl;
+	printSizeVs(ft_vct, std_vct);
+	printSizeVs(ft_vct_range, std_vct_range);
+	printSizeVs(ft_vct_copy, std_vct_copy);
+
+	ft_vct = ft_vct_copy;
+	std_vct = std_vct_copy;
+	ft_vct_copy = ft_vct_range;
+	std_vct_copy = std_vct_range;
+	ft_vct_range.clear();
+	std_vct_range.clear();
+
+	std::cout << "\t-- PART TWO --" << std::endl;
+	printSizeVs(ft_vct, std_vct);
+	printSizeVs(ft_vct_range, std_vct_range);
+	printSizeVs(ft_vct_copy, std_vct_copy);
+}
+
 
 int main(int argc, char** argv)
 {
@@ -377,5 +431,7 @@ int main(int argc, char** argv)
 	// vec_assign_test();
 	// vec_bidirectionalit_test();
 	// vec_erased_test();
-	vec_insert_test();
+	// vec_insert_test();
+	test_copy_construct();
+	return (0);
 }

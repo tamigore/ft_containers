@@ -89,14 +89,11 @@ namespace ft
 			{
 				size_type dist = x.size();
 				
-				_start = _alloc.allocate(x.capacity());
+				_start = _alloc.allocate(dist);
 				_end = _start;
 				_capacity = _start + dist;
 				for (size_type i = 0; i < dist; i++)
-				{
-					_alloc.construct(_end, x[i]);
-					_end++;
-				}
+					_alloc.construct(_end++, x[i]);
 			}
 			
 			vector& operator=(const vector& other)
@@ -393,23 +390,20 @@ namespace ft
 						capacity() + dist : capacity() * 2)
 						: dist + 1);
 
-					// std::cout << "allocate" << std::endl;
 					_start = _alloc.allocate(new_cap);
 					_end = _start;
 					_capacity = _start + new_cap;
 					while (size() < old_size + dist)
 					{
-						// std::cout << "construct :" << (i == len ? *first : *(old_start + i)) << std::endl;
 						if (i == len && ret == pos)
 						{
 							ret = _end;
 							while (first != last)
 								_alloc.construct(_end++, *(first++));
 						}
-						// if (i < old_size)
+						else
 							_alloc.construct(_end++, *(old_start + i++));
 					}
-					// std::cout << "deallocate" << std::endl;
 					_alloc.deallocate(old_start, old_cap);
 				}
 				else
