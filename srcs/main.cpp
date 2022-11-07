@@ -249,23 +249,17 @@ void	vec_assign_test()
 
 }
 
-void    checkErase(ft::vector<std::string> const &vct, ft::vector<std::string>::const_iterator const &it)
+void    checkErase(ft::vector<std::string> const &ft_vct, ft::vector<std::string>::const_iterator const &it, std::vector<std::string> const &std_vct, std::vector<std::string>::const_iterator const &sit)
 {
 	static int i = 0;
-	std::cout << "_ft_" << std::endl;
-	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
-	printSize(vct);
+	static int j = 0;
+	std::cout << "" << std::endl;
+	std::cout << "_ft_ [" << i++ << "] " << "erase: " << it - ft_vct.begin() << std::endl;
+	std::cout << "_std_ [" << j++ << "] " << "erase: " << sit - std_vct.begin() << std::endl;
+	printSizeVs(ft_vct, std_vct);
 }
 
-void    checkErase(std::vector<std::string> const &vct, std::vector<std::string>::const_iterator const &it)
-{
-	static int i = 0;
-	std::cout << "_std_" << std::endl;
-	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
-	printSize_std(vct);
-}
-
-void	vec_erased_test(void)
+void	vec_erased_test()
 {
 	ft::vector<std::string>		ft_vct(10);
 	std::vector<std::string>	std_vct(10);
@@ -276,27 +270,20 @@ void	vec_erased_test(void)
 			std_vct[i] = std::string((std_vct.size() - i), i + 65);
 	printSizeVs(ft_vct, std_vct);
 
-	checkErase(ft_vct, ft_vct.erase(ft_vct.begin() + 2));
-	checkErase(std_vct, std_vct.erase(std_vct.begin() + 2));
+	checkErase(ft_vct, ft_vct.erase(ft_vct.begin() + 2), std_vct, std_vct.erase(std_vct.begin() + 2));
 	
-	checkErase(ft_vct, ft_vct.erase(ft_vct.begin()));
-	checkErase(std_vct, std_vct.erase(std_vct.begin()));
-	checkErase(ft_vct, ft_vct.erase(ft_vct.end() - 1));
-	checkErase(std_vct, std_vct.erase(std_vct.end() - 1));
+	checkErase(ft_vct, ft_vct.erase(ft_vct.begin()), std_vct, std_vct.erase(std_vct.begin()));
+	checkErase(ft_vct, ft_vct.erase(ft_vct.end() - 1), std_vct, std_vct.erase(std_vct.end() - 1));
 
-	checkErase(ft_vct, ft_vct.erase(ft_vct.begin(), ft_vct.begin() + 3));
-	checkErase(std_vct, std_vct.erase(std_vct.begin(), std_vct.begin() + 3));
-	checkErase(ft_vct, ft_vct.erase(ft_vct.end() - 3, ft_vct.end() - 1));
-	checkErase(std_vct, std_vct.erase(std_vct.end() - 3, std_vct.end() - 1));
+	checkErase(ft_vct, ft_vct.erase(ft_vct.begin(), ft_vct.begin() + 3), std_vct, std_vct.erase(std_vct.begin(), std_vct.begin() + 3));
+	checkErase(ft_vct, ft_vct.erase(ft_vct.end() - 3, ft_vct.end() - 1), std_vct, std_vct.erase(std_vct.end() - 3, std_vct.end() - 1));
 
 	ft_vct.push_back("Hello");
 	ft_vct.push_back("Hi there");
 	std_vct.push_back("Hello");
 	std_vct.push_back("Hi there");
-	printSize(ft_vct);
-	printSize_std(std_vct);
-	checkErase(ft_vct, ft_vct.erase(ft_vct.end() - 3, ft_vct.end()));
-	checkErase(std_vct, std_vct.erase(std_vct.end() - 3, std_vct.end()));
+	printSizeVs(ft_vct, std_vct);
+	checkErase(ft_vct, ft_vct.erase(ft_vct.end() - 3, ft_vct.end()), std_vct, std_vct.erase(std_vct.end() - 3, std_vct.end()));
 
 	ft_vct.push_back("ONE");
 	ft_vct.push_back("TWO");
@@ -306,67 +293,105 @@ void	vec_erased_test(void)
 	std_vct.push_back("TWO");
 	std_vct.push_back("THREE");
 	std_vct.push_back("FOUR");
-	printSize(ft_vct);
-	printSize_std(std_vct);
-	checkErase(ft_vct, ft_vct.erase(ft_vct.begin(), ft_vct.end()));
-	checkErase(std_vct, std_vct.erase(std_vct.begin(), std_vct.end()));
+	printSizeVs(ft_vct, std_vct);
+	checkErase(ft_vct, ft_vct.erase(ft_vct.begin(), ft_vct.end()), std_vct, std_vct.erase(std_vct.begin(), std_vct.end()));
 }
 
-void	vec_insert_test(void)
+void	vec_insert_test()
 {
-	ft::vector<int> ft_vec(10);
-	ft::vector<int> ft_vec2;
-	ft::vector<int> ft_vec3;
-	std::vector<int> std_vec(10);
-	std::vector<int> std_vec2;
-	std::vector<int> std_vec3;
+	std::cout << "FIRST PART" << std::endl;
+	{
+		ft::vector<int> ft_vec(10);
+		ft::vector<int> ft_vec2;
+		ft::vector<int> ft_vec3;
+		std::vector<int> std_vec(10);
+		std::vector<int> std_vec2;
+		std::vector<int> std_vec3;
 
-	for (unsigned long int i = 0; i < ft_vec.size(); ++i)
-		ft_vec[i] = (ft_vec.size() - i) * 3;
-	for (unsigned long int i = 0; i < std_vec.size(); ++i)
-		std_vec[i] = (std_vec.size() - i) * 3;
-	printSizeVs(ft_vec, std_vec);
+		for (unsigned long int i = 0; i < ft_vec.size(); ++i)
+			ft_vec[i] = (ft_vec.size() - i) * 3;
+		for (unsigned long int i = 0; i < std_vec.size(); ++i)
+			std_vec[i] = (std_vec.size() - i) * 3;
+		printSizeVs(ft_vec, std_vec);
 
-	// ft_vec2.resize(4);
-	// std_vec2.resize(4);
-	ft_vec2.insert(ft_vec2.end(), 42);
-	std_vec2.insert(std_vec2.end(), 42);
-	printSizeVs(ft_vec2, std_vec2);
+		// ft_vec2.resize(4);
+		// std_vec2.resize(4);
+		ft_vec2.insert(ft_vec2.end(), 42);
+		std_vec2.insert(std_vec2.end(), 42);
+		printSizeVs(ft_vec2, std_vec2);
 
-	ft_vec2.insert(ft_vec2.begin(), 2, 21);
-	std_vec2.insert(std_vec2.begin(), 2, 21);
-	printSizeVs(ft_vec2, std_vec2);
+		ft_vec2.insert(ft_vec2.begin(), 2, 21);
+		std_vec2.insert(std_vec2.begin(), 2, 21);
+		printSizeVs(ft_vec2, std_vec2);
 
-	// std::cout << *(ft_vec2.end() - 2) << " || " << (ft_vec2._end - 2) << std::endl;
-	ft_vec2.insert(ft_vec2.end() - 2, 42);
-	std_vec2.insert(std_vec2.end() - 2, 42);
-	printSizeVs(ft_vec2, std_vec2);
+		// std::cout << *(ft_vec2.end() - 2) << " || " << (ft_vec2._end - 2) << std::endl;
+		ft_vec2.insert(ft_vec2.end() - 2, 42);
+		std_vec2.insert(std_vec2.end() - 2, 42);
+		printSizeVs(ft_vec2, std_vec2);
 
-	ft_vec2.insert(ft_vec2.end(), 2, 84);
-	std_vec2.insert(std_vec2.end(), 2, 84);
-	printSizeVs(ft_vec2, std_vec2);
+		ft_vec2.insert(ft_vec2.end(), 2, 84);
+		std_vec2.insert(std_vec2.end(), 2, 84);
+		printSizeVs(ft_vec2, std_vec2);
 
-	ft_vec2.resize(4);
-	std_vec2.resize(4);
-	printSizeVs(ft_vec2, std_vec2);
+		ft_vec2.resize(4);
+		std_vec2.resize(4);
+		printSizeVs(ft_vec2, std_vec2);
 
-	ft_vec2.insert(ft_vec2.begin() + 2, ft_vec.begin(), ft_vec.end());
-	ft_vec.clear();
-	std_vec2.insert(std_vec2.begin() + 2, std_vec.begin(), std_vec.end());
-	std_vec.clear();
-	printSizeVs(ft_vec2, std_vec2);
+		ft_vec2.insert(ft_vec2.begin() + 2, ft_vec.begin(), ft_vec.end());
+		ft_vec.clear();
+		std_vec2.insert(std_vec2.begin() + 2, std_vec.begin(), std_vec.end());
+		std_vec.clear();
+		printSizeVs(ft_vec2, std_vec2);
 
-	for (int i = 0; i < 5; ++i)
-			ft_vec3.insert(ft_vec3.end(), i);
-	for (int i = 0; i < 5; ++i)
-			std_vec3.insert(std_vec3.end(), i);
-	printSizeVs(ft_vec3, std_vec3);
-	ft_vec3.insert(ft_vec3.begin() + 1, 2, 111);
-	std_vec3.insert(std_vec3.begin() + 1, 2, 111);
-	printSizeVs(ft_vec3, std_vec3);
+		for (int i = 0; i < 5; ++i)
+				ft_vec3.insert(ft_vec3.end(), i);
+		for (int i = 0; i < 5; ++i)
+				std_vec3.insert(std_vec3.end(), i);
+		printSizeVs(ft_vec3, std_vec3);
+		ft_vec3.insert(ft_vec3.begin() + 1, 2, 111);
+		std_vec3.insert(std_vec3.begin() + 1, 2, 111);
+		printSizeVs(ft_vec3, std_vec3);
+	}
+	std::cout << std::endl;
+	std::cout << "SECOND PART" << std::endl;
+	{
+		ft::vector<int> ft_vct(5);
+		std::vector<int> std_vct(5);
+		ft::vector<int> ft_vct2;
+		std::vector<int> std_vct2;
+		const int cut = 3;
+
+		for (unsigned long int i = 0; i < ft_vct.size(); ++i)
+				ft_vct[i] = (ft_vct.size() - i) * 7;
+		for (unsigned long int i = 0; i < std_vct.size(); ++i)
+				std_vct[i] = (std_vct.size() - i) * 7;
+		printSizeVs(ft_vct, std_vct);
+
+		ft_vct2.insert(ft_vct2.begin(), ft_vct.begin(), ft_vct.begin() + cut);
+		std_vct2.insert(std_vct2.begin(), std_vct.begin(), std_vct.begin() + cut);
+		printSizeVs(ft_vct2, std_vct2);
+		ft_vct2.insert(ft_vct2.begin(), ft_vct.begin() + cut, ft_vct.end());
+		std_vct2.insert(std_vct2.begin(), std_vct.begin() + cut, std_vct.end());
+		printSizeVs(ft_vct2, std_vct2);
+		ft_vct2.insert(ft_vct2.end(), ft_vct.begin(), ft_vct.begin() + cut);
+		std_vct2.insert(std_vct2.end(), std_vct.begin(), std_vct.begin() + cut);
+		printSizeVs(ft_vct2, std_vct2);
+
+		std::cout << "insert return:" << std::endl;
+
+		std::cout << *ft_vct2.insert(ft_vct2.end(), 42)  << " = " << *std_vct2.insert(std_vct2.end(), 42) << std::endl;
+		printSizeVs(ft_vct2, std_vct2);
+		
+		
+		std::cout << *ft_vct2.insert(ft_vct2.begin() + 5, 84) << " = " << *std_vct2.insert(std_vct2.begin() + 5, 84) << std::endl;
+		std::cout << "----------------------------------------" << std::endl;
+
+		printSizeVs(ft_vct2, std_vct2);
+	}
+	std::cout << std::endl;
 }
 
-void	test_copy_construct(void)
+void	test_copy_construct()
 {
 	ft::vector<int>		ft_vct(5);
 	ft::vector<int>::iterator it = ft_vct.begin(), ite = ft_vct.end();
@@ -420,6 +445,143 @@ void	test_copy_construct(void)
 	printSizeVs(ft_vct_copy, std_vct_copy);
 }
 
+void	is_empty(ft::vector<int> const &ft_vct, std::vector<int> const &std_vct)
+{
+        std::cout << "ft is_empty: " << ft_vct.empty() << " | std is_empty: " << std_vct.empty() << std::endl;
+}
+
+void	test_size()
+{
+	const int start_size = 7;
+	ft::vector<int> ft_vct(start_size, 20);
+	ft::vector<int> ft_vct2;
+	ft::vector<int>::iterator it = ft_vct.begin();
+	std::vector<int> std_vct(start_size, 20);
+	std::vector<int> std_vct2;
+	std::vector<int>::iterator sit = std_vct.begin();
+
+	for (int i = 2; i < start_size; ++i)
+			it[i] = (start_size - i) * 3;
+	for (int i = 2; i < start_size; ++i)
+			sit[i] = (start_size - i) * 3;
+	printSizeVs(ft_vct, std_vct);
+
+	ft_vct.resize(10, 42);
+	std_vct.resize(10, 42);
+	printSizeVs(ft_vct, std_vct);
+
+	ft_vct.resize(18, 43);
+	std_vct.resize(18, 43);
+	printSizeVs(ft_vct, std_vct);
+	ft_vct.resize(10);
+	std_vct.resize(10);
+	printSizeVs(ft_vct, std_vct);
+	ft_vct.resize(23, 44);
+	std_vct.resize(23, 44);
+	printSizeVs(ft_vct, std_vct);
+	ft_vct.resize(5);
+	std_vct.resize(5);
+	printSizeVs(ft_vct, std_vct);
+	ft_vct.reserve(5);
+	std_vct.reserve(5);
+	ft_vct.reserve(3);
+	std_vct.reserve(3);
+	printSizeVs(ft_vct, std_vct);
+	ft_vct.resize(87);
+	std_vct.resize(87);
+	ft_vct.resize(5);
+	std_vct.resize(5);
+	printSizeVs(ft_vct, std_vct);
+
+	is_empty(ft_vct2, std_vct2);
+	ft_vct2 = ft_vct;
+	std_vct2 = std_vct;
+	is_empty(ft_vct2, std_vct2);
+	ft_vct.reserve(ft_vct.capacity() + 1);
+	std_vct.reserve(std_vct.capacity() + 1);
+	printSizeVs(ft_vct, std_vct);
+	printSizeVs(ft_vct2, std_vct);
+
+	ft_vct2.resize(0);
+	std_vct2.resize(0);
+	is_empty(ft_vct2, std_vct2);
+	printSizeVs(ft_vct2, std_vct2);
+}
+
+void	test_swap()
+{
+	ft::vector<int> foo(3, 15);
+	ft::vector<int> bar(5, 42);
+	std::vector<int> sfoo(3, 15);
+	std::vector<int> sbar(5, 42);
+	ft::vector<int>::const_iterator it_foo = foo.begin();
+	ft::vector<int>::const_iterator it_bar = bar.begin();
+	std::vector<int>::const_iterator sit_foo = sfoo.begin();
+	std::vector<int>::const_iterator sit_bar = sbar.begin();
+
+	std::cout << "BEFORE SWAP" << std::endl;
+
+	std::cout << "foo contains:" << std::endl;
+	printSizeVs(foo, sfoo);
+	std::cout << "bar contains:" << std::endl;
+	printSizeVs(bar, sbar);
+
+	foo.swap(bar);
+	sfoo.swap(sbar);
+
+	std::cout << "AFTER SWAP" << std::endl;
+
+	std::cout << "foo contains:" << std::endl;
+	printSizeVs(foo, sfoo);
+	std::cout << "bar contains:" << std::endl;
+	printSizeVs(bar, sbar);
+
+	std::cout << "Iterator validity:" << std::endl;
+	std::cout << (it_foo == bar.begin()) << std::endl;
+	std::cout << (it_bar == foo.begin()) << std::endl;
+	std::cout << (sit_foo == sbar.begin()) << std::endl;
+	std::cout << (sit_bar == sfoo.begin()) << std::endl;
+	std::cout << "END" << std::endl;
+}
+
+void	test_iter_const(void)
+{
+	{
+		const int size = 5;
+		ft::vector<int> vct(size);
+		ft::vector<int>::iterator it = vct.begin();
+		ft::vector<int>::const_iterator ite = vct.begin();
+
+		for (int i = 0; i < size; ++i)
+				it[i] = i;
+
+		std::cout << "ok ?" << std::endl;
+		ite[1] = 42; // < -- error
+		std::cout << "KO !" << std::endl;
+	}
+	{
+		const int size = 5;
+		ft::vector<int> vct(size);
+		ft::vector<int>::iterator it = vct.begin();
+		ft::vector<int>::const_iterator ite = vct.begin();
+
+		for (int i = 0; i < size; ++i)
+			it[i] = i;
+		std::cout << "ok ?" << std::endl;
+		*ite = 42; // < -- error
+		std::cout << "KO !" << std::endl;
+	}
+	{
+		const int size = 5;
+		ft::vector<int> const vct(size);
+		ft::vector<int>::iterator it = vct.begin(); // <-- error expected
+
+		std::cout << "ok ?" << std::endl;
+		for (int i = 0; i < size; ++i)
+				it[i] = i;
+		std::cout << "KO !" << std::endl;
+	}
+}
 
 int main(int argc, char** argv)
 {
@@ -431,7 +593,10 @@ int main(int argc, char** argv)
 	// vec_assign_test();
 	// vec_bidirectionalit_test();
 	// vec_erased_test();
-	// vec_insert_test();
-	test_copy_construct();
+	vec_insert_test();
+	// test_copy_construct();
+	// test_size();
+	// test_swap();
+	// test_iter_const();
 	return (0);
 }

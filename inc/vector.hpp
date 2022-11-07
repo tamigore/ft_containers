@@ -44,9 +44,9 @@ namespace ft
 			explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
 				: _alloc(alloc)
 			{
-				_start = _alloc.allocate(count + 1);
+				_start = _alloc.allocate(count);
 				_end = _start;
-				_capacity = _start + count + 1;
+				_capacity = _start + count;
 				while (count--)
 				{
 					_alloc.construct(_end, value);
@@ -65,9 +65,9 @@ namespace ft
 			{
 				size_type	dist = ft::distance(first, last);
 
-				_start = _alloc.allocate(dist + 1);
+				_start = _alloc.allocate(dist);
 				_end = _start;
-				_capacity = _start + dist + 1;
+				_capacity = _start + dist;
 				while (first != last)
 				{
 					_alloc.construct(_end, *first);
@@ -176,11 +176,9 @@ namespace ft
 			{
 				if (count > this->max_size())
 					throw (std::length_error("vector::resize"));
-				std::cout << "size = " << size() << " | count = " <<  count << std::endl;
+				// std::cout << "size = " << size() << " | count = " <<  count << std::endl;
 				if (count > size())
-				{
-					insert(end(), count, value);
-				}
+					insert(end(), count - size(), value);
 				else
 				{
 					while (count < size())
@@ -333,7 +331,7 @@ namespace ft
 					size_type	new_cap = (capacity() > 0 ?
 						(capacity() * 2 < count + size() ?
 						capacity() + count : capacity() * 2)
-						: count + 1);
+						: count);
 
 					_start = _alloc.allocate(new_cap);
 					_end = _start;
@@ -343,7 +341,7 @@ namespace ft
 						if (i == len && ret == pos)
 						{
 							ret = _end;
-							while (count--)
+							for (size_type i = count; i > 0; i--)
 								_alloc.construct(_end++, value);
 						}
 						else if (i < old_size)
@@ -385,10 +383,9 @@ namespace ft
 					pointer		old_start = _start;
 					size_type	old_size = size();
 					size_type	old_cap = capacity();
-					size_type	new_cap = (capacity() > 0 ?
-						(capacity() * 2 < dist + size() ?
-						capacity() + dist : capacity() * 2)
-						: dist + 1);
+					size_type	new_cap = (capacity() > 0 ? size() + dist : dist);
+					// size_type	new_cap = (capacity() > 0 ?
+						// (capacity() * 2 < dist + size() ? capacity() + dist : capacity() * 2) : dist);
 
 					_start = _alloc.allocate(new_cap);
 					_end = _start;
@@ -423,14 +420,11 @@ namespace ft
 				if (position == end())
 					return (end());
 				size_type dist = position - begin();
-				while (dist < size())
-				{
-					*(_start + dist) = *(_start + dist + 1);
-					dist++;
-				}
+				for (size_type i = dist; i < size() - 1; i++)
+					*(_start + i) = *(_start + i + 1);
 				_end--;
 				_alloc.destroy(_end);
-				return (position);
+				return (_start + dist);
 			}
 
 			iterator erase(iterator first, iterator last)
@@ -450,9 +444,18 @@ namespace ft
 
 			void swap(vector& other)
 			{
-				vector tmp(*this);
-				*this = other;
-				other = tmp;
+				allocator_type	old_alloc = other.get_allocator();
+				pointer			old_start = other._start;
+				pointer			old_end = other._end;
+				pointer			old_capacity = other._capacity;
+				other._alloc = this->_alloc;
+				other._start = this->_start;
+				other._end = this->_end;
+				other._capacity = this->_capacity;
+				this->_alloc = old_alloc;
+				this->_start = old_start;
+				this->_end = old_end;
+				this->_capacity = old_capacity;
 			}
 
 			void clear()
