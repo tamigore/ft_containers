@@ -25,7 +25,8 @@ HEADER =	ft.hpp		\
 			stack.hpp	\
 			vector.hpp	\
 			usefull.hpp	\
-			pair.hpp
+			pair.hpp	\
+			RBTree.hpp
 # map.hpp
 
 INC = inc/
