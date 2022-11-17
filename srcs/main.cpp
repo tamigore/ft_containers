@@ -603,7 +603,57 @@ void	test_iter_const(void)
 // 	return (0);
 // }
 
-int main()
+#define TESTED_NAMESPACE std
+#define NAMESPACE2 ft
+#define TESTED_TYPE int
+
+template <class T, class Alloc>
+void    cmp(const NAMESPACE2::vector<T, Alloc> &lhs, const NAMESPACE2::vector<T, Alloc> &rhs, const TESTED_NAMESPACE::vector<T, Alloc> &s_lhs, const TESTED_NAMESPACE::vector<T, Alloc> &s_rhs)
+{
+        static int i = 0;
+
+        std::cout << "############### [" << i++ << "] ###############"  << std::endl;
+
+        std::cout << "FT > eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << " || STD > eq: " << (s_lhs == s_rhs) << " | ne: " << (s_lhs != s_rhs) << std::endl;
+        std::cout << "FT > lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << " || STD > lt: " << (s_lhs <  s_rhs) << " | le: " << (s_lhs <= s_rhs) << std::endl;
+        std::cout << "FT > gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << " || STD > gt: " << (s_lhs >  s_rhs) << " | ge: " << (s_lhs >= s_rhs) << std::endl;
+}
+
+void	test_relational_op()
+{
+	NAMESPACE2::vector<TESTED_TYPE> ft_vct(4);
+	NAMESPACE2::vector<TESTED_TYPE> ft_vct2(4);
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(4);
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2(4);
+
+	cmp(ft_vct, ft_vct, vct, vct);  // 0
+	cmp(ft_vct, ft_vct2, vct, vct2); // 1
+
+	vct2.resize(10);
+	ft_vct2.resize(10);
+
+	cmp(ft_vct, ft_vct2, vct, vct2); // 2
+	cmp(ft_vct2, ft_vct, vct2, vct); // 3
+
+	vct[2] = 42;
+	ft_vct[2] = 42;
+
+	cmp(ft_vct, ft_vct2, vct, vct2); // 4
+	cmp(ft_vct2, ft_vct, vct2, vct); // 5
+	printSizeVs(ft_vct, vct);
+	printSizeVs(ft_vct2, vct2);
+
+	swap(vct, vct2);
+	swap(ft_vct, ft_vct2);
+
+	printSizeVs(ft_vct, vct);
+	printSizeVs(ft_vct2, vct2);
+	cmp(ft_vct, ft_vct2, vct, vct2); // 6
+	cmp(ft_vct2, ft_vct, vct2, vct); // 7
+	cmp(ft_vct, ft_vct, vct, vct); // 8
+}
+
+int main(int argc, char** argv)
 {
 	ft::RBTree<int> bst;
 	bst.insert(8, 1);

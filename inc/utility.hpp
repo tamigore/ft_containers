@@ -34,9 +34,35 @@ namespace ft
 
 	// distance https://en.cppreference.com/w/cpp/iterator/distance
 
+	template<class InputIt1, class InputIt2>
+	bool	lexicographical_compare(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
+	{
+		for (; (first1 != last1) && (first2 != last2); ++first1, (void) ++first2)
+		{
+			if (*first1 < *first2)
+				return true;
+			if (*first2 < *first1)
+				return false;
+		}
+		return (first1 == last1) && (first2 != last2);
+	}
+
+	template<class InputIt1, class InputIt2, class Compare>
+	bool	lexicographical_compare(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, Compare comp)
+	{
+		for (; (first1 != last1) && (first2 != last2); ++first1, (void) ++first2)
+		{
+			if (comp(*first1, *first2))
+				return true;
+			if (comp(*first2, *first1))
+				return false;
+		}
+	
+		return (first1 == last1) && (first2 != last2);
+	}
+
 	template<class It>
-	typename std::iterator_traits<It>::difference_type 
-		do_distance(It first, It last, std::input_iterator_tag)
+	typename std::iterator_traits<It>::difference_type	do_distance(It first, It last, std::input_iterator_tag)
 	{
 		typename std::iterator_traits<It>::difference_type result = 0;
 		while (first != last)
@@ -48,15 +74,13 @@ namespace ft
 	}
 	
 	template<class It>
-	typename std::iterator_traits<It>::difference_type 
-		do_distance(It first, It last, std::random_access_iterator_tag)
+	typename std::iterator_traits<It>::difference_type  do_distance(It first, It last, std::random_access_iterator_tag)
 	{
 		return last - first;
 	}
 	
 	template<class It>
-	typename std::iterator_traits<It>::difference_type
-		distance(It first, It last)
+	typename std::iterator_traits<It>::difference_type distance(It first, It last)
 	{
 		return do_distance(first, last,
 			typename std::iterator_traits<It>::iterator_category());

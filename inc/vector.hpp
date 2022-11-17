@@ -178,7 +178,10 @@ namespace ft
 					throw (std::length_error("vector::resize"));
 				// std::cout << "size = " << size() << " | count = " <<  count << std::endl;
 				if (count > size())
+				{
 					insert(end(), count - size(), value);
+					// std::cout << size() << std::endl;
+				}
 				else
 				{
 					while (count < size())
@@ -302,8 +305,8 @@ namespace ft
 				}
 				else
 				{
-					i = len;
-					while (i++ < size())
+					i = size();
+					while (i-- > len)
 						_alloc.construct(_start + i + 1, *(_start + i));
 					i = len;
 					_end++;
@@ -473,29 +476,16 @@ namespace ft
 	template <class T, class Alloc>
 	bool operator==(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
 	{
-		typedef typename Alloc::size_type size;
-	
 		if (x.size() != y.size())
 			return (false);
-		for (size i = 0; i < x.size(); i++)
+		typename ft::vector<T>::const_iterator i = x.begin();
+		typename ft::vector<T>::const_iterator j = y.begin();
+		while (i != x.end())
 		{
-			if (x[i] != y[i])
+			if (j == y.end() || *i != *j)
 				return (false);
-		}
-		return (true);
-	};
-
-	template <class T, class Alloc>
-	bool operator< (const vector<T,Alloc>& x, const vector<T,Alloc>& y)
-	{
-		typedef typename Alloc::size_type size;
-
-		if (x.size() >= y.size())
-			return (false);
-		for (size i = 0; i < x.size(); i++)
-		{
-			if (x[i] >= y[i])
-				return (false);
+			++i;
+			++j;
 		}
 		return (true);
 	};
@@ -503,59 +493,31 @@ namespace ft
 	template <class T, class Alloc>
 	bool operator!=(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
 	{
-		if (x.size() == y.size())
-			return (false);
-		// for (Alloc::size_type i = 0; i < x.size(); i++)
-		// {
-		// 	if (x[i] != y[i])
-		// 		return (true);
-		// }
-		return (true);
+		return (!(x == y));
 	};
 
 	template <class T, class Alloc>
-	bool operator> (const vector<T,Alloc>& x, const vector<T,Alloc>& y)
+	bool operator< (const vector<T,Alloc>& x, const vector<T,Alloc>& y)
 	{
-		typedef typename Alloc::size_type size;
-	
-		if (x.size() <= y.size())
-			return (false);
-		for (size i = 0; i < x.size(); i++)
-		{
-			if (x[i] <= y[i])
-				return (false);
-		}
-		return (true);
-	};
-
-	template <class T, class Alloc>
-	bool operator>=(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
-	{
-		typedef typename Alloc::size_type size;
-	
-		if (x.size() < y.size())
-			return (false);
-		for (size i = 0; i < x.size(); i++)
-		{
-			if (x[i] < y[i])
-				return (false);
-		}
-		return (true);
+		return (ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()));
 	};
 
 	template <class T, class Alloc>
 	bool operator<=(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
 	{
-		typedef typename Alloc::size_type size;
+		return (x == y || x < y);
+	};
 
-		if (x.size() > y.size())
-			return (false);
-		for (size i = 0; i < x.size(); i++)
-		{
-			if (x[i] > y[i])
-				return (false);
-		}
-		return (true);
+	template <class T, class Alloc>
+	bool operator> (const vector<T,Alloc>& x, const vector<T,Alloc>& y)
+	{
+		return (!(x <= y));
+	};
+
+	template <class T, class Alloc>
+	bool operator>=(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
+	{
+		return (!(x < y));
 	};
 
 	// specialized algorithms:
