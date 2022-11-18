@@ -24,7 +24,7 @@ namespace ft
 			typedef typename allocator_type::pointer			pointer;
 			typedef typename allocator_type::const_pointer		const_pointer;
 			typedef ft::random_access_iterator<T>				iterator;
-			typedef ft::random_access_iterator<T>				const_iterator;
+			typedef ft::random_access_iterator<const T>			const_iterator;
 			typedef ft::reverse_iterator<iterator> 				reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
@@ -98,7 +98,7 @@ namespace ft
 			
 			vector& operator=(const vector& other)
 			{
-				if (*this == other)
+				if (this == &other)
 					return (*this);
 				clear();
 				insert(this->begin(), other.begin(), other.end());
@@ -138,6 +138,12 @@ namespace ft
 				// insert(begin(), first, last);
 			};
 
+// no matching conversion for functional-style cast 
+// from 'ft::vector<std::basic_string<char> >::const_iterator' 
+// (aka 'random_access_iterator<const std::basic_string<char> >') 
+// to 'ft::vector<std::basic_string<char> >::reverse_iterator' 
+// (aka 'reverse_iterator<random_access_iterator<std::basic_string<char> > >')
+
 			allocator_type get_allocator() const
 				{ return (_alloc); }
 
@@ -157,13 +163,13 @@ namespace ft
 				{ return (reverse_iterator(end())); }
 
 			const_reverse_iterator	rbegin(void) const
-				{ return (reverse_iterator(end())); }
+				{ return (const_reverse_iterator(end())); }
 			
 			reverse_iterator	rend(void)
 				{ return (reverse_iterator(begin())); }
 
 			const_reverse_iterator	rend(void) const
-				{ return (reverse_iterator(begin())); }
+				{ return (const_reverse_iterator(begin())); }
 
 			// 23.2.4.2 capacity:
 			size_type size() const
@@ -269,15 +275,14 @@ namespace ft
 
 			void pop_back()
 			{
-				_alloc.destroy(_end - 1);
-				_end--;
+				_alloc.destroy(--_end);
 			}
 
 			iterator insert(const_iterator pos, const T& value)
 			{
 				size_type	len = pos - begin();
 				size_type	i = 0;
-				iterator	ret = pos;
+				iterator	ret = _start + len;
 
 				if (size() + 1 > this->max_size())
 					throw (std::length_error("vector::insert (one))"));
@@ -320,10 +325,10 @@ namespace ft
 			{
 				size_type	len = pos - begin();
 				size_type	i = 0;
-				iterator	ret = pos;
+				iterator	ret = _start + len;
 
 				if (count == 0)
-					return (pos);
+					return (ret);
 				if (count + size() > this->max_size())
 					throw (std::length_error("vector::insert (fill)"));
 				if (capacity() < size() + count)
@@ -375,10 +380,10 @@ namespace ft
 				size_type	len = pos - begin();
 				size_type	dist = ft::distance(first, last);
 				size_type	i = 0;
-				iterator	ret = pos;
+				iterator	ret = _start + len;
 
 				if (first == last)
-					return (pos);
+					return (ret);
 				if (dist + size() > this->max_size())
 					throw (std::length_error("vector::insert (fill)"));
 				if (capacity() < size() + dist)
@@ -476,49 +481,55 @@ namespace ft
 	template <class T, class Alloc>
 	bool operator==(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
 	{
-		if (x.size() != y.size())
-			return (false);
-		typename ft::vector<T>::const_iterator i = x.begin();
-		typename ft::vector<T>::const_iterator j = y.begin();
-		while (i != x.end())
-		{
-			if (j == y.end() || *i != *j)
-				return (false);
-			++i;
-			++j;
-		}
-		return (true);
+		bool a = ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
+		bool b = ft::lexicographical_compare(y.begin(), y.end(), x.begin(), x.end());
+		
+		if (!a && !b)
+			return (true);
+		return (false);
+		// if (x.size() != y.size())
+		// 	return (false);
+		// typename ft::vector<T>::const_iterator i = x.begin();
+		// typename ft::vector<T>::const_iterator j = y.begin();
+		// while (i != x.end())
+		// {
+		// 	if (j == y.end() || *i != *j)
+		// 		return (false);
+		// 	++i;
+		// 	++j;
+		// }
+		// return (true);
 	};
 
 	template <class T, class Alloc>
 	bool operator!=(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
 	{
 		return (!(x == y));
-	};
+	}
 
 	template <class T, class Alloc>
 	bool operator< (const vector<T,Alloc>& x, const vector<T,Alloc>& y)
 	{
 		return (ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()));
-	};
+	}
 
 	template <class T, class Alloc>
 	bool operator<=(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
 	{
 		return (x == y || x < y);
-	};
+	}
 
 	template <class T, class Alloc>
 	bool operator> (const vector<T,Alloc>& x, const vector<T,Alloc>& y)
 	{
-		return (!(x <= y));
-	};
+		return (ft::lexicographical_compare(y.begin(), y.end(), x.begin(), x.end()));
+	}
 
 	template <class T, class Alloc>
 	bool operator>=(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
 	{
 		return (!(x < y));
-	};
+	}
 
 	// specialized algorithms:
 	template <class T, class Alloc>
@@ -527,7 +538,7 @@ namespace ft
 		vector<T,Alloc> tmp(x);
 		x = y;
 		y = tmp;
-	};
+	}
 }
 
 #endif

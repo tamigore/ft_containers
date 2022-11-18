@@ -1,5 +1,9 @@
 #include "ft.hpp"
-#include "RBTree.hpp"
+// #include "RBTree.hpp"
+
+#define SPACE_STD std
+#define SPACE_FT ft
+#define TESTED_TYPE int
 
 int stack_test()
 {
@@ -125,8 +129,7 @@ void	vec_bidirectionalit_test(void)
 
 	ft::vector<int>		ft_vct(lst.begin(), lst.end());
 	std::vector<int>	std_vct(lst.begin(), lst.end());
-	printSize(ft_vct);
-	printSize_std(std_vct);
+	printSizeVs(ft_vct, std_vct);
 
 	lst_it = lst.begin();
 	for (int i = 1; lst_it != lst.end(); ++i)
@@ -136,13 +139,11 @@ void	vec_bidirectionalit_test(void)
 	for (int i = 1; lst_it != lst.end(); ++i)
 			*lst_it++ = i * 5;
 	std_vct.assign(lst.begin(), lst.end());
-	printSize(ft_vct);
-	printSize_std(std_vct);
+	printSizeVs(ft_vct, std_vct);
 
 	ft_vct.insert(ft_vct.end(), lst.rbegin(), lst.rend());
 	std_vct.insert(std_vct.end(), lst.rbegin(), lst.rend());
-	printSize(ft_vct);
-	printSize_std(std_vct);
+	printSizeVs(ft_vct, std_vct);
 }
 
 void	vec_erase_test()
@@ -159,14 +160,12 @@ void	vec_erase_test()
 	std_v0.push_back('c');
 	ft_v0.push_back('k');
 	std_v0.push_back('k');
-	printSize(ft_v0);
-	printSize_std(std_v0);
+	printSizeVs(ft_v0, std_v0);
 	ft_v0.erase(ft_v0.begin() + 2);
 	std_v0.erase(std_v0.begin() + 2);
 	ft_v0.erase(ft_v0.begin());
 	std_v0.erase(std_v0.begin());
-	printSize(ft_v0);
-	printSize_std(std_v0);
+	printSizeVs(ft_v0, std_v0);
 	ft_v0.push_back('z');
 	std_v0.push_back('z');
 	ft_v0.push_back('y');
@@ -175,16 +174,13 @@ void	vec_erase_test()
 	std_v0.push_back('x');
 	ft_v0.push_back('w');
 	std_v0.push_back('w');
-	printSize(ft_v0);
-	printSize_std(std_v0);
+	printSizeVs(ft_v0, std_v0);
 	ft_v0.erase(ft_v0.begin() + 1, ft_v0.end() - 3);
 	std_v0.erase(std_v0.begin() + 1, std_v0.end() - 3);
-	printSize(ft_v0);
-	printSize_std(std_v0);
+	printSizeVs(ft_v0, std_v0);
 	ft_v0.erase(ft_v0.begin(), ft_v0.end());
 	std_v0.erase(std_v0.begin(), std_v0.end());
-	printSize(ft_v0);
-	printSize_std(std_v0);
+	printSizeVs(ft_v0, std_v0);
 }
 
 void	vec_assign_test()
@@ -206,10 +202,8 @@ void	vec_assign_test()
 			std_vct[i] = (std_vct.size() - i) * 3;
 	for (unsigned long int i = 0; i < std_vct_two.size(); ++i)
 			std_vct_two[i] = (std_vct_two.size() - i) * 5;
-	printSize(ft_vct);
-	printSize_std(std_vct);
-	printSize(ft_vct_two);
-	printSize_std(std_vct_two);
+	printSizeVs(ft_vct, std_vct);
+	printSizeVs(ft_vct_two, std_vct_two);
 
 	ft_vct_three.assign(ft_vct.begin(), ft_vct.end());
 	ft_vct.assign(ft_vct_two.begin(), ft_vct_two.end());
@@ -222,19 +216,14 @@ void	vec_assign_test()
 
 	std::cout << "\t### After assign(): ###" << std::endl;
 
-	printSize(ft_vct);
-	printSize_std(std_vct);
-	printSize(ft_vct_two);
-	printSize_std(std_vct_two);
-	printSize(ft_vct_three);
-	printSize_std(std_vct_three);
-	printSize(ft_vct_four);
-	printSize_std(std_vct_four);
+	printSizeVs(ft_vct, std_vct);
+	printSizeVs(ft_vct_two, std_vct_two);
+	printSizeVs(ft_vct_three, std_vct_three);
+	printSizeVs(ft_vct_four, std_vct_four);
 
 	ft_vct_four.assign(6, 84);
 	std_vct_four.assign(6, 84);
-	printSize(ft_vct_four);
-	printSize_std(std_vct_four);
+	printSizeVs(ft_vct_four, std_vct_four);
 
 	std::cout << "\t### assign() on enough capacity and low size: ###" << std::endl;
 
@@ -243,10 +232,8 @@ void	vec_assign_test()
 	std_vct.assign(5, 53);
 	std_vct_two.assign(std_vct_three.begin(), std_vct_three.begin() + 3);
 
-	printSize(ft_vct);
-	printSize_std(std_vct);
-	printSize(ft_vct_two);
-	printSize_std(std_vct_two);
+	printSizeVs(ft_vct, std_vct);
+	printSizeVs(ft_vct_two, std_vct_two);
 
 }
 
@@ -545,86 +532,59 @@ void	test_swap()
 	std::cout << "END" << std::endl;
 }
 
-void	test_iter_const(void)
-{
-	{
-		const int size = 5;
-		ft::vector<int> vct(size);
-		ft::vector<int>::iterator it = vct.begin();
-		ft::vector<int>::const_iterator ite = vct.begin();
-
-		for (int i = 0; i < size; ++i)
-				it[i] = i;
-
-		std::cout << "ok ?" << std::endl;
-		ite[1] = 42; // < -- error
-		std::cout << "KO !" << std::endl;
-	}
-	{
-		const int size = 5;
-		ft::vector<int> vct(size);
-		ft::vector<int>::iterator it = vct.begin();
-		ft::vector<int>::const_iterator ite = vct.begin();
-
-		for (int i = 0; i < size; ++i)
-			it[i] = i;
-		std::cout << "ok ?" << std::endl;
-		*ite = 42; // < -- error
-		std::cout << "KO !" << std::endl;
-	}
-	{
-		const int size = 5;
-		ft::vector<int> const vct(size);
-		ft::vector<int>::iterator it = vct.begin(); // <-- error expected
-
-		std::cout << "ok ?" << std::endl;
-		for (int i = 0; i < size; ++i)
-				it[i] = i;
-		std::cout << "KO !" << std::endl;
-	}
-}
-
-// int main(int argc, char** argv)
+// void	test_iter_const(void)
 // {
-// 	(void)argc;
-// 	(void)argv;
-// 	// stack_test();
-// 	// vector_test();
-// 	// vec_erase_test();
-// 	// vec_assign_test();
-// 	// vec_bidirectionalit_test();
-// 	// vec_erased_test();
-// 	// vec_insert_test();
-// 	// test_copy_construct();
-// 	// test_size();
-// 	// test_swap();
-// 	// test_iter_const();
-	
-// 	return (0);
+// 	{
+// 		const int size = 5;
+// 		ft::vector<int> vct(size);
+// 		ft::vector<int>::iterator it = vct.begin();
+// 		ft::vector<int>::const_iterator ite = vct.begin();
+// 		for (int i = 0; i < size; ++i)
+// 				it[i] = i;
+// 		std::cout << "ok ?" << std::endl;
+// 		ite[1] = 42; // < -- error
+// 		std::cout << "KO !" << std::endl;
+// 	}
+// 	{
+// 		const int size = 5;
+// 		ft::vector<int> vct(size);
+// 		ft::vector<int>::iterator it = vct.begin();
+// 		ft::vector<int>::const_iterator ite = vct.begin();
+// 		for (int i = 0; i < size; ++i)
+// 			it[i] = i;
+// 		std::cout << "ok ?" << std::endl;
+// 		*ite = 42; // < -- error
+// 		std::cout << "KO !" << std::endl;
+// 	}
+// 	{
+// 		const int size = 5;
+// 		ft::vector<int> const vct(size);
+// 		ft::vector<int>::iterator it = vct.begin(); // <-- error expected
+// 		std::cout << "ok ?" << std::endl;
+// 		for (int i = 0; i < size; ++i)
+// 				it[i] = i;
+// 		std::cout << "KO !" << std::endl;
+// 	}
 // }
 
-#define TESTED_NAMESPACE std
-#define NAMESPACE2 ft
-#define TESTED_TYPE int
-
 template <class T, class Alloc>
-void    cmp(const NAMESPACE2::vector<T, Alloc> &lhs, const NAMESPACE2::vector<T, Alloc> &rhs, const TESTED_NAMESPACE::vector<T, Alloc> &s_lhs, const TESTED_NAMESPACE::vector<T, Alloc> &s_rhs)
+void    cmp(const SPACE_FT::vector<T, Alloc> &lhs, const SPACE_FT::vector<T, Alloc> &rhs, const SPACE_STD::vector<T, Alloc> &s_lhs, const SPACE_STD::vector<T, Alloc> &s_rhs)
 {
-        static int i = 0;
+	static int i = 0;
 
-        std::cout << "############### [" << i++ << "] ###############"  << std::endl;
+	std::cout << "############### [" << i++ << "] ###############"  << std::endl;
 
-        std::cout << "FT > eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << " || STD > eq: " << (s_lhs == s_rhs) << " | ne: " << (s_lhs != s_rhs) << std::endl;
-        std::cout << "FT > lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << " || STD > lt: " << (s_lhs <  s_rhs) << " | le: " << (s_lhs <= s_rhs) << std::endl;
-        std::cout << "FT > gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << " || STD > gt: " << (s_lhs >  s_rhs) << " | ge: " << (s_lhs >= s_rhs) << std::endl;
+	std::cout << "FT > eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << " || STD > eq: " << (s_lhs == s_rhs) << " | ne: " << (s_lhs != s_rhs) << std::endl;
+	std::cout << "FT > lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << " || STD > lt: " << (s_lhs <  s_rhs) << " | le: " << (s_lhs <= s_rhs) << std::endl;
+	std::cout << "FT > gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << " || STD > gt: " << (s_lhs >  s_rhs) << " | ge: " << (s_lhs >= s_rhs) << std::endl;
 }
 
 void	test_relational_op()
 {
-	NAMESPACE2::vector<TESTED_TYPE> ft_vct(4);
-	NAMESPACE2::vector<TESTED_TYPE> ft_vct2(4);
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(4);
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2(4);
+	SPACE_FT::vector<TESTED_TYPE> ft_vct(4);
+	SPACE_FT::vector<TESTED_TYPE> ft_vct2(4);
+	SPACE_STD::vector<TESTED_TYPE> vct(4);
+	SPACE_STD::vector<TESTED_TYPE> vct2(4);
 
 	cmp(ft_vct, ft_vct, vct, vct);  // 0
 	cmp(ft_vct, ft_vct2, vct, vct2); // 1
@@ -653,38 +613,144 @@ void	test_relational_op()
 	cmp(ft_vct, ft_vct, vct, vct); // 8
 }
 
+template <typename Ite_1, typename Ite_2, typename Ite_3, typename Ite_4>
+void ft_eq_ope(const Ite_1 &first, const Ite_2 &second, const Ite_3 std1, const Ite_4 std2, const bool redo = 1)
+{
+	std::cout << (first < second) << " = " << (std1 < std2) << std::endl;
+	std::cout << (first <= second) << " = " << (std1 <= std2) << std::endl;
+	std::cout << (first > second) << " = " << (std1 > std2) << std::endl;
+	std::cout << (first >= second) << " = " << (std1 >= std2) << std::endl;
+	if (redo)
+		ft_eq_ope(second, first, std2, std1, 0);
+}
+
+void	ite_equ_test(void)
+{
+	const int size = 5;
+	int i = 0;
+	SPACE_FT::vector<TESTED_TYPE> vct(size);
+	SPACE_FT::vector<TESTED_TYPE>::iterator it_0(vct.begin());
+	SPACE_FT::vector<TESTED_TYPE>::iterator it_1(vct.end());
+	SPACE_FT::vector<TESTED_TYPE>::iterator it_mid;
+	SPACE_STD::vector<TESTED_TYPE> svct(size);
+	SPACE_STD::vector<TESTED_TYPE>::iterator sit_0(svct.begin());
+	SPACE_STD::vector<TESTED_TYPE>::iterator sit_1(svct.end());
+	SPACE_STD::vector<TESTED_TYPE>::iterator sit_mid;
+
+	SPACE_FT::vector<TESTED_TYPE>::const_iterator cit_0 = vct.begin();
+	SPACE_FT::vector<TESTED_TYPE>::const_iterator cit_1;
+	SPACE_FT::vector<TESTED_TYPE>::const_iterator cit_mid;
+	SPACE_STD::vector<TESTED_TYPE>::const_iterator scit_0 = svct.begin();
+	SPACE_STD::vector<TESTED_TYPE>::const_iterator scit_1;
+	SPACE_STD::vector<TESTED_TYPE>::const_iterator scit_mid;
+
+	for (int i = size; it_0 != it_1; --i)
+		*it_0++ = i;
+	for (int i = size; sit_0 != sit_1; --i)
+		*sit_0++ = i;
+	printSizeVs(vct, svct);
+	it_0 = vct.begin();
+	sit_0 = svct.begin();
+	cit_1 = vct.end();
+	scit_1 = svct.end();
+	it_mid = it_0 + 3;
+	sit_mid = sit_0 + 3;
+	cit_mid = it_0 + 3; cit_mid = cit_0 + 3; cit_mid = it_mid;
+	scit_mid = sit_0 + 3; scit_mid = scit_0 + 3; scit_mid = sit_mid;
+
+	std::cout << std::boolalpha;
+	std::cout << ((it_0 + 3 == cit_0 + 3) && (cit_0 + 3 == it_mid)) << std::endl;
+	std::cout << std::boolalpha;
+	std::cout << ((sit_0 + 3 == scit_0 + 3) && (scit_0 + 3 == sit_mid)) << std::endl;
+
+
+	std::cout << "\t\tft_eq_ope:" << std::endl;
+	std::cout << "Regular it :\n" << i++ << ": " << std::endl;
+	ft_eq_ope(it_0 + 3, it_mid, sit_0 + 3, sit_mid);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(it_0, it_1, sit_0, sit_1);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(it_1 - 3, it_mid, sit_1 - 3, sit_mid);
+	std::cout << "Const it :\n" << i++ << ": " << std::endl;
+	std::cout << "1 :" << *(cit_0 + 3) << " | 2 :" << *(cit_mid) << " | 3 :" << *(sit_0 + 3) << " | 4 :" << *(sit_mid) << std::endl;
+	ft_eq_ope(cit_0 + 3, cit_mid, scit_0 + 3, scit_mid); // false ?
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(cit_0, cit_1, scit_0, scit_1);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(cit_1 - 3, cit_mid, scit_1 - 3, scit_mid);
+	std::cout << "Both it :\n" << i++ << ": " << std::endl;
+	ft_eq_ope(it_mid, cit_0 + 3, sit_mid, scit_0 + 3);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(it_0, cit_1, sit_0, scit_1);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(it_1, cit_0, sit_1, scit_0);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(it_1 - 3, cit_mid, sit_1 - 3, scit_mid);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(it_mid, cit_1 - 3, sit_mid, scit_1 - 3);
+}
+
+void	rite2(void)
+{
+	const int size = 5;
+	SPACE_FT::vector<TESTED_TYPE> vct(size);
+	SPACE_FT::vector<TESTED_TYPE>::reverse_iterator it = vct.rbegin();
+	SPACE_FT::vector<TESTED_TYPE>::const_reverse_iterator ite = vct.rbegin();
+	SPACE_STD::vector<TESTED_TYPE> svct(size);
+	SPACE_STD::vector<TESTED_TYPE>::reverse_iterator sit = svct.rbegin();
+	SPACE_STD::vector<TESTED_TYPE>::const_reverse_iterator site = svct.rbegin();
+
+	for (int i = 0; i < size; ++i)
+	{
+		it[i] = (size - i) * 5;
+		sit[i] = (size - i) * 5;
+	}
+
+	it = it + 5;
+	it = 1 + it;
+	it = it - 4;
+	sit = sit + 5;
+	sit = 1 + sit;
+	sit = sit - 4;
+	std::cout << *(it += 2) << " = " << *(sit += 2) << std::endl;
+	std::cout << *(it -= 1) << " = " << *(sit -= 1) << std::endl;
+
+	*(it -= 2) = 42;
+	*(it += 2) = 21;
+	*(sit -= 2) = 42;
+	*(sit += 2) = 21;
+
+	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
+	std::cout << "const_ite +=/-=: " << *(site += 2) << " | " << *(site -= 2) << std::endl;
+
+	std::cout << "(it == const_it): " << (ite == it) << std::endl;
+	std::cout << "(it == const_it): " << (site == sit) << std::endl;
+	std::cout << "(const_ite - it): " << (ite - it) << "(" << *ite << " " << *it << ")" << std::endl;
+	std::cout << "(const_ite - it): " << (site - sit) << "(" << *ite << " " << *it << ")" << std::endl;
+	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
+	std::cout << "(ite + 3 == it): " << (site + 3 == sit) << std::endl;
+
+	printSizeVs(vct, svct);
+}
+
+
 int main(int argc, char** argv)
 {
-	ft::RBTree<int> bst;
-	bst.insert(8, 1);
-	bst.insert(18, 30);
-	bst.insert(5, 100);
-	bst.insert(15, 91);
-	bst.insert(17, 2);
-	bst.insert(25, 2);
-	bst.insert(40, 1);
-	bst.insert(80, 1);
-	bst.deleteNode(25);
-	bst.insert(19, 1);
-	bst.insert(1, 1);
-	bst.insert(54, 1);
-	bst.insert(100, 1);
-	bst.prettyPrint();
-	std::cout << "min = ";
-	printNode(bst.minimum(bst.getRoot()));
-	std::cout << "\nmax = ";
-	printNode(bst.maximum(bst.getRoot()));
-	bst.deleteNode(25);
-	bst.insert(100);
-	bst.insert(100);
-	bst.insert(100);
-	bst.insert(100);
-	bst.insert(100);
-	bst.insert(101);
-	bst.prettyPrint();
-	std::cout << "search 100 = ";
-	ft::printNode(bst.searchTree(100));
-	std::cout << "search 100 parent = ";
-	ft::printNode(bst.searchTree(100)->parent);
-	return 0;
+	(void)argc;
+	(void)argv;
+	// stack_test();
+	// vector_test();
+	// vec_erase_test();
+	// vec_assign_test();
+	// vec_bidirectionalit_test();
+	// vec_erased_test();
+	// vec_insert_test();
+	// test_copy_construct();
+	// test_size();
+	// test_swap();
+	// test_iter_const();
+	// test_relational_op();
+	// ite_equ_test();
+	rite2();
+	return (0);
 }

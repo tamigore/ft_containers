@@ -82,51 +82,49 @@ void	printSizeVs(ft::vector<T> const &ft_vec, std::vector<T> const &std_vec, boo
 	std::cout << "_______________________________________________" << std::endl;
 }
 
-template <typename T>
-void	printSize(ft::vector<T> const &vct, bool print_content = true)
-{
-	std::cout << "______________________ft_______________________" << std::endl;
-	const int size = vct.size();
-	const int capacity = vct.capacity();
-	const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
-	// Cannot limit capacity's max value because it's implementation dependent
+// template <typename T>
+// void	printSize(ft::vector<T> const &vct, bool print_content = true)
+// {
+// 	std::cout << "______________________ft_______________________" << std::endl;
+// 	const int size = vct.size();
+// 	const int capacity = vct.capacity();
+// 	const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
+// 	// Cannot limit capacity's max value because it's implementation dependent
+// 	std::cout << "size: " << size << std::endl;
+// 	std::cout << "capacity: " << isCapacityOk << std::endl;
+// 	std::cout << "max_size: " << vct.max_size() << std::endl;
+// 	if (print_content)
+// 	{
+// 		typename ft::vector<T>::const_iterator it = vct.begin();
+// 		typename ft::vector<T>::const_iterator ite = vct.end();
+// 		std::cout << std::endl << "Content is:" << std::endl;
+// 		for (; it != ite; ++it)
+// 			std::cout << "- " << *it << std::endl;
+// 	}
+// 	std::cout << "_______________________________________________" << std::endl;
+// }
 
-	std::cout << "size: " << size << std::endl;
-	std::cout << "capacity: " << isCapacityOk << std::endl;
-	std::cout << "max_size: " << vct.max_size() << std::endl;
-	if (print_content)
-	{
-		typename ft::vector<T>::const_iterator it = vct.begin();
-		typename ft::vector<T>::const_iterator ite = vct.end();
-		std::cout << std::endl << "Content is:" << std::endl;
-		for (; it != ite; ++it)
-			std::cout << "- " << *it << std::endl;
-	}
-	std::cout << "_______________________________________________" << std::endl;
-}
-
-template <typename T>
-void	printSize_std(std::vector<T> const &vct, bool print_content = true)
-{
-	std::cout << "______________________std______________________" << std::endl;
-	const int size = vct.size();
-	const int capacity = vct.capacity();
-	const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
-	// Cannot limit capacity's max value because it's implementation dependent
-
-	std::cout << "size: " << size << std::endl;
-	std::cout << "capacity: " << isCapacityOk << std::endl;
-	std::cout << "max_size: " << vct.max_size() << std::endl;
-	if (print_content)
-	{
-		typename std::vector<T>::const_iterator it = vct.begin();
-		typename std::vector<T>::const_iterator ite = vct.end();
-		std::cout << std::endl << "Content is:" << std::endl;
-		for (; it != ite; ++it)
-			std::cout << "- " << *it << std::endl;
-	}
-	std::cout << "_______________________________________________" << std::endl;
-}
+// template <typename T>
+// void	printSize_std(std::vector<T> const &vct, bool print_content = true)
+// {
+// 	std::cout << "______________________std______________________" << std::endl;
+// 	const int size = vct.size();
+// 	const int capacity = vct.capacity();
+// 	const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
+// 	// Cannot limit capacity's max value because it's implementation dependent
+// 	std::cout << "size: " << size << std::endl;
+// 	std::cout << "capacity: " << isCapacityOk << std::endl;
+// 	std::cout << "max_size: " << vct.max_size() << std::endl;
+// 	if (print_content)
+// 	{
+// 		typename std::vector<T>::const_iterator it = vct.begin();
+// 		typename std::vector<T>::const_iterator ite = vct.end();
+// 		std::cout << std::endl << "Content is:" << std::endl;
+// 		for (; it != ite; ++it)
+// 			std::cout << "- " << *it << std::endl;
+// 	}
+// 	std::cout << "_______________________________________________" << std::endl;
+// }
 
 namespace ft
 {
