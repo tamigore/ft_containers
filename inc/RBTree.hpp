@@ -2,46 +2,46 @@
 # define _RBTREE_HPP_
 
 # include "utility.hpp"
+# include "pair.hpp"
 # include <cassert>
 # include <iostream>
-
-# define NIL NULL
-# define LEFT  0
-# define RIGHT 1
-# define left  child[LEFT]
-# define right child[RIGHT]
 
 namespace ft
 {
 	// data structure that represents a node in the tree
+	#define NIL NULL
+	#define LEFT  0
+	#define RIGHT 1
+	#define left  child[LEFT]
+	#define right child[RIGHT]
 	#define RED 1
 	#define BLACK 0
 
-	template <class T>
+	template <class Key, class T>
 	struct Node
 	{
 		T	data;
-		int key; // holds the key
+		Key key; // holds the key
 		Node *parent; // pointer to the parent
 		Node *child[2]; // pointer to child
-		int color; // 1 -> Red, 0 -> Black
+		bool color; // 1 -> Red, 0 -> Black
 	};
 	
-	template <class T>
-	void	printNode(Node<T> *x)
+	template <class Key, class T>
+	void	printNode(Node<Key, T> *x)
 	{
 		std::cout << "key :" << x->key << " | color :" <<(x->color == BLACK ? "BLACK" : "RED") << " | data :" << x->data << std::endl;
 	};
 
 	// class RBTree implements the operations in Red Black Tree
-	template <class T>
+	template <class Key, class T>
 	class RBTree
 	{
 		private:
-			Node<T> *root;
-			Node<T> *TNULL;
+			Node<Key, T> *root;
+			Node<Key, T> *TNULL;
 
-			Node<T>	*searchTreeHelper(Node<T> *node, int key)
+			Node<Key, T>	*searchTreeHelper(Node<Key, T> *node, Key key)
 			{
 				if (node == TNULL || key == node->key)
 					return node;
@@ -51,9 +51,9 @@ namespace ft
 			}
 
 			// fix the rb tree modified by the delete operation
-			void fixDelete(Node<T> *x)
+			void fixDelete(Node<Key, T> *x)
 			{
-				Node<T>	*s;
+				Node<Key, T>	*s;
 				while (x != root && x->color == BLACK)
 				{
 					if (x == x->parent->left)
@@ -133,7 +133,7 @@ namespace ft
 				x->color = BLACK;
 			}
 
-			void rbTransplant(Node<T>* u, Node<T>* v)
+			void rbTransplant(Node<Key, T>* u, Node<Key, T>* v)
 			{
 				if (u->parent == NULL)
 					root = v;
@@ -144,11 +144,11 @@ namespace ft
 				v->parent = u->parent;
 			}
 
-			void deleteNodeHelper(Node<T>* node, int key)
+			void deleteNodeHelper(Node<Key, T>* node, Key key)
 			{
 				// find the node containing key
-				Node<T>	*z = TNULL;
-				Node<T>	*x, *y;
+				Node<Key, T>	*z = TNULL;
+				Node<Key, T>	*x, *y;
 				while (node != TNULL)
 				{
 					if (node->key == key)
@@ -164,7 +164,7 @@ namespace ft
 					return;
 				} 
 				y = z;
-				int y_original_color = y->color;
+				bool y_original_color = y->color;
 				if (z->left == TNULL)
 				{
 					x = z->right;
@@ -200,9 +200,9 @@ namespace ft
 			}
 			
 			// fix the red-black tree
-			void fixInsert(Node<T>* k)
+			void fixInsert(Node<Key, T>* k)
 			{
-				Node<T>* u;
+				Node<Key, T>* u;
 				while (k->parent->color == 1)
 				{
 					if (k->parent == k->parent->parent->right)
@@ -262,7 +262,7 @@ namespace ft
 				root->color = BLACK;
 			}
 
-			void printHelper(Node<T>* root, std::string indent, bool last)
+			void printHelper(Node<Key, T>* root, std::string indent, bool last)
 			{
 				// print the tree structure on the screen
 				if (root != TNULL)
@@ -289,7 +289,7 @@ namespace ft
 		public:
 			RBTree()
 			{
-				TNULL = new Node<T>;
+				TNULL = new Node<Key, T>;
 				TNULL->data = T();
 				TNULL->color = BLACK;
 				TNULL->left = NULL;
@@ -297,10 +297,15 @@ namespace ft
 				root = TNULL;
 			}
 
+			// RBTree(const RBTree& other)
+			// {
+			// 	*this = other;
+			// }
+
 			~RBTree()
 			{
-				Node<T> *min;
-				Node<T> *max;
+				Node<Key, T> *min;
+				Node<Key, T> *max;
 
 				while (root)
 				{
@@ -324,29 +329,48 @@ namespace ft
 						return ;
 					}
 				}
+				if (TNULL)
+					delete TNULL;
 			}
 
+			// operator=(const RBTree& other)
+			// {
+			// 	if (&other == this)
+			// 		return (*this);
+			// 	TNULL = new Node<Key, T>;
+			// 	TNULL->data = T();
+			// 	TNULL->color = BLACK;
+			// 	TNULL->left = NULL;
+			// 	TNULL->right = NULL;
+			// 	if (!other.root)
+			// 	{
+			// 		root = TNULL;
+			// 		return ;
+			// 	}
+			// 	root = other.root;
+			// }
+
 			// search the tree for the key k and return the corresponding node
-			Node<T>* searchTree(int k)
+			Node<Key, T>* searchTree(Key k)
 			{
 				return searchTreeHelper(this->root, k);
 			}
 
-			Node<T>* minimum(Node<T>* node)// find the node with the minimum key
+			Node<Key, T>* minimum(Node<Key, T>* node)// find the node with the minimum key
 			{
 				while (node->left != TNULL)
 					node = node->left;
 				return node;
 			}
 
-			Node<T>* maximum(Node<T>* node)// find the node with the maximum key
+			Node<Key, T>* maximum(Node<Key, T>* node)// find the node with the maximum key
 			{
 				while (node->right != TNULL)
 					node = node->right;
 				return node;
 			}
 
-			void	rotate(Node<T> *x, int dir)// rotate node in dir
+			void	rotate(Node<Key, T> *x, int dir)// rotate node in dir
 			{
 				int l = 0;
 				int r = 1;
@@ -355,7 +379,7 @@ namespace ft
 					l = 1;
 					r = 0;
 				}
-				Node<T>* y = x->child[r];
+				Node<Key, T>* y = x->child[r];
 				x->child[r] = y->child[l];
 				if (y->child[l] != TNULL)
 					y->child[l]->parent = x;
@@ -371,9 +395,9 @@ namespace ft
 			}
 
 			// insert the key to the tree in its appropriate position and fix the tree
-			void insert(int key)// Ordinary Binary Search Insertion
+			void insert(Key key)// Ordinary Binary Search Insertion
 			{
-				Node<T>* node = new Node<T>;
+				Node<Key, T>* node = new Node<Key, T>;
 				node->parent = NULL;
 				node->key = key;
 				node->data = T();
@@ -381,8 +405,8 @@ namespace ft
 				node->right = TNULL;
 				node->color = 1; // new node must be red
 
-				Node<T>* y = NULL;
-				Node<T>* x = this->root;
+				Node<Key, T>* y = NULL;
+				Node<Key, T>* x = this->root;
 
 				while (x != TNULL)
 				{
@@ -406,10 +430,11 @@ namespace ft
 				else // Fix the tree
 					fixInsert(node);
 			}
-
-			void insert(int key, T data) // Ordinary Binary Search Insertion
+			
+			// insert the key with data to the tree in its appropriate position and fix the tree
+			void insert(Key key, T data) // Ordinary Binary Search Insertion
 			{
-				Node<T>* node = new Node<T>;
+				Node<Key, T>* node = new Node<Key, T>;
 				node->parent = NULL;
 				node->key = key;
 				node->data = data;
@@ -417,8 +442,8 @@ namespace ft
 				node->right = TNULL;
 				node->color = 1; // new node must be red
 
-				Node<T>* y = NULL;
-				Node<T>* x = this->root;
+				Node<Key, T>* y = NULL;
+				Node<Key, T>* x = this->root;
 
 				while (x != TNULL) // compare key to insert min values left and max right
 				{
@@ -443,12 +468,18 @@ namespace ft
 					fixInsert(node);
 			}
 
-			Node<T>* getRoot()// retrun root
+			// insert the key with data to the tree in its appropriate position and fix the tree
+			void insert(ft::pair<const Key, T> mypair) // Ordinary Binary Search Insertion
+			{
+				insert(mypair.first, mypair.second);
+			}
+
+			Node<Key, T>* getRoot()// retrun root
 			{
 				return this->root;
 			}
 
-			void deleteNode(int key)// delete the node from the tree
+			void deleteNode(Key key)// delete the node from the tree
 			{
 				deleteNodeHelper(this->root, key);
 			}

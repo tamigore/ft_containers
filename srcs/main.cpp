@@ -751,6 +751,6 @@ int main(int argc, char** argv)
 	// test_iter_const();
 	// test_relational_op();
 	// ite_equ_test();
-	rite2();
+	// rite2();
 	return (0);
 }

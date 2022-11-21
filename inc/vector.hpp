@@ -109,34 +109,42 @@ namespace ft
 			{
 				if (!empty())
 					clear();
-				_start = _alloc.allocate(count);
+				if (count > capacity())
+				{
+					_alloc.deallocate(_start, capacity());
+					_start = _alloc.allocate(count);
+				}
 				_end = _start;
 				_capacity = _start + count;
 				for (size_type i = 0; i < count; i++)
 				{
+					_alloc.destroy(_end);
 					_alloc.construct(_end, value);
 					_end++;
 				}
-				// insert(begin(), count, value);
-			};
+			}
 
 			template< class InputIt >
 			void assign(InputIt first, typename enable_if<!is_integral<InputIt>::value, InputIt>::type last)
 			{
+				size_type dist = ft::distance(first, last);
 				if (!empty())
 					clear();
-				size_type dist = ft::distance(first, last);
-				_start = _alloc.allocate(dist);
+				if (dist > capacity())
+				{
+					_alloc.deallocate(_start, capacity());
+					_start = _alloc.allocate(dist);
+				}
 				_end = _start;
 				_capacity = _start + dist;
 				for (size_type i = 0; i < dist; i++)
 				{
+					_alloc.destroy(_end);
 					_alloc.construct(_end, *first);
 					first++;
 					_end++;
 				}
-				// insert(begin(), first, last);
-			};
+			}
 
 // no matching conversion for functional-style cast 
 // from 'ft::vector<std::basic_string<char> >::const_iterator' 
@@ -487,7 +495,7 @@ namespace ft
 		if (!a && !b)
 			return (true);
 		return (false);
-		// if (x.size() != y.size())
+		// if (x.size() != y.size()) // faster ?
 		// 	return (false);
 		// typename ft::vector<T>::const_iterator i = x.begin();
 		// typename ft::vector<T>::const_iterator j = y.begin();

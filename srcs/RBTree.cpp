@@ -1,9 +1,9 @@
 #include <iostream>
 #include "RBTree.hpp"
 
-int main(int argc, char** argv)
+int main(void)
 {
-	ft::RBTree<int> bst;
+	ft::RBTree<int, int> bst;
 	bst.insert(8, 1);
 	bst.insert(18, 30);
 	bst.insert(5, 100);
@@ -28,7 +28,14 @@ int main(int argc, char** argv)
 	bst.insert(100);
 	bst.insert(100);
 	bst.insert(100);
+	bst.insert(100);
+	bst.insert(100);
+	bst.insert(100);
+	bst.insert(100);
+	bst.insert(100);
 	bst.insert(101);
+	bst.insert(ft::make_pair(84, 42));
+	bst.insert(ft::make_pair(74, 42));
 	bst.prettyPrint();
 	std::cout << "search 100 = ";
 	ft::printNode(bst.searchTree(100));
