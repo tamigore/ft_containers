@@ -2,7 +2,7 @@
 #include "vector.hpp"
 #include <iostream>
 
-int vector_test()
+int	vector_tester()
 {
 	// Create a vector containing integers
 	std::vector<int>	std_vec;

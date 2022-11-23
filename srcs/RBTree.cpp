@@ -1,7 +1,7 @@
 #include <iostream>
 #include "RBTree.hpp"
 
-int main(void)
+int RBTree_tester()
 {
 	ft::RBTree<int, int> bst;
 	bst.insert(8, 1);

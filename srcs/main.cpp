@@ -616,10 +616,13 @@ void	test_relational_op()
 template <typename Ite_1, typename Ite_2, typename Ite_3, typename Ite_4>
 void ft_eq_ope(const Ite_1 &first, const Ite_2 &second, const Ite_3 std1, const Ite_4 std2, const bool redo = 1)
 {
-	std::cout << (first < second) << " = " << (std1 < std2) << std::endl;
-	std::cout << (first <= second) << " = " << (std1 <= std2) << std::endl;
-	std::cout << (first > second) << " = " << (std1 > std2) << std::endl;
-	std::cout << (first >= second) << " = " << (std1 >= std2) << std::endl;
+	std::cout << "ft : " <<  *first << " == " << *second << " || std : " << *std1 << " == " << *std2 <<std::endl;
+	std::cout << " < : " << (first < second) << " = " << (std1 < std2) << std::endl;
+	std::cout << " <= : " << (first <= second) << " = " << (std1 <= std2) << std::endl;
+	std::cout << " > : " << (first > second) << " = " << (std1 > std2) << std::endl;
+	std::cout << " >= : " << (first >= second) << " = " << (std1 >= std2) << std::endl;
+	std::cout << " != : " << (first != second) << " = " << (std1 != std2) << std::endl;
+	std::cout << " == : " << (first == second) << " = " << (std1 == std2) << std::endl;
 	if (redo)
 		ft_eq_ope(second, first, std2, std1, 0);
 }
@@ -733,6 +736,72 @@ void	rite2(void)
 	printSizeVs(vct, svct);
 }
 
+void	rite_equ_test(void)
+{
+	const int size = 5;
+	int i = 0;
+	SPACE_FT::vector<TESTED_TYPE> vct(size);
+	SPACE_FT::vector<TESTED_TYPE>::reverse_iterator it_0(vct.rbegin());
+	SPACE_FT::vector<TESTED_TYPE>::reverse_iterator it_1(vct.rend());
+	SPACE_FT::vector<TESTED_TYPE>::reverse_iterator it_mid;
+	SPACE_STD::vector<TESTED_TYPE> svct(size);
+	SPACE_STD::vector<TESTED_TYPE>::reverse_iterator sit_0(svct.rbegin());
+	SPACE_STD::vector<TESTED_TYPE>::reverse_iterator sit_1(svct.rend());
+	SPACE_STD::vector<TESTED_TYPE>::reverse_iterator sit_mid;
+
+	SPACE_FT::vector<TESTED_TYPE>::const_reverse_iterator cit_0 = vct.rbegin();
+	SPACE_FT::vector<TESTED_TYPE>::const_reverse_iterator cit_1;
+	SPACE_FT::vector<TESTED_TYPE>::const_reverse_iterator cit_mid;
+	SPACE_STD::vector<TESTED_TYPE>::const_reverse_iterator scit_0 = svct.rbegin();
+	SPACE_STD::vector<TESTED_TYPE>::const_reverse_iterator scit_1;
+	SPACE_STD::vector<TESTED_TYPE>::const_reverse_iterator scit_mid;
+
+	for (int i = size; it_0 != it_1; --i)
+		*it_0++ = i;
+	for (int i = size; sit_0 != sit_1; --i)
+		*sit_0++ = i;
+	printSizeVs(vct, svct);
+	it_0 = vct.rbegin();
+	cit_1 = vct.rend();
+	it_mid = it_0 + 3;
+	cit_mid = it_0 + 3; cit_mid = cit_0 + 3; cit_mid = it_mid;
+	sit_0 = svct.rbegin();
+	scit_1 = svct.rend();
+	sit_mid = sit_0 + 3;
+	scit_mid = sit_0 + 3; scit_mid = scit_0 + 3; scit_mid = sit_mid;
+
+	std::cout << std::boolalpha;
+	std::cout << ((it_0 + 3 == cit_0 + 3) && (cit_0 + 3 == it_mid)) << std::endl;
+	std::cout << std::boolalpha;
+	std::cout << ((sit_0 + 3 == scit_0 + 3) && (scit_0 + 3 == sit_mid)) << std::endl;
+
+	std::cout << "\t\tft_eq_ope:" << std::endl;
+	std::cout << "Regular it :\n" << i++ << ": " << std::endl;
+	ft_eq_ope(it_0 + 3, it_mid, sit_0 + 3, sit_mid);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(it_0, it_1, sit_0, sit_1);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(it_1 - 3, it_mid, sit_1 - 3, sit_mid);
+	std::cout << "Const it :\n" << i++ << ": " << std::endl;
+	ft_eq_ope(cit_0 + 3, cit_mid, scit_0 + 3, scit_mid);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(cit_0, cit_1, scit_0, scit_1);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(cit_1 - 3, cit_mid, scit_1 - 3, scit_mid);
+	std::cout << "Both it :\n" << i++ << ": " << std::endl;
+	ft_eq_ope(it_0 + 3, cit_mid, sit_0 + 3, scit_mid);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(it_mid, cit_0 + 3, sit_mid, scit_0 + 3);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(it_0, cit_1, sit_0, scit_1);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(it_1, cit_0, sit_1, scit_0);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(it_1 - 3, cit_mid, sit_1 - 3, scit_mid);
+	std::cout << i++ << ": "<< std::endl;
+	ft_eq_ope(it_mid, cit_1 - 3, sit_mid, scit_1 - 3);
+}
+
 
 int main(int argc, char** argv)
 {
@@ -752,5 +821,7 @@ int main(int argc, char** argv)
 	// test_relational_op();
 	// ite_equ_test();
 	// rite2();
+	// rite_equ_test();
+	RBTree_tester();
 	return (0);
 }

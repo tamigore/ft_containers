@@ -1,4 +1,4 @@
-#include "ft.hpp"
+#include "stack.hpp"
 #include <stack>
 #include <iostream>
 #include <string>
@@ -36,11 +36,11 @@ class MutantStack : public ft::stack<T>
 		iterator end() { return this->c.end(); }
 };
 
-int stack_test()
+int stack_tester()
 {
 	ft::stack<int>							test_stack_int;
 	ft::stack<int>							f_stack_int;
-	ft::stack<Buffer, std::vector<Buffer> >	f_stack_deq_buffer;
+	ft::stack<Buffer, ft::vector<Buffer> >	f_stack_deq_buffer;
 	std::stack<int>							s_stack_int;
 	std::stack<Buffer, std::deque<Buffer> >	s_stack_deq_buffer;
 

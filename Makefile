@@ -16,11 +16,12 @@ NAME = ft_containers
 
 DIR_S = srcs/
 
-SOURCES = main.cpp
-# stack.cpp
-# vector.cpp
-# pair.cpp
-# RBTree.cpp
+SOURCES =	main.cpp	\
+			stack.cpp	\
+			vector.cpp	\
+			RBTree.cpp
+#	pair.cpp
+#	map.cpp
 
 HEADER =	ft.hpp		\
 			stack.hpp	\

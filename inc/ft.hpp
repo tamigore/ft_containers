@@ -1,7 +1,7 @@
 #ifndef _FT_HPP_
 # define _FT_HPP_
 
-# include "map.hpp"
+// # include "map.hpp"
 # include "vector.hpp"
 # include "stack.hpp"
 
@@ -13,8 +13,10 @@
 #include <stdlib.h>
 #include <list>
 
-// int vector_test();
-// int stack_test();
+int	RBTree_tester();
+int stack_tester();
+int	vector_tester();
+// int	map_tester();
 
 #define MAX_RAM 4294967296
 #define BUFFER_SIZE 4096

@@ -6,7 +6,7 @@
 # include <stdexcept>
 # include <string>
 
-# include "iterator.hpp"
+# include "random_access_iter.hpp"
 
 namespace ft
 {
@@ -25,8 +25,8 @@ namespace ft
 			typedef typename allocator_type::const_pointer		const_pointer;
 			typedef ft::random_access_iterator<T>				iterator;
 			typedef ft::random_access_iterator<const T>			const_iterator;
-			typedef ft::reverse_iterator<iterator> 				reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+			typedef ft::reverse_random_iterator<iterator> 		reverse_iterator;
+			typedef ft::reverse_random_iterator<const_iterator>	const_reverse_iterator;
 
 		private:
 			allocator_type	_alloc;
@@ -145,12 +145,6 @@ namespace ft
 					_end++;
 				}
 			}
-
-// no matching conversion for functional-style cast 
-// from 'ft::vector<std::basic_string<char> >::const_iterator' 
-// (aka 'random_access_iterator<const std::basic_string<char> >') 
-// to 'ft::vector<std::basic_string<char> >::reverse_iterator' 
-// (aka 'reverse_iterator<random_access_iterator<std::basic_string<char> > >')
 
 			allocator_type get_allocator() const
 				{ return (_alloc); }

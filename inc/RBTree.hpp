@@ -370,6 +370,37 @@ namespace ft
 				return node;
 			}
 
+			Node<Key, T> successor(Node<Key, T> x)
+			{
+				// if the right subtree is not null, the successor is the leftmost node in the right subtree
+				if (x->right != TNULL)
+					return minimum(x->right);
+				// else it is the lowest ancestor of x whose left child is also an ancestor of x.
+				Node<Key, T> y = x->parent;
+				while (y != TNULL && x == y->right)
+				{
+					x = y;
+					y = y->parent;
+				}
+				return y;
+			}
+
+			// find the predecessor of a given node
+			Node<Key, T> predecessor(Node<Key, T> x)
+			{
+				// if the left subtree is not null, the predecessor is the rightmost node in the left subtree
+				if (x->left != TNULL)
+					return maximum(x->left);
+				// else it is the highest ancestor of x whose right child is also an ancestor of x.
+				Node<Key, T> y = x->parent;
+				while (y != TNULL && x == y->left)
+				{
+					x = y;
+					y = y->parent;
+				}
+				return y;
+			}
+
 			void	rotate(Node<Key, T> *x, int dir)// rotate node in dir
 			{
 				int l = 0;

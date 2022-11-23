@@ -3,7 +3,7 @@
 
 # include <iostream>
 # include <utility>
-# include "iterator.hpp"
+# include "map_iter.hpp"
 // # include "pair.hpp"
 # include "RBTree.hpp"
 
@@ -13,23 +13,23 @@ namespace ft
 	class map
 	{
 		public:
-			typedef Key										key_type;
-			typedef Allocator								allocator_type;
-			typedef T										mapped_type;
-			typedef ft::pair<const Key, T>					value_type;
-			typedef std::size_t								size_type;
-			typedef std::ptrdiff_t							difference_type;
-			typedef Compare									key_compare;
-			typedef value_type&								reference;
-			typedef const value_type&						const_reference;
-			typedef typename Allocator::pointer				pointer;
-			typedef typename Allocator::const_pointer		const_pointer;
-			typedef ft::random_access_iterator<T>			iterator;
-			typedef ft::random_access_iterator<const T>		const_iterator;
-			typedef ft::reverse_iterator<iterator>			reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
-			typedef	ft::Node<Key, T>						node_type;
-			typedef	ft::RBTree<Key, T>						tree_type;
+			typedef Key											key_type;
+			typedef Allocator									allocator_type;
+			typedef T											mapped_type;
+			typedef ft::pair<const Key, T>						value_type;
+			typedef std::size_t									size_type;
+			typedef std::ptrdiff_t								difference_type;
+			typedef Compare										key_compare;
+			typedef value_type&									reference;
+			typedef const value_type&							const_reference;
+			typedef typename Allocator::pointer					pointer;
+			typedef typename Allocator::const_pointer			const_pointer;
+			typedef ft::map_iterator<Key, T>					iterator;
+			typedef ft::map_iterator<Key, const T>				const_iterator;
+			typedef ft::reverse_map_iterator<iterator>			reverse_iterator;
+			typedef ft::reverse_map_iterator<const_iterator>	const_reverse_iterator;
+			typedef	ft::Node<Key, T>							node_type;
+			typedef	ft::RBTree<Key, T>							tree_type;
 
 			class value_compare
 			{
@@ -51,24 +51,28 @@ namespace ft
 		
 		private:
 			tree_type		*_tree;
+			// node_type		*_node;
 			allocator_type	_alloc;
 			key_compare		_comp;
 			size_type		_size;
 		
 		public:
-			map() : _tree(new tree_type()), _alloc(allocator_type()), _comp(key_compare()), _size(0) {}
+			map() : _tree(new tree_type()),/* _node(ft_nullptr), */ _alloc(allocator_type()), _comp(key_compare()), _size(0) {}
 
 			map(const key_compare& comp, const allocator_type& alloc = allocator_type()) :
-				_tree(new tree_type()), _alloc(alloc), _comp(comp), _size(0) {}
+				_tree(new tree_type()), /* _node(ft_nullptr), */ _alloc(alloc), _comp(comp), _size(0) {}
 
 			template < class InputIt >
 			map(InputIt first, InputIt last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
 			{
+				_comp = comp;
+				_alloc = alloc;
+				// _node = ft_nullptr;
 				if (!_tree)
 					_tree = new tree_type();
 				while (first != last)
 				{
-					_tree.insert(*first);
+					_tree->insert(*first);
 					first++;
 				}
 			}
@@ -146,7 +150,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Alloc >
 	bool operator==( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs )
 	{
-		return (!(lhs < rhs) && !(lhs > rhs))
+		return (!(lhs < rhs) && !(lhs > rhs));
 	}
 
 	template< class Key, class T, class Compare, class Alloc >
