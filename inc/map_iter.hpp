@@ -20,7 +20,7 @@ namespace ft
 			typedef typename ft::Node<Key, T>	TNode;
 
 
-			map_iterator(void) : _tree(ft_nullptr), _node(ft_nullptr) {}
+			map_iterator(void) : _tree(NULL), _node(NULL) {}
 
 			map_iterator(Tree *tree, TNode *node) : _tree(tree), _node(node) {}
 

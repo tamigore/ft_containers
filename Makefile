@@ -20,8 +20,7 @@ SOURCES =	main.cpp	\
 			stack.cpp	\
 			vector.cpp	\
 			RBTree.cpp
-#	pair.cpp
-#	map.cpp
+			# map.cpp
 
 HEADER =	ft.hpp		\
 			stack.hpp	\

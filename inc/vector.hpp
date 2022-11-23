@@ -1,8 +1,8 @@
 #ifndef _VECTOR_HPP_
 # define _VECTOR_HPP_
 
-// # include <memory>
 # include <algorithm>
+# include <vector>
 # include <stdexcept>
 # include <string>
 
@@ -36,10 +36,10 @@ namespace ft
 
 		public:
 			// constructor
-			vector() : _alloc(), _start(ft_nullptr), _end(ft_nullptr), _capacity(ft_nullptr) {}
+			vector() : _alloc(), _start(NULL), _end(NULL), _capacity(NULL) {}
 
 			explicit vector( const Allocator& alloc )
-				: _alloc(alloc), _start(ft_nullptr), _end(ft_nullptr), _capacity(ft_nullptr) {}
+				: _alloc(alloc), _start(NULL), _end(NULL), _capacity(NULL) {}
 
 			explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
 				: _alloc(alloc)
@@ -85,7 +85,7 @@ namespace ft
 
 			// copy
 			vector(const vector<T,Allocator>& x)
-				: _alloc(x._alloc), _start(ft_nullptr), _end(ft_nullptr), _capacity(ft_nullptr)
+				: _alloc(x._alloc), _start(NULL), _end(NULL), _capacity(NULL)
 			{
 				size_type dist = x.size();
 				
@@ -541,6 +541,41 @@ namespace ft
 		x = y;
 		y = tmp;
 	}
+}
+
+template <typename T>
+void	printSizeVs(ft::vector<T> const &ft_vec, std::vector<T> const &std_vec, bool print_content = true)
+{
+	std::cout << "___________________ft vs std___________________" << std::endl;
+	const int ft_size = ft_vec.size();
+	const int ft_capacity = ft_vec.capacity();
+	const int std_size = std_vec.size();
+	const int std_capacity = std_vec.capacity();
+
+	std::cout << "ft_size: " << ft_size << " == std_size: " << std_size <<std::endl;
+	std::cout << "ft_capacity: " << ft_capacity << " == " << std_capacity << " :std_capacity || capacity is ok ? : " << ((ft_capacity >= ft_size) ? "OK" : "KO") << std::endl;
+	std::cout << "ft_max_size: " << (ft_vec.max_size() == std_vec.max_size() ? "OK" : "KO") << std::endl;
+	if (print_content)
+	{
+		typename ft::vector<T>::const_iterator it = ft_vec.begin();
+		typename ft::vector<T>::const_iterator ite = ft_vec.end();
+		typename std::vector<T>::const_iterator s_it = std_vec.begin();
+		typename std::vector<T>::const_iterator s_ite = std_vec.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		int i = 0;
+		for (; it != ite; ++it)
+		{
+			if (s_it >= s_ite)
+				std::cout << "to much elem" << std::endl;
+			else
+			{
+				std::cout << i << "- ft: |" << *it  << "| == |" << *s_it << "| :std" << std::endl;
+				s_it++;
+			}
+			i++;
+		}
+	}
+	std::cout << "_______________________________________________" << std::endl;
 }
 
 #endif

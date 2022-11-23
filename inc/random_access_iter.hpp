@@ -17,7 +17,7 @@ namespace ft
 			typedef typename ft::iterator_traits<T*>::pointer			pointer;
 			typedef typename ft::iterator_traits<T*>::reference			reference;
 
-			random_access_iterator(void) : _content(ft_nullptr) {}
+			random_access_iterator(void) : _content(NULL) {}
 
 			random_access_iterator(pointer elem) : _content(elem) {}
 

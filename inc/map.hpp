@@ -57,17 +57,17 @@ namespace ft
 			size_type		_size;
 		
 		public:
-			map() : _tree(new tree_type()),/* _node(ft_nullptr), */ _alloc(allocator_type()), _comp(key_compare()), _size(0) {}
+			map() : _tree(new tree_type()),/* _node(NULL), */ _alloc(allocator_type()), _comp(key_compare()), _size(0) {}
 
 			map(const key_compare& comp, const allocator_type& alloc = allocator_type()) :
-				_tree(new tree_type()), /* _node(ft_nullptr), */ _alloc(alloc), _comp(comp), _size(0) {}
+				_tree(new tree_type()), /* _node(NULL), */ _alloc(alloc), _comp(comp), _size(0) {}
 
 			template < class InputIt >
 			map(InputIt first, InputIt last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
 			{
 				_comp = comp;
 				_alloc = alloc;
-				// _node = ft_nullptr;
+				// _node = NULL;
 				if (!_tree)
 					_tree = new tree_type();
 				while (first != last)
