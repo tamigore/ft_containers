@@ -51,23 +51,21 @@ namespace ft
 		
 		private:
 			tree_type		*_tree;
-			// node_type		*_node;
 			allocator_type	_alloc;
 			key_compare		_comp;
 			size_type		_size;
 		
 		public:
-			map() : _tree(new tree_type()),/* _node(NULL), */ _alloc(allocator_type()), _comp(key_compare()), _size(0) {}
+			map() : _tree(new tree_type()), _alloc(allocator_type()), _comp(key_compare()), _size(0) {}
 
 			map(const key_compare& comp, const allocator_type& alloc = allocator_type()) :
-				_tree(new tree_type()), /* _node(NULL), */ _alloc(alloc), _comp(comp), _size(0) {}
+				_tree(new tree_type()), _alloc(alloc), _comp(comp), _size(0) {}
 
 			template < class InputIt >
 			map(InputIt first, InputIt last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
 			{
 				_comp = comp;
 				_alloc = alloc;
-				// _node = NULL;
 				if (!_tree)
 					_tree = new tree_type();
 				while (first != last)
@@ -105,23 +103,77 @@ namespace ft
 				return (_alloc);
 			}
 			
-			T&			at(const Key& key);
-			const T&	at(const Key& key) const;
+			T&			at(const Key& key)
+			{
+				return (_tree->searchTree(key));
+			}
+
+			const T&	at(const Key& key) const
+			{
+				return (_tree->searchTree(key));
+			}
 			
-			T& operator[](const Key& key);
+			T& operator[](const Key& key)
+			{
+				return (_tree->searchTree(key));
+			}
 
-			iterator				begin();
-			const_iterator			begin() const;
-			iterator				end();
-			const_iterator			end() const;
-			reverse_iterator		rbegin();
-			const_reverse_iterator	rbegin() const;
-			reverse_iterator		rend();
-			const_reverse_iterator	rend() const;
+			iterator				begin()
+			{
+				return (iterator(_tree->minimum()));
+			}
 
-			bool		empty() const;
-			size_type	size() const;
-			size_type	max_size() const;
+			const_iterator			begin() const
+			{
+				return (const_iterator(_tree->minimum()));
+			}
+
+			iterator				end()
+			{
+				return (iterator(_tree->maximum()));
+			}
+
+			const_iterator			end() const
+			{
+				return (const_iterator(_tree->maximum()));
+			}
+
+			reverse_iterator		rbegin()
+			{
+				return (reverse_iterator(begin()));
+			}
+
+			const_reverse_iterator	rbegin() const
+			{
+				return (const_reverse_iterator(begin()));
+			}
+
+			reverse_iterator		rend()
+			{
+				return (reverse_iterator(end()));
+			}
+
+			const_reverse_iterator	rend() const
+			{
+				return (const_reverse_iterator(end()));
+			}
+
+			bool		empty() const
+			{
+				if (size() == 0 || _tree->root == _tree->TNULL)
+					return (true);
+				return (false);
+			}
+
+			size_type	size() const
+			{
+				return (size_type(_tree->getSize()));
+			}
+
+			size_type	max_size() const
+			{
+				return (allocator_type::max_size());
+			}
 			
 			void						clear();
 			std::pair<iterator, bool>	insert( const value_type& value );
@@ -134,8 +186,16 @@ namespace ft
 			void						swap( map& other );
 
 			size_type									count( const Key& key ) const;
-			iterator									find( const Key& key );
-			const_iterator								find( const Key& key ) const;
+			iterator									find( const Key& key )
+			{
+				return (iterator(_tree->searchTree(key)));
+			}
+
+			const_iterator								find( const Key& key ) const
+			{
+				return (const_iterator(_tree->searchTree(key)));
+			}
+
 			std::pair<iterator,iterator>				equal_range( const Key& key );
 			std::pair<const_iterator,const_iterator>	equal_range( const Key& key ) const;
 			iterator									lower_bound( const Key& key );
@@ -185,7 +245,7 @@ namespace ft
 
 	template< class Key, class T, class Compare, class Alloc >
 	void swap( map<Key,T,Compare,Alloc>& lhs, map<Key,T,Compare,Alloc>& rhs );
-		   
+
 }
 
 #endif

@@ -38,8 +38,9 @@ namespace ft
 	class RBTree
 	{
 		private:
-			Node<Key, T> *root;
-			Node<Key, T> *TNULL;
+			Node<Key, T>	*root;
+			Node<Key, T>	*TNULL;
+			int				_size;
 
 			Node<Key, T>	*searchTreeHelper(Node<Key, T> *node, Key key)
 			{
@@ -295,6 +296,7 @@ namespace ft
 				TNULL->left = NULL;
 				TNULL->right = NULL;
 				root = TNULL;
+				_size = 0;
 			}
 
 			// RBTree(const RBTree& other)
@@ -331,6 +333,11 @@ namespace ft
 				}
 				if (TNULL)
 					delete TNULL;
+			}
+
+			int	getSize()
+			{
+				return (_size);
 			}
 
 			// operator=(const RBTree& other)
@@ -438,7 +445,7 @@ namespace ft
 
 				Node<Key, T>* y = NULL;
 				Node<Key, T>* x = this->root;
-
+				_size++;
 				while (x != TNULL)
 				{
 					y = x;
@@ -475,7 +482,7 @@ namespace ft
 
 				Node<Key, T>* y = NULL;
 				Node<Key, T>* x = this->root;
-
+				_size++;
 				while (x != TNULL) // compare key to insert min values left and max right
 				{
 					y = x;
@@ -512,6 +519,7 @@ namespace ft
 
 			void deleteNode(Key key)// delete the node from the tree
 			{
+				size--;
 				deleteNodeHelper(this->root, key);
 			}
 

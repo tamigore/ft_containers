@@ -97,7 +97,6 @@ namespace ft
 			{ return (map_iterator<const T>(this->_tree, this->_node)); }
 			
 		private:
-			// pointer		_content;
 			Tree		*_tree;
 			TNode		*_node;
 	};
