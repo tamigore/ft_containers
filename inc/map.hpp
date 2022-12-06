@@ -24,12 +24,12 @@ namespace ft
 			typedef const value_type&							const_reference;
 			typedef typename Allocator::pointer					pointer;
 			typedef typename Allocator::const_pointer			const_pointer;
-			typedef ft::map_iterator<Key, T>					iterator;
-			typedef ft::map_iterator<Key, const T>				const_iterator;
+			typedef ft::map_iterator<value_type>				iterator;
+			typedef ft::map_iterator<value_type>				const_iterator;
 			typedef ft::reverse_map_iterator<iterator>			reverse_iterator;
 			typedef ft::reverse_map_iterator<const_iterator>	const_reverse_iterator;
-			typedef	ft::Node<Key, T>							node_type;
-			typedef	ft::RBTree<Key, T>							tree_type;
+			typedef	ft::Node<value_type>						node_type;
+			typedef	ft::RBTree<value_type>						tree_type;
 
 			class value_compare
 			{
@@ -90,12 +90,13 @@ namespace ft
 			map& operator=(const map& other)
 			{
 				if (this == &other)
-					return (this);
+					return (*this);
 				clear();
 				_size = 0;
 				_alloc = other.get_allocator();
 				_comp = other._comp;
 				insert(other.begin(), other.end());
+				return (*this);
 			}
 			
 			allocator_type get_allocator() const
@@ -120,22 +121,22 @@ namespace ft
 
 			iterator				begin()
 			{
-				return (iterator(_tree->minimum()));
+				return (iterator(_tree->minimum(_tree->getRoot())));
 			}
 
 			const_iterator			begin() const
 			{
-				return (const_iterator(_tree->minimum()));
+				return (const_iterator(_tree->minimum(_tree->getRoot())));
 			}
 
 			iterator				end()
 			{
-				return (iterator(_tree->maximum()));
+				return (iterator(_tree->maximum(_tree->getRoot())));
 			}
 
 			const_iterator			end() const
 			{
-				return (const_iterator(_tree->maximum()));
+				return (const_iterator(_tree->maximum(_tree->getRoot())));
 			}
 
 			reverse_iterator		rbegin()

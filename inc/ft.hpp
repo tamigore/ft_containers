@@ -16,7 +16,7 @@
 int	RBTree_tester();
 int stack_tester();
 int	vector_tester();
-int	map_tester();
+// int	map_tester();
 
 namespace ft
 {

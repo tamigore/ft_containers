@@ -4,20 +4,22 @@
 # include <cstddef>
 # include "utility.hpp"
 # include "iterator.hpp"
+# include "RBTree.hpp"
+# include "pair.hpp"
 
 namespace ft
 {
-	template <typename Key, typename T>
-	class map_iterator : ft::iterator<std::bidirectional_iterator_tag, ft::make_pair(Key, T)>
+	template <typename T>
+	class map_iterator : ft::iterator<std::bidirectional_iterator_tag, T>
 	{		
 		public:
-			// typedef typename ft::iterator::iterator_category	iterator_category;
-			// typedef typename ft::iterator::value_type		value_type;
-			// typedef typename ft::iterator::difference_type	difference_type;
-			// typedef typename ft::iterator::pointer			pointer;
-			// typedef typename ft::iterator<T*>::reference			reference;
-			typedef typename ft::RBTree<Key, T>	Tree;
-			typedef typename ft::Node<Key, T>	TNode;
+			typedef typename ft::iterator_traits<T*>::iterator_category	iterator_category;
+			typedef typename ft::iterator_traits<T*>::value_type		value_type;
+			typedef typename ft::iterator_traits<T*>::difference_type	difference_type;
+			typedef typename ft::iterator_traits<T*>::pointer			pointer;
+			typedef typename ft::iterator_traits<T*>::reference			reference;
+			typedef typename ft::RBTree<T>								Tree;
+			typedef typename ft::Node<T>								TNode;
 
 
 			map_iterator(void) : _tree(NULL), _node(NULL) {}
@@ -38,10 +40,10 @@ namespace ft
 			virtual ~map_iterator() {}
 
 			pointer base() const
-			{ return (ft::make_pair(this->_node->key, this->_node->data)); }
+			{ return (&value_type(this->_node->key)); }
 
 			reference operator*(void) const
-			{ return (base()); }
+			{ return (*base()); }
 
 			pointer operator->(void)
 			{ return &(this->operator*()); }
@@ -101,69 +103,69 @@ namespace ft
 			TNode		*_node;
 	};
 
-	template <typename Key, typename T>
-	typename ft::map_iterator<Key, T>::difference_type
-	operator==(const ft::map_iterator<Key, T> lhs, const ft::map_iterator<Key, T> rhs)
+	template <typename T>
+	typename ft::map_iterator<T>::difference_type
+	operator==(const ft::map_iterator<T> lhs, const ft::map_iterator<T> rhs)
 	{ return (lhs.base() == rhs.base()); }
 
-	template<typename Key_L, typename T_L, typename Key_R, typename T_R>
-	bool	operator==(const ft::map_iterator<Key_L, T_L> lhs, const ft::map_iterator<Key_R, T_R> rhs)
+	template<typename T_L, typename T_R>
+	bool	operator==(const ft::map_iterator<T_L> lhs, const ft::map_iterator<T_R> rhs)
 	{ return (lhs.base() == rhs.base()); }
 
-	template <typename Key, typename T>
-	bool	operator!=(const ft::map_iterator<Key, T> lhs, const ft::map_iterator<Key, T> rhs)
+	template <typename T>
+	bool	operator!=(const ft::map_iterator<T> lhs, const ft::map_iterator<T> rhs)
 	{ return (lhs.base() != rhs.base()); }
 
-	template<typename Key_L, typename T_L, typename Key_R, typename T_R>
-	bool	operator!=(const ft::map_iterator<Key_L, T_L> lhs, const ft::map_iterator<Key_R, T_R> rhs)
+	template<typename T_L, typename T_R>
+	bool	operator!=(const ft::map_iterator<T_L> lhs, const ft::map_iterator<T_R> rhs)
 	{ return (lhs.base() != rhs.base()); }
 
-	template <typename Key, typename T>
-	bool	operator<(const ft::map_iterator<Key, T> lhs,
-			  const ft::map_iterator<Key, T> rhs)
+	template <typename T>
+	bool	operator<(const ft::map_iterator<T> lhs,
+			  const ft::map_iterator<T> rhs)
 	{ return (lhs.base() < rhs.base()); }
 
-	template<typename Key_L, typename T_L, typename Key_R, typename T_R>
-	bool	operator<(const ft::map_iterator<Key_L, T_L> lhs, const ft::map_iterator<Key_R, T_R> rhs)
+	template<typename T_L, typename T_R>
+	bool	operator<(const ft::map_iterator<T_L> lhs, const ft::map_iterator<T_R> rhs)
 	{ return (lhs.base() < rhs.base()); }
 
-	template <typename Key, typename T>
-	bool	operator>(const ft::map_iterator<Key, T> lhs, const ft::map_iterator<Key, T> rhs)
+	template <typename T>
+	bool	operator>(const ft::map_iterator<T> lhs, const ft::map_iterator<T> rhs)
 	{ return (lhs.base() > rhs.base()); }
 
-	template<typename Key_L, typename T_L, typename Key_R, typename T_R>
-	bool	operator>(const ft::map_iterator<Key_L, T_L> lhs, const ft::map_iterator<Key_R, T_R> rhs)
+	template<typename T_L, typename T_R>
+	bool	operator>(const ft::map_iterator<T_L> lhs, const ft::map_iterator<T_R> rhs)
 	{ return (lhs.base() > rhs.base()); }
 
-	template <typename Key, typename T>
-	bool	operator<=(const ft::map_iterator<Key, T> lhs, const ft::map_iterator<Key, T> rhs)
+	template <typename T>
+	bool	operator<=(const ft::map_iterator<T> lhs, const ft::map_iterator<T> rhs)
 	{ return (lhs.base() <= rhs.base()); }
 
-	template<typename Key_L, typename T_L, typename Key_R, typename T_R>
-	bool	operator<=(const ft::map_iterator<Key_L, T_L> lhs, const ft::map_iterator<Key_R, T_R> rhs)
+	template<typename T_L, typename T_R>
+	bool	operator<=(const ft::map_iterator<T_L> lhs, const ft::map_iterator<T_R> rhs)
 	{ return (lhs.base() <= rhs.base()); }
 
-	template <typename Key, typename T>
-	bool	operator>=(const ft::map_iterator<Key, T> lhs, const ft::map_iterator<Key, T> rhs)
+	template <typename T>
+	bool	operator>=(const ft::map_iterator<T> lhs, const ft::map_iterator<T> rhs)
 	{ return (lhs.base() >= rhs.base()); }
 
-	template<typename Key_L, typename T_L, typename Key_R, typename T_R>
-	bool	operator>=(const ft::map_iterator<Key_L, T_L> lhs, const ft::map_iterator<Key_R, T_R> rhs)
+	template<typename T_L, typename T_R>
+	bool	operator>=(const ft::map_iterator<T_L> lhs, const ft::map_iterator<T_R> rhs)
 	{ return (lhs.base() >= rhs.base()); }
 
-	template<typename Key, typename T>
-	ft::map_iterator<Key, T>
-	operator+(typename ft::map_iterator<Key, T>::difference_type n, typename ft::map_iterator<Key, T>& rai)
+	template<typename T>
+	ft::map_iterator<T>
+	operator+(typename ft::map_iterator<T>::difference_type n, typename ft::map_iterator<T>& rai)
 	{ return (&(*rai) + n); }
 
-	template <typename Key, typename T>
-	typename ft::map_iterator<Key, T>::difference_type
-	operator-(const ft::map_iterator<Key, T> lhs, const ft::map_iterator<Key, T> rhs)
+	template <typename T>
+	typename ft::map_iterator<T>::difference_type
+	operator-(const ft::map_iterator<T> lhs, const ft::map_iterator<T> rhs)
 	{ return (lhs.base() - rhs.base()); }
 
-	template<typename Key_L, typename T_L, typename Key_R, typename T_R>
-	typename ft::map_iterator<Key_L, T_L>::difference_type
-	operator-(const ft::map_iterator<Key_L, T_L> lhs, const ft::map_iterator<Key_R, T_R> rhs)
+	template<typename T_L, typename T_R>
+	typename ft::map_iterator<T_L>::difference_type
+	operator-(const ft::map_iterator<T_L> lhs, const ft::map_iterator<T_R> rhs)
 	{ return (lhs.base() - rhs.base()); }
 
 	template <class Iterator>
