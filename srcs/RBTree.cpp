@@ -6,7 +6,6 @@ int RBTree_tester()
 	std::cout << "START \"RBTree\" TEST" << std::endl;
 	int i = 0;
 	ft::pair<int, int> tmp = ft::make_pair(2, 3);
-	std::cout << "i = " << i++ << std::endl;
 	ft::RBTree<int, ft::pair<int, int> > bst;
 	std::cout << "i = " << i++ << std::endl;
 	bst.insert(tmp.first, tmp);
@@ -26,6 +25,7 @@ int RBTree_tester()
 	bst.insert(80, ft::make_pair(80, 1));
 	std::cout << "i = " << i++ << std::endl;
 	bst.deleteNode(25);
+	std::cout << "i = " << i++ << std::endl;
 	bst.prettyPrint();
 	std::cout << "min = ";
 	ft::printNode(bst.minimum(bst.getRoot()));
