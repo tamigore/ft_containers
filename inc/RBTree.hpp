@@ -68,6 +68,9 @@ namespace ft
 			std::cout << "color :" <<(x->color == BLACK ? "BLACK" : "RED") << std::endl;
 			std::cout << "data :" << x->data << std::endl;
 		}
+		else
+			std::cout << "NULL" << std::endl;
+		std::cout << "____________" << std::endl;
 	};
 
 	// class RBTree implements the operations in Red Black Tree
@@ -92,7 +95,7 @@ namespace ft
 				Node<Key, T>	*s;
 
 				std::cout << "?" << std::endl;
-				while (x != root && x->color == BLACK)
+				while (x && x != root && x->color == BLACK)
 				{
 					std::cout << "while" << std::endl;
 					if (x == x->parent->left)
@@ -151,14 +154,14 @@ namespace ft
 						}
 						else
 						{
-							if (s && s->left->color == BLACK)
+							if (s->left->color == BLACK)
 							{
 								std::cout << "case 3.3" << std::endl;
 								s->right->color = BLACK;
 								s->color = 1;
 								rotate(s, LEFT);
 								s = x->parent->left;
-							} 
+							}
 							std::cout << "case 3.4" << std::endl;
 							s->color = x->parent->color;
 							x->parent->color = BLACK;
@@ -166,7 +169,7 @@ namespace ft
 							rotate(x->parent, RIGHT);
 							x = root;
 						}
-					} 
+					}
 				}
 				x->color = BLACK;
 			}
@@ -188,6 +191,8 @@ namespace ft
 				Node<Key, T>	*z = NULL;
 				Node<Key, T>	*x, *y;
 
+				std::cout << "deleteNodeHelper" << std::endl;
+				printNode(node);
 				while (node != NULL)
 				{
 					if (node->key == key)
@@ -203,25 +208,25 @@ namespace ft
 				bool y_original_color = y->color;
 				if (z->left == NULL)
 				{
-					std::cout << "if" << std::endl;
+					// std::cout << "if" << std::endl;
 					x = z->right;
 					rbTransplant(z, z->right);
 				}
 				else if (z->right == NULL)
 				{
-					std::cout << "else if ?" << std::endl;
+					// std::cout << "else if ?" << std::endl;
 					x = z->left;
 					rbTransplant(z, z->left);
 				}
 				else
 				{
-					std::cout << "else ?" << std::endl;
+					// std::cout << "else ?" << std::endl;
 					y = minimum(z->right);
-					std::cout << "?" << std::endl;
+					// std::cout << "?" << std::endl;
 					y_original_color = y->color;
-					std::cout << "?" << std::endl;
+					// std::cout << "?" << std::endl;
 					x = y->right;
-					std::cout << "?" << std::endl;
+					// std::cout << "?" << std::endl;
 					if (y->parent == z)
 						x->parent = y;
 					else
@@ -230,7 +235,7 @@ namespace ft
 						y->right = z->right;
 						y->right->parent = y;
 					}
-					std::cout << "?" << std::endl;
+					// std::cout << "?" << std::endl;
 					rbTransplant(z, y);
 					y->left = z->left;
 					y->left->parent = y;
@@ -243,34 +248,41 @@ namespace ft
 			}
 			
 			// fix the red-black tree
-			void	fixInsert(Node<Key, T> *k)
+			void fixInsert(Node<Key, T> *k)
 			{
-				Node<Key, T>* u;
+				Node<Key, T> *u;
 
-				while (k->parent->color == 1)
+				while (k->parent->color == RED)
 				{
+					std::cout << "while ?" << std::endl;
 					if (k->parent == k->parent->parent->right)
 					{
+						std::cout << "if ?" << std::endl;
 						u = k->parent->parent->left; // uncle
-						if (u->color == 1)
+						printNode(k);
+						printNode(k->parent);
+						printNode(k->parent->parent);
+						printNode(u);
+						if (u && u->color == RED) // case 3.1
 						{
-							// case 3.1
+							std::cout << "if 2 ?" << std::endl;
 							u->color = BLACK;
 							k->parent->color = BLACK;
-							k->parent->parent->color = 1;
+							k->parent->parent->color = RED;
 							k = k->parent->parent;
 						}
 						else
 						{
-							if (k == k->parent->left)
+							std::cout << "else 2 ?" << std::endl;
+							if (k == k->parent->left) // case 3.2.2
 							{
-								// case 3.2.2
+								std::cout << "if 3 ?" << std::endl;
 								k = k->parent;
 								rotate(k, RIGHT);
 							}
 							// case 3.2.1
 							k->parent->color = BLACK;
-							k->parent->parent->color = 1;
+							k->parent->parent->color = RED;
 							rotate(k->parent->parent, LEFT);
 						}
 					}
@@ -278,25 +290,23 @@ namespace ft
 					{
 						u = k->parent->parent->right; // uncle
 
-						if (u->color == 1)
+						if (u && u->color == RED)// mirror case 3.1
 						{
-							// mirror case 3.1
 							u->color = BLACK;
 							k->parent->color = BLACK;
-							k->parent->parent->color = 1;
+							k->parent->parent->color = RED;
 							k = k->parent->parent;	
 						}
 						else
 						{
-							if (k == k->parent->right)
+							if (k == k->parent->right)// mirror case 3.2.2
 							{
-								// mirror case 3.2.2
 								k = k->parent;
 								rotate(k, LEFT);
 							}
 							// mirror case 3.2.1
 							k->parent->color = BLACK;
-							k->parent->parent->color = 1;
+							k->parent->parent->color = RED;
 							rotate(k->parent->parent, RIGHT);
 						}
 					}
@@ -305,6 +315,70 @@ namespace ft
 				}
 				root->color = BLACK;
 			}
+
+			// fix the red-black tree
+			// void	fixInsert(Node<Key, T> *k)
+			// {
+			// 	Node<Key, T>* u;
+
+			// 	while (k->parent->color == 1)
+			// 	{
+			// 		if (k->parent == k->parent->parent->right)
+			// 		{
+			// 			u = k->parent->parent->left; // uncle
+			// 			if (u->color == 1)
+			// 			{
+			// 				// case 3.1
+			// 				u->color = BLACK;
+			// 				k->parent->color = BLACK;
+			// 				k->parent->parent->color = 1;
+			// 				k = k->parent->parent;
+			// 			}
+			// 			else
+			// 			{
+			// 				if (k == k->parent->left)
+			// 				{
+			// 					// case 3.2.2
+			// 					k = k->parent;
+			// 					rotate(k, RIGHT);
+			// 				}
+			// 				// case 3.2.1
+			// 				k->parent->color = BLACK;
+			// 				k->parent->parent->color = 1;
+			// 				rotate(k->parent->parent, LEFT);
+			// 			}
+			// 		}
+			// 		else
+			// 		{
+			// 			u = k->parent->parent->right; // uncle
+
+			// 			if (u->color == 1)
+			// 			{
+			// 				// mirror case 3.1
+			// 				u->color = BLACK;
+			// 				k->parent->color = BLACK;
+			// 				k->parent->parent->color = 1;
+			// 				k = k->parent->parent;	
+			// 			}
+			// 			else
+			// 			{
+			// 				if (k == k->parent->right)
+			// 				{
+			// 					// mirror case 3.2.2
+			// 					k = k->parent;
+			// 					rotate(k, LEFT);
+			// 				}
+			// 				// mirror case 3.2.1
+			// 				k->parent->color = BLACK;
+			// 				k->parent->parent->color = 1;
+			// 				rotate(k->parent->parent, RIGHT);
+			// 			}
+			// 		}
+			// 		if (k == root)
+			// 			break;
+			// 	}
+			// 	root->color = BLACK;
+			// }
 
 			void	printHelper(Node<Key, T>* root, std::string indent, bool last)
 			{
@@ -459,7 +533,7 @@ namespace ft
 				Node<Key, T> *y = NULL;
 				Node<Key, T> *x = this->root;
 
-				while (x != NULL && x != NULL)
+				while (x != NULL) //find node parent
 				{
 					y = x;
 					if (node->key < x->key)
@@ -475,17 +549,20 @@ namespace ft
 				else
 					y->right = node;
 				if (node->parent == NULL) // if new node is a root node, simply return
+				{
 					node->color = BLACK;
-				else if (node->parent->parent == NULL)// if the grandparent is null, simply return
-					return;
-				else // Fix the tree
-					fixInsert(node);
+					return ;
+				}
+				if (node->parent->parent == NULL)// if the grandparent is null, simply return
+					return ;
+				fixInsert(node);// Fix the tree
 			}
 
 			// insert the key to the tree in its appropriate position and fix the tree
 			void	insert(Key key)// Ordinary Binary Search Insertion
 			{
 				Node<Key, T> *node = new Node<Key, T>(key);
+				node->color = RED;
 				insert(node);
 				printNode(node);
 			}
@@ -493,6 +570,7 @@ namespace ft
 			void	insert(Key key, T val)// Ordinary Binary Search Insertion
 			{
 				Node<Key, T> *node = new Node<Key, T>(key, val);
+				node->color = RED;
 				insert(node);
 				printNode(node);
 			}
