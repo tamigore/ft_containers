@@ -1,7 +1,7 @@
 #ifndef _FT_HPP_
 # define _FT_HPP_
 
-// # include "map.hpp"
+# include "map.hpp"
 # include "vector.hpp"
 # include "stack.hpp"
 
@@ -16,7 +16,7 @@
 int	RBTree_tester();
 int stack_tester();
 int	vector_tester();
-// int	map_tester();
+int	map_tester();
 
 namespace ft
 {

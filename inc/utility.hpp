@@ -54,7 +54,8 @@ namespace ft
 		{
 			if (comp(*first1, *first2))
 				return true;
-			if (comp(*first2, *first1))
+			// if (comp(*first2, *first1))
+			else
 				return false;
 		}
 	

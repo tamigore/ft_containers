@@ -597,7 +597,7 @@ void	test_relational_op()
 template <typename Ite_1, typename Ite_2, typename Ite_3, typename Ite_4>
 void ft_eq_ope(const Ite_1 &first, const Ite_2 &second, const Ite_3 std1, const Ite_4 std2, const bool redo = 1)
 {
-	std::cout << "ft : " <<  *first << " == " << *second << " || std : " << *std1 << " == " << *std2 <<std::endl;
+	// std::cout << "ft : " <<  *first << " == " << *second << " || std : " << *std1 << " == " << *std2 <<std::endl;
 	std::cout << " < : " << (first < second) << " = " << (std1 < std2) << std::endl;
 	std::cout << " <= : " << (first <= second) << " = " << (std1 <= std2) << std::endl;
 	std::cout << " > : " << (first > second) << " = " << (std1 > std2) << std::endl;

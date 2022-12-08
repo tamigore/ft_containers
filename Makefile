@@ -19,16 +19,16 @@ DIR_S = srcs/
 SOURCES =	main.cpp	\
 			stack.cpp	\
 			vector.cpp	\
-			RBTree.cpp
-			# map.cpp
+			RBTree.cpp	\
+			map.cpp
 
 HEADER =	ft.hpp		\
 			stack.hpp	\
 			vector.hpp	\
 			usefull.hpp	\
 			pair.hpp	\
-			RBTree.hpp
-# map.hpp
+			RBTree.hpp	\
+			map.hpp
 
 INC = inc/
 

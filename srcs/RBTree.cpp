@@ -1,7 +1,7 @@
 #include <iostream>
 #include "RBTree.hpp"
 
-int RBTree_tester()
+void	second_test()
 {
 	std::cout << "START \"RBTree\" TEST" << std::endl;
 	int i = 0;
@@ -47,5 +47,98 @@ int RBTree_tester()
 	ft::printNode(bst.searchTree(100));
 	std::cout << "search 100 parent = ";
 	ft::printNode(bst.searchTree(100)->parent);
+	std::cout << "END SECOND TEST" << std::endl;
+}
+
+void	first_test()
+{
+	ft::RBTree<int, int> bst;
+	bst.insert(8);
+	bst.insert(18);
+	bst.insert(5);
+	bst.insert(15);
+	bst.insert(17);
+	bst.insert(25);
+	bst.insert(40);
+	bst.insert(80);
+	bst.deleteNode(25);
+	bst.insert(19);
+	bst.insert(1);
+	bst.insert(541);
+	bst.insert(1001);
+	bst.prettyPrint();
+	std::cout << "min :" << std::endl;
+	ft::printNode(bst.minimum(bst.getRoot()));
+	std::cout << "max :" << std::endl;
+	ft::printNode(bst.maximum(bst.getRoot()));
+	bst.deleteNode(25);
+	bst.insert(100);
+	bst.insert(100);
+	bst.insert(100);
+	bst.insert(100);
+	bst.insert(100);
+	bst.insert(100);
+	bst.insert(100);
+	bst.insert(100);
+	bst.insert(100);
+	bst.insert(100);
+	bst.insert(101);
+	bst.prettyPrint();
+	std::cout << "search 100 :" << std::endl;
+	ft::printNode(bst.searchTree(100));
+	std::cout << "search 100 parent :" << std::endl;
+	ft::printNode(bst.searchTree(100)->parent);
+	std::cout << "END FIRST TEST" << std::endl;
+}
+
+void	third_test()
+{
+	ft::RBTree<int, int> bst;
+	std::cout << "START THIRD TEST" << std::endl;
+	bst.prettyPrint();
+	std::cout << "okay not stupid" << std::endl;
+	bst.insert(8);
+	bst.insert(18);
+	bst.insert(5);
+	bst.insert(15);
+	bst.insert(17);
+	bst.insert(25);
+	bst.insert(40);
+	bst.insert(80);
+	bst.deleteNode(25);
+	bst.insert(19);
+	bst.insert(1);
+	bst.insert(541);
+	bst.insert(1001);
+	bst.prettyPrint();
+	std::cout << "min :" << std::endl;
+	ft::printNode(bst.minimum(bst.getRoot()));
+	std::cout << "max :" << std::endl;
+	ft::printNode(bst.maximum(bst.getRoot()));
+	bst.deleteNode(25);
+	bst.insert(100);
+	bst.insert(101);
+	bst.insert(102);
+	bst.insert(103);
+	bst.insert(104);
+	bst.insert(105);
+	bst.insert(106);
+	bst.insert(107);
+	bst.insert(108);
+	bst.insert(109);
+	bst.insert(110);
+	bst.prettyPrint();
+	std::cout << "search 100 :" << std::endl;
+	ft::printNode(bst.searchTree(100));
+	std::cout << "search 100 parent :" << std::endl;
+	ft::printNode(bst.searchTree(100)->parent);
+	std::cout << "END THIRD TEST" << std::endl;
+}
+
+int RBTree_tester()
+{
+	first_test();
+	second_test();
+	third_test();
 	return 0;
 }

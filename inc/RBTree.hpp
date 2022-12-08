@@ -9,18 +9,17 @@
 namespace ft
 {
 	// data structure that represents a node in the tree
-	#define LEFT  0
-	#define RIGHT 1
-	#define left  child[LEFT]
-	#define right child[RIGHT]
-	#define RED 1
-	#define BLACK 0
+	#define LEFT	0
+	#define RIGHT	1
+	#define left	child[LEFT]
+	#define right	child[RIGHT]
+	#define RED		1
+	#define BLACK	0
 
 	template <class Key, class T>
-	class	Node
+	class Node
 	{
 		public:
-
 			Key		key; // holds the key
 			T		data;
 			Node 	*parent; // pointer to the parent
@@ -50,14 +49,6 @@ namespace ft
 	};
 
 	template <class Key, class T>
-	bool	operator==(const ft::Node<Key, T> lhs, const ft::Node<Key, T> rhs)
-	{ return (lhs.parent == rhs.parent && lhs.left == rhs.left && lhs.right == rhs.right && lhs.color == rhs.color); }
-
-	template <class Key, typename T>
-	bool	operator!=(const ft::Node<Key, T> lhs, const ft::Node<Key, T> rhs)
-	{ return (lhs.parent != rhs.parent && lhs.left != rhs.left && lhs.right != rhs.right && lhs.color != rhs.color); }
-
-	template <class Key, class T>
 	void	printNode(Node<Key, T> *x)
 	{
 		std::cout << "_PrintNode_" << std::endl;
@@ -78,33 +69,30 @@ namespace ft
 	class RBTree
 	{
 		private:
-			Node<Key, T>	*root;
+			Node<Key, T> *root;
+			Node<Key, T> TNULL;
 
 			Node<Key, T>	*searchTreeHelper(Node<Key, T> *node, Key key)
 			{
-				if (node == NULL || key == node->key)
+				if (node == &TNULL || key == node->key)
 					return node;
 				if (key < node->key)
 					return searchTreeHelper(node->left, key);
 				return searchTreeHelper(node->right, key);
 			}
 
-			// fix the rb tree modified by the delete operation 
-			void	fixDelete(Node<Key, T> *x)
+			// fix the rb tree modified by the delete operation
+			void fixDelete(Node<Key, T> *x)
 			{
 				Node<Key, T>	*s;
-
-				std::cout << "?" << std::endl;
-				while (x && x != root && x->color == BLACK)
+				while (x != root && x->color == BLACK)
 				{
-					std::cout << "while" << std::endl;
 					if (x == x->parent->left)
 					{
-						std::cout << "if" << std::endl;
 						s = x->parent->right;
 						if (s->color == 1)
 						{
-							// std::cout << "case 3.1" << std::endl;
+							// case 3.1
 							s->color = BLACK;
 							x->parent->color = 1;
 							rotate(x->parent, LEFT);
@@ -112,7 +100,7 @@ namespace ft
 						}
 						if (s->left->color == BLACK && s->right->color == BLACK)
 						{
-							// std::cout << "case 3.2" << std::endl;
+							// case 3.2
 							s->color = 1;
 							x = x->parent;
 						} 
@@ -120,13 +108,14 @@ namespace ft
 						{
 							if (s->right->color == BLACK)
 							{
-								// std::cout << "case 3.3" << std::endl;
+								// case 3.3
 								s->left->color = BLACK;
 								s->color = 1;
 								rotate(s, RIGHT);
 								s = x->parent->right;
 							} 
-							// std::cout << "case 3.4" << std::endl;
+
+							// case 3.4
 							s->color = x->parent->color;
 							x->parent->color = BLACK;
 							s->right->color = BLACK;
@@ -136,19 +125,19 @@ namespace ft
 					}
 					else
 					{
-						std::cout << "else" << std::endl;
 						s = x->parent->left;
-						if (s && s->color == 1)
+						if (s->color == 1)
 						{
-							std::cout << "case 3.1" << std::endl;
+							// case 3.1
 							s->color = BLACK;
 							x->parent->color = 1;
 							rotate(x->parent, RIGHT);
 							s = x->parent->left;
 						}
-						if (s && s->right->color == BLACK && s->right->color == BLACK)
+
+						if (s->right->color == BLACK && s->right->color == BLACK)
 						{
-							std::cout << "case 3.2" << std::endl;
+							// case 3.2
 							s->color = 1;
 							x = x->parent;
 						}
@@ -156,25 +145,26 @@ namespace ft
 						{
 							if (s->left->color == BLACK)
 							{
-								std::cout << "case 3.3" << std::endl;
+								// case 3.3
 								s->right->color = BLACK;
 								s->color = 1;
 								rotate(s, LEFT);
 								s = x->parent->left;
-							}
-							std::cout << "case 3.4" << std::endl;
+							} 
+
+							// case 3.4
 							s->color = x->parent->color;
 							x->parent->color = BLACK;
 							s->left->color = BLACK;
 							rotate(x->parent, RIGHT);
 							x = root;
 						}
-					}
+					} 
 				}
 				x->color = BLACK;
 			}
 
-			void	rbTransplant(Node<Key, T> *u, Node<Key, T> *v)
+			void rbTransplant(Node<Key, T>* u, Node<Key, T>* v)
 			{
 				if (u->parent == NULL)
 					root = v;
@@ -185,15 +175,13 @@ namespace ft
 				v->parent = u->parent;
 			}
 
-			void	deleteNodeHelper(Node<Key, T> *node, Key key)
+			bool	deleteNodeHelper(Node<Key, T>* node, Key key)
 			{
 				// find the node containing key
-				Node<Key, T>	*z = NULL;
+				Node<Key, T>	*z = &TNULL;
 				Node<Key, T>	*x, *y;
 
-				std::cout << "deleteNodeHelper" << std::endl;
-				printNode(node);
-				while (node != NULL)
+				while (node != &TNULL)
 				{
 					if (node->key == key)
 						z = node;
@@ -202,31 +190,25 @@ namespace ft
 					else
 						node = node->left;
 				}
-				if (z == NULL)
-					return;
+				if (z == &TNULL)
+					return (false);
 				y = z;
 				bool y_original_color = y->color;
-				if (z->left == NULL)
+				if (z->left == &TNULL)
 				{
-					// std::cout << "if" << std::endl;
 					x = z->right;
 					rbTransplant(z, z->right);
 				}
-				else if (z->right == NULL)
+				else if (z->right == &TNULL)
 				{
-					// std::cout << "else if ?" << std::endl;
 					x = z->left;
 					rbTransplant(z, z->left);
 				}
 				else
 				{
-					// std::cout << "else ?" << std::endl;
 					y = minimum(z->right);
-					// std::cout << "?" << std::endl;
 					y_original_color = y->color;
-					// std::cout << "?" << std::endl;
 					x = y->right;
-					// std::cout << "?" << std::endl;
 					if (y->parent == z)
 						x->parent = y;
 					else
@@ -235,54 +217,46 @@ namespace ft
 						y->right = z->right;
 						y->right->parent = y;
 					}
-					// std::cout << "?" << std::endl;
+
 					rbTransplant(z, y);
 					y->left = z->left;
 					y->left->parent = y;
 					y->color = z->color;
 				}
-				if (z)
-					delete z;
+				delete z;
 				if (y_original_color == BLACK)
 					fixDelete(x);
+				return (true);
 			}
 			
 			// fix the red-black tree
-			void fixInsert(Node<Key, T> *k)
+			void fixInsert(Node<Key, T>* k)
 			{
-				Node<Key, T> *u;
-
-				while (k->parent->color == RED)
+				Node<Key, T>* u;
+				while (k->parent->color == 1)
 				{
-					std::cout << "while ?" << std::endl;
 					if (k->parent == k->parent->parent->right)
 					{
-						std::cout << "if ?" << std::endl;
 						u = k->parent->parent->left; // uncle
-						printNode(k);
-						printNode(k->parent);
-						printNode(k->parent->parent);
-						printNode(u);
-						if (u && u->color == RED) // case 3.1
+						if (u->color == 1)
 						{
-							std::cout << "if 2 ?" << std::endl;
+							// case 3.1
 							u->color = BLACK;
 							k->parent->color = BLACK;
-							k->parent->parent->color = RED;
+							k->parent->parent->color = 1;
 							k = k->parent->parent;
 						}
 						else
 						{
-							std::cout << "else 2 ?" << std::endl;
-							if (k == k->parent->left) // case 3.2.2
+							if (k == k->parent->left)
 							{
-								std::cout << "if 3 ?" << std::endl;
+								// case 3.2.2
 								k = k->parent;
 								rotate(k, RIGHT);
 							}
 							// case 3.2.1
 							k->parent->color = BLACK;
-							k->parent->parent->color = RED;
+							k->parent->parent->color = 1;
 							rotate(k->parent->parent, LEFT);
 						}
 					}
@@ -290,23 +264,25 @@ namespace ft
 					{
 						u = k->parent->parent->right; // uncle
 
-						if (u && u->color == RED)// mirror case 3.1
+						if (u->color == 1)
 						{
+							// mirror case 3.1
 							u->color = BLACK;
 							k->parent->color = BLACK;
-							k->parent->parent->color = RED;
+							k->parent->parent->color = 1;
 							k = k->parent->parent;	
 						}
 						else
 						{
-							if (k == k->parent->right)// mirror case 3.2.2
+							if (k == k->parent->right)
 							{
+								// mirror case 3.2.2
 								k = k->parent;
 								rotate(k, LEFT);
 							}
 							// mirror case 3.2.1
 							k->parent->color = BLACK;
-							k->parent->parent->color = RED;
+							k->parent->parent->color = 1;
 							rotate(k->parent->parent, RIGHT);
 						}
 					}
@@ -316,74 +292,10 @@ namespace ft
 				root->color = BLACK;
 			}
 
-			// fix the red-black tree
-			// void	fixInsert(Node<Key, T> *k)
-			// {
-			// 	Node<Key, T>* u;
-
-			// 	while (k->parent->color == 1)
-			// 	{
-			// 		if (k->parent == k->parent->parent->right)
-			// 		{
-			// 			u = k->parent->parent->left; // uncle
-			// 			if (u->color == 1)
-			// 			{
-			// 				// case 3.1
-			// 				u->color = BLACK;
-			// 				k->parent->color = BLACK;
-			// 				k->parent->parent->color = 1;
-			// 				k = k->parent->parent;
-			// 			}
-			// 			else
-			// 			{
-			// 				if (k == k->parent->left)
-			// 				{
-			// 					// case 3.2.2
-			// 					k = k->parent;
-			// 					rotate(k, RIGHT);
-			// 				}
-			// 				// case 3.2.1
-			// 				k->parent->color = BLACK;
-			// 				k->parent->parent->color = 1;
-			// 				rotate(k->parent->parent, LEFT);
-			// 			}
-			// 		}
-			// 		else
-			// 		{
-			// 			u = k->parent->parent->right; // uncle
-
-			// 			if (u->color == 1)
-			// 			{
-			// 				// mirror case 3.1
-			// 				u->color = BLACK;
-			// 				k->parent->color = BLACK;
-			// 				k->parent->parent->color = 1;
-			// 				k = k->parent->parent;	
-			// 			}
-			// 			else
-			// 			{
-			// 				if (k == k->parent->right)
-			// 				{
-			// 					// mirror case 3.2.2
-			// 					k = k->parent;
-			// 					rotate(k, LEFT);
-			// 				}
-			// 				// mirror case 3.2.1
-			// 				k->parent->color = BLACK;
-			// 				k->parent->parent->color = 1;
-			// 				rotate(k->parent->parent, RIGHT);
-			// 			}
-			// 		}
-			// 		if (k == root)
-			// 			break;
-			// 	}
-			// 	root->color = BLACK;
-			// }
-
-			void	printHelper(Node<Key, T>* root, std::string indent, bool last)
+			void printHelper(Node<Key, T>* root, std::string indent, bool last)
 			{
 				// print the tree structure on the screen
-				if (root != NULL)
+				if (root != &TNULL)
 				{
 					std::cout << indent;
 					if (last)
@@ -396,8 +308,9 @@ namespace ft
 						std::cout<<"L----";
 						indent += "|    ";
 					}
+					
 					std::string sColor = root->color?"RED":"BLACK";
-					std::cout << root->key << "("<< sColor << ")" << std::endl;
+					std::cout<<root->key<<"("<<sColor<<")"<<std::endl;
 					printHelper(root->left, indent, false);
 					printHelper(root->right, indent, true);
 				}
@@ -406,12 +319,7 @@ namespace ft
 		public:
 			RBTree()
 			{
-				root = NULL;
-			}
-
-			RBTree(const RBTree& other)
-			{
-				*this = other;
+				root = &TNULL;
 			}
 
 			~RBTree()
@@ -424,62 +332,45 @@ namespace ft
 					min = this->minimum(root);
 					max = this->maximum(root);
 					if (min != root)
-					{
-						// printNode(min);
 						deleteNode(min->key);
-					}
 					else if (max != root && max != min)
-					{
-						// printNode(max);
 						deleteNode(max->key);
-					}
 					else
 					{
-						// printNode(root);
 						deleteNode(root->key);
+						return ;
 					}
 				}
 			}
 
-			RBTree &operator=(const RBTree& other)
-			{
-				if (&other == this)
-					return (*this);
-				if (!other.getRoot())
-					root = NULL;
-				else
-					root = other.getRoot();
-				return (*this);
-			}
-
 			// search the tree for the key k and return the corresponding node
-			Node<Key, T>	*searchTree(Key k)
+			Node<Key, T>* searchTree(Key k)
 			{
 				return searchTreeHelper(this->root, k);
 			}
 
-			Node<Key, T>	*minimum(Node<Key, T> *node)// find the node with the minimum key
+			Node<Key, T>* minimum(Node<Key, T>* node)// find the node with the minimum key
 			{
-				while (node->left != NULL)
+				while (node->left != &TNULL)
 					node = node->left;
 				return node;
 			}
 
-			Node<Key, T>	*maximum(Node<Key, T> *node)// find the node with the maximum key
+			Node<Key, T>* maximum(Node<Key, T>* node)// find the node with the maximum key
 			{
-				while (node->right != NULL)
+				while (node->right != &TNULL)
 					node = node->right;
 				return node;
 			}
 
-			Node<Key, T>	*successor(Node<Key, T> *x)
+			Node<Key, T> *successor(Node<Key, T> *x)
 			{
 				// if the right subtree is not nullhe successor is the leftmost node in the right subtree
-				if (x->right != NULL)
+				if (x->right != &TNULL)
 					return minimum(x->right);
 				// else it is the lowest ancestor of x whose left child is also an ancestor of x.
 				Node<Key, T> *y = x->parent;
-				while (y != NULL && x == y->right)
+				while (y != &TNULL && x == y->right)
 				{
 					x = y;
 					y = y->parent;
@@ -488,14 +379,14 @@ namespace ft
 			}
 
 			// find the predecessor of a given node
-			Node<Key, T>	*predecessor(Node<Key, T> *x)
+			Node<Key, T> *predecessor(Node<Key, T> *x)
 			{
 				// if the left subtree is not nullhe predecessor is the rightmost node in the left subtree
-				if (x->left != NULL && x->left != NULL)
+				if (x->left != &TNULL)
 					return maximum(x->left);
 				// else it is the highest ancestor of x whose right child is also an ancestor of x.
 				Node<Key, T> *y = x->parent;
-				while (y != NULL && y != NULL && x == y->left)
+				while (y != &TNULL && x == y->left)
 				{
 					x = y;
 					y = y->parent;
@@ -514,7 +405,7 @@ namespace ft
 				}
 				Node<Key, T>* y = x->child[r];
 				x->child[r] = y->child[l];
-				if (y->child[l] != NULL)
+				if (y->child[l] != &TNULL)
 					y->child[l]->parent = x;
 				y->parent = x->parent;
 				if (x->parent == NULL)
@@ -527,13 +418,18 @@ namespace ft
 				x->parent = y;
 			}
 
-			// insert the key to the tree in its appropriate position and fix the tree
-			void	insert(Node<Key, T> *node)// Ordinary Binary Search Insertion
+			// insert Node to the tree in its appropriate position and fix the tree
+			void insert(Node<Key, T>* node)// Ordinary Binary Search Insertion
 			{
-				Node<Key, T> *y = NULL;
-				Node<Key, T> *x = this->root;
+				node->parent = NULL;
+				node->left = &TNULL;
+				node->right = &TNULL;
+				node->color = 1; // new node must be red
 
-				while (x != NULL) //find node parent
+				Node<Key, T>* y = NULL;
+				Node<Key, T>* x = this->root;
+
+				while (x != &TNULL)
 				{
 					y = x;
 					if (node->key < x->key)
@@ -549,48 +445,41 @@ namespace ft
 				else
 					y->right = node;
 				if (node->parent == NULL) // if new node is a root node, simply return
-				{
 					node->color = BLACK;
-					return ;
-				}
-				if (node->parent->parent == NULL)// if the grandparent is null, simply return
-					return ;
-				fixInsert(node);// Fix the tree
+				else if (node->parent->parent == NULL)// if the grandparent is null, simply return
+					return;
+				else // Fix the tree
+					fixInsert(node);
 			}
 
-			// insert the key to the tree in its appropriate position and fix the tree
-			void	insert(Key key)// Ordinary Binary Search Insertion
+			void insert(Key key)
 			{
-				Node<Key, T> *node = new Node<Key, T>(key);
-				node->color = RED;
+				Node<Key, T>* node = new Node<Key, T>(key);
 				insert(node);
-				printNode(node);
 			}
 
-			void	insert(Key key, T val)// Ordinary Binary Search Insertion
+			void insert(Key key, T val)
 			{
-				Node<Key, T> *node = new Node<Key, T>(key, val);
-				node->color = RED;
+				Node<Key, T>* node = new Node<Key, T>(key, val);
 				insert(node);
-				printNode(node);
 			}
 
-			Node<Key, T>	*getRoot()// retrun root
+			Node<Key, T>* getRoot()// retrun root
 			{
-				return this->root;
+				return (this->root);
 			}
 
-			void	deleteNode(Key key)// delete the node from the tree
+			Node<Key, T>* getNULL()// retrun NULL node
 			{
-				deleteNodeHelper(this->root, key);
+				return (&this->TNULL);
 			}
 
-			// void	deleteNode(Key key, Node<Key, T> *node)// delete the node from the tree
-			// {
-			// 	deleteNodeHelper(node, key);
-			// }
+			bool	deleteNode(Key key)// delete the node from the tree
+			{
+				return (deleteNodeHelper(this->root, key));
+			}
 
-			void	prettyPrint()// print the tree structure on the screen
+			void prettyPrint()// print the tree structure on the screen
 			{
 				if (root)
 					printHelper(this->root, "", true);

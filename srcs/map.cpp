@@ -29,11 +29,11 @@ void	printSizeVs(ft::map<Key ,T> const &ft_map, std::map<Key ,T> const &std_map,
 		int i = 0;
 		for (; it != ite; ++it)
 		{
-			if (s_it >= s_ite)
+			if (s_it == s_ite)
 				std::cout << "to much elem" << std::endl;
 			else
 			{
-				std::cout << i << "- ft: |" << *it  << "| == |" << *s_it << "| :std" << std::endl;
+				std::cout << i << "- ft: |" << *it  << std::endl;// "| == |" << *s_it << "| :std" << std::endl;
 				s_it++;
 			}
 			i++;

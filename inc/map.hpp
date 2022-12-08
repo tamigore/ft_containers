@@ -24,12 +24,12 @@ namespace ft
 			typedef const value_type&							const_reference;
 			typedef typename Allocator::pointer					pointer;
 			typedef typename Allocator::const_pointer			const_pointer;
-			typedef ft::map_iterator<value_type>				iterator;
-			typedef ft::map_iterator<value_type>				const_iterator;
+			typedef ft::map_iterator<key_type, value_type>		iterator;
+			typedef ft::map_iterator<key_type, value_type>		const_iterator;
 			typedef ft::reverse_map_iterator<iterator>			reverse_iterator;
 			typedef ft::reverse_map_iterator<const_iterator>	const_reverse_iterator;
-			typedef	ft::Node<value_type>						node_type;
-			typedef	ft::RBTree<value_type>						tree_type;
+			typedef	ft::Node<key_type, value_type>				node_type;
+			typedef	ft::RBTree<key_type, value_type>			tree_type;
 
 			class value_compare
 			{
@@ -70,7 +70,7 @@ namespace ft
 					_tree = new tree_type();
 				while (first != last)
 				{
-					_tree->insert(*first);
+					_tree->insert(first->first, *first);
 					first++;
 				}
 			}
@@ -98,7 +98,7 @@ namespace ft
 				insert(other.begin(), other.end());
 				return (*this);
 			}
-			
+
 			allocator_type get_allocator() const
 			{
 				return (_alloc);
@@ -116,27 +116,27 @@ namespace ft
 			
 			T& operator[](const Key& key)
 			{
-				return (_tree->searchTree(key));
+				return (_tree->searchTree(key)->data.second);
 			}
 
 			iterator				begin()
 			{
-				return (iterator(_tree->minimum(_tree->getRoot())));
+				return (iterator(_tree, _tree->minimum(_tree->getRoot())));
 			}
 
 			const_iterator			begin() const
 			{
-				return (const_iterator(_tree->minimum(_tree->getRoot())));
+				return (const_iterator(_tree, _tree->minimum(_tree->getRoot())));
 			}
 
 			iterator				end()
 			{
-				return (iterator(_tree->maximum(_tree->getRoot())));
+				return (iterator(_tree, _tree->maximum(_tree->getRoot())));
 			}
 
 			const_iterator			end() const
 			{
-				return (const_iterator(_tree->maximum(_tree->getRoot())));
+				return (const_iterator(_tree, _tree->maximum(_tree->getRoot())));
 			}
 
 			reverse_iterator		rbegin()
@@ -161,19 +161,19 @@ namespace ft
 
 			bool		empty() const
 			{
-				if (size() == 0 || _tree->root == _tree->TNULL)
+				if (size() == 0 || _tree->getRoot() == _tree->getNULL())
 					return (true);
 				return (false);
 			}
 
 			size_type	size() const
 			{
-				return (size_type(_tree->getSize()));
+				return (size_type(_size));
 			}
 
 			size_type	max_size() const
 			{
-				return (allocator_type::max_size());
+				return (_alloc.max_size());
 			}
 			
 			void						clear();
@@ -189,12 +189,12 @@ namespace ft
 			size_type									count( const Key& key ) const;
 			iterator									find( const Key& key )
 			{
-				return (iterator(_tree->searchTree(key)));
+				return (iterator(_tree, _tree->searchTree(key)));
 			}
 
 			const_iterator								find( const Key& key ) const
 			{
-				return (const_iterator(_tree->searchTree(key)));
+				return (const_iterator(_tree, _tree->searchTree(key)));
 			}
 
 			std::pair<iterator,iterator>				equal_range( const Key& key );
@@ -204,7 +204,10 @@ namespace ft
 			iterator									upper_bound( const Key& key );
 			const_iterator								upper_bound( const Key& key ) const;
 
-			key_compare					key_comp() const;
+			key_compare					key_comp() const
+			{
+				return (_comp);
+			}
 			// value_compare				value_comp() const;
 	};
 
@@ -223,7 +226,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Alloc >
 	bool operator<( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs )
 	{
-		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), lhs._comp));
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), lhs.key_comp()));
 	}
 
 	template< class Key, class T, class Compare, class Alloc >
@@ -235,7 +238,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Alloc >
 	bool operator>( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs )
 	{
-		return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end(), lhs._comp));
+		return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end(), rhs.key_comp()));
 	}
 
 	template< class Key, class T, class Compare, class Alloc >
