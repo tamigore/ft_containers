@@ -176,17 +176,81 @@ namespace ft
 				return (_alloc.max_size());
 			}
 			
-			void						clear();
-			std::pair<iterator, bool>	insert( const value_type& value );
-			iterator					insert( iterator pos, const value_type& value );
-			template< class InputIt >
-			void						insert( InputIt first, InputIt last );
-			iterator					erase( iterator pos );
-			iterator					erase( iterator first, iterator last );
-			size_type					erase( const Key& key );
-			void						swap( map& other );
+			void						clear()
+			{
+				_tree->~RBTree();
+			}
 
-			size_type									count( const Key& key ) const;
+			std::pair<iterator, bool>	insert( const value_type& value )
+			{
+				_tree->insert(value->first, value);
+			}
+
+			iterator					insert( iterator pos, const value_type& value )
+			{
+				(void)pos;
+				_tree->insert(value->first, value);
+			}
+
+			template< class InputIt >
+			void						insert( InputIt first, InputIt last )
+			{
+				while (first != last)
+				{
+					_tree->insert(first->first, *first);
+					first++;
+				}
+			}
+
+			iterator					erase( iterator pos )
+			{
+				_tree->deleteNode(pos->first);
+			}
+
+			iterator					erase( iterator first, iterator last )
+			{
+				// difference_type	i = distance(first, last);
+				// Key	tab[i];
+
+				// while (i > 0)
+				// {
+				// 	tab[i--] = first->first;
+				// 	first++;
+				// }
+				while (first != last)
+				{
+					_tree->deleteNode(first->first);
+					first++;
+				}
+			}
+
+			size_type					erase( const Key& key )
+			{
+				_tree->deleteNode(key);
+			}
+
+			void						swap( map& other )
+			{
+				ft::swap(other._tree, this->_tree);
+				ft::swap(other._size, this->_size);
+				ft::swap(other._comp, this->_comp);
+				ft::swap(other._alloc, this->_alloc);
+			}
+
+			size_type									count( const Key& key ) const
+			{
+				iterator	i = begin();
+				size_type	ret = 0;
+				while (i != end())
+				{
+					ret++;
+					if (i->first == key)
+						break ;
+					i++;
+				}
+				return (ret);
+			}
+
 			iterator									find( const Key& key )
 			{
 				return (iterator(_tree, _tree->searchTree(key)));
@@ -214,7 +278,7 @@ namespace ft
 	template< class Key, class T, class Compare, class Alloc >
 	bool operator==( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs )
 	{
-		return (!(lhs < rhs) && !(lhs > rhs));
+		return (!(lhs < rhs) && !(rhs < lhs));
 	}
 
 	template< class Key, class T, class Compare, class Alloc >

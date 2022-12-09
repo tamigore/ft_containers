@@ -22,17 +22,21 @@
 
 namespace ft
 {
-	// to_string https://en.cppreference.com/w/cpp/string/basic_string/to_string
-	// template <typename T>
-	// std::string to_string(T obj)
+	// template<class T>
+	// void	swap(T *x, T *y)
 	// {
-	// 	// Stream used to convert to string
-	// 	std::ostringstream ss;
-	// 	ss << obj;
-	// 	return (ss.str());
+	// 	T	tmp = *x;
+	// 	*x = *y;
+	// 	*y = *tmp;
 	// }
 
-	// distance https://en.cppreference.com/w/cpp/iterator/distance
+	template<class T>
+	void	swap(T &x, T &y)
+	{
+		T	tmp = x;
+		x = y;
+		y = tmp;
+	}
 
 	template<class InputIt1, class InputIt2>
 	bool	lexicographical_compare(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
