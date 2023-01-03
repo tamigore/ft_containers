@@ -150,16 +150,16 @@ namespace ft
 				{ return (_alloc); }
 
 			iterator	begin(void)
-				{ return (_start); }
+				{ return (iterator(_start)); }
 
 			const_iterator begin() const
-				{ return (_start); }
+				{ return (const_iterator(_start)); }
 
 			iterator	end(void)
-				{ return (_end); }
+				{ return (iterator(_end)); }
 
 			const_iterator end() const
-				{ return (_end); }
+				{ return (const_iterator(_end)); }
 
 			reverse_iterator	rbegin(void)
 				{ return (reverse_iterator(end())); }
@@ -452,55 +452,32 @@ namespace ft
 				return (first);
 			}
 
-			void swap(vector& other)
+			void swap(vector &other)
 			{
-				allocator_type	old_alloc = other.get_allocator();
-				pointer			old_start = other._start;
-				pointer			old_end = other._end;
-				pointer			old_capacity = other._capacity;
-				other._alloc = this->_alloc;
-				other._start = this->_start;
-				other._end = this->_end;
-				other._capacity = this->_capacity;
-				this->_alloc = old_alloc;
-				this->_start = old_start;
-				this->_end = old_end;
-				this->_capacity = old_capacity;
+				ft::swap((other._alloc), (this->_alloc));
+				ft::swap((other._start), (this->_start));
+				ft::swap((other._end), (this->_end));
+				ft::swap((other._capacity), (this->_capacity));
 			}
 
 			void clear()
 			{
-				size_type tmp = this->size();
-
-				while (tmp--)
-				{
-					_end--;
-					_alloc.destroy(_end);
-				}
+				this->erase(this->begin(), this->end());
+				// size_type tmp = this->size();
+				// while (tmp--)
+				// {
+				// 	_end--;
+				// 	_alloc.destroy(_end);
+				// }
 			}
 	};
 
 	template <class T, class Alloc>
 	bool operator==(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
 	{
-		bool a = ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
-		bool b = ft::lexicographical_compare(y.begin(), y.end(), x.begin(), x.end());
-		
-		if (!a && !b)
+		if (!(x < y) && !(y < x))
 			return (true);
 		return (false);
-		// if (x.size() != y.size()) // faster ?
-		// 	return (false);
-		// typename ft::vector<T>::const_iterator i = x.begin();
-		// typename ft::vector<T>::const_iterator j = y.begin();
-		// while (i != x.end())
-		// {
-		// 	if (j == y.end() || *i != *j)
-		// 		return (false);
-		// 	++i;
-		// 	++j;
-		// }
-		// return (true);
 	};
 
 	template <class T, class Alloc>
@@ -518,7 +495,7 @@ namespace ft
 	template <class T, class Alloc>
 	bool operator<=(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
 	{
-		return (x == y || x < y);
+		return (!(x > y));
 	}
 
 	template <class T, class Alloc>
