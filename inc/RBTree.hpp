@@ -46,6 +46,18 @@ namespace ft
 				right = NULL;
 				color = BLACK;
 			}
+
+			Node<Key, T> operator=(Node<Key, T> &other)
+			{
+				if (&other == NULL)
+					return (Node<Key, T>());
+				key = other.key;
+				data = other.data;
+				parent = other.parent;
+				left = other.left;
+				right = other.right;
+				color = other.color;
+			}
 	};
 
 	template <class Key, class T>
@@ -69,8 +81,9 @@ namespace ft
 	class RBTree
 	{
 		private:
-			Node<Key, T> *root;
-			Node<Key, T> TNULL;
+			Node<Key, T>					*root;
+			Node<Key, T>					TNULL;
+			std::allocator<Node<Key, T> >	alloc;
 
 			Node<Key, T>	*searchTreeHelper(Node<Key, T> *node, Key key)
 			{
@@ -223,6 +236,7 @@ namespace ft
 					y->left->parent = y;
 					y->color = z->color;
 				}
+				// alloc.deallocate(z);
 				delete z;
 				if (y_original_color == BLACK)
 					fixDelete(x);
@@ -327,16 +341,16 @@ namespace ft
 				Node<Key, T> *min;
 				Node<Key, T> *max;
 
-				while (root)
+				while (root && root != &TNULL)
 				{
 					min = this->minimum(root);
-					max = this->maximum(root);
-					if (min != root)
+					if (min && min != root && min != &TNULL)
 						deleteNode(min->key);
-					else if (max != root && max != min)
-						deleteNode(max->key);
 					else
 					{
+						max = this->maximum(root);
+						if (max && max != root && max != min && max != &TNULL)
+							deleteNode(max->key);
 						deleteNode(root->key);
 						return ;
 					}
@@ -351,20 +365,22 @@ namespace ft
 
 			Node<Key, T>* minimum(Node<Key, T>* node)// find the node with the minimum key
 			{
-				while (node->left != &TNULL)
+				while (node && node->left != &TNULL)
 					node = node->left;
 				return node;
 			}
 
 			Node<Key, T>* maximum(Node<Key, T>* node)// find the node with the maximum key
 			{
-				while (node->right != &TNULL)
+				while (node && node->right != &TNULL)
 					node = node->right;
 				return node;
 			}
 
 			Node<Key, T> *successor(Node<Key, T> *x)
 			{
+				if (!x)
+					return (&TNULL);
 				// if the right subtree is not nullhe successor is the leftmost node in the right subtree
 				if (x->right != &TNULL)
 					return minimum(x->right);
@@ -381,6 +397,8 @@ namespace ft
 			// find the predecessor of a given node
 			Node<Key, T> *predecessor(Node<Key, T> *x)
 			{
+				if (!x)
+					return (&TNULL);
 				// if the left subtree is not nullhe predecessor is the rightmost node in the left subtree
 				if (x->left != &TNULL)
 					return maximum(x->left);
@@ -424,11 +442,11 @@ namespace ft
 				node->parent = NULL;
 				node->left = &TNULL;
 				node->right = &TNULL;
-				node->color = 1; // new node must be red
+				node->color = RED; // new node must be red
 
 				Node<Key, T>* y = NULL;
 				Node<Key, T>* x = this->root;
-
+				printNode(node);
 				while (x != &TNULL)
 				{
 					y = x;
@@ -454,12 +472,16 @@ namespace ft
 
 			void insert(Key key)
 			{
+				// Node<Key, T>* node = alloc.allocate(1);
+				// *node = Node<Key, T>(key);
 				Node<Key, T>* node = new Node<Key, T>(key);
 				insert(node);
 			}
 
 			void insert(Key key, T val)
 			{
+				// Node<Key, T>* node = alloc.allocate(1);
+				// *node = Node<Key, T>(key, val);
 				Node<Key, T>* node = new Node<Key, T>(key, val);
 				insert(node);
 			}
@@ -481,8 +503,10 @@ namespace ft
 
 			void prettyPrint()// print the tree structure on the screen
 			{
-				if (root)
+				if (root && root != &TNULL)
 					printHelper(this->root, "", true);
+				else
+					std::cout << "RBtree NULL..." << std::endl;
 			}
 	};
 } // namespace ft

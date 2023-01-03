@@ -47,6 +47,14 @@ namespace ft
 		return (first1 == last1) && (first2 != last2);
 	}
 
+	template<class T>
+	void	swap(T &x, T &y)
+	{
+		T	tmp = x;
+		x = y;
+		y = tmp;
+	}
+
 	template<class InputIt1, class InputIt2, class Compare>
 	bool	lexicographical_compare(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, Compare comp)
 	{
