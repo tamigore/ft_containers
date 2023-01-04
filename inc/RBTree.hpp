@@ -386,11 +386,13 @@ namespace ft
 					return minimum(x->right);
 				// else it is the lowest ancestor of x whose left child is also an ancestor of x.
 				Node<Key, T> *y = x->parent;
-				while (y != &TNULL && x == y->right)
+				while (y && y != &TNULL && x == y->right)
 				{
 					x = y;
 					y = y->parent;
 				}
+				if (!y)
+					y = &TNULL;
 				return y;
 			}
 
@@ -404,11 +406,13 @@ namespace ft
 					return maximum(x->left);
 				// else it is the highest ancestor of x whose right child is also an ancestor of x.
 				Node<Key, T> *y = x->parent;
-				while (y != &TNULL && x == y->left)
+				while (y && y != &TNULL && x == y->left)
 				{
 					x = y;
 					y = y->parent;
 				}
+				if (!y)
+					y = &TNULL;
 				return y;
 			}
 

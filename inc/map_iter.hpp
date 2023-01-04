@@ -75,10 +75,28 @@ namespace ft
 			}
 
 			map_iterator operator+(difference_type n) const
-			{ return (*this + n); }
+			{
+				map_iterator rtn(*this);
+
+				while (n > 0 && rtn._node)
+				{
+					rtn._node = rtn._tree->successor(rtn._node);
+					n--;
+				} 
+				return (rtn);
+			}
 
 			map_iterator operator-(difference_type n) const
-			{ return (*this - n); }
+			{
+				map_iterator rtn(*this);
+
+				while (n > 0 && rtn._node)
+				{
+					rtn._node = rtn._tree->predecessor(rtn._node);
+					n--;
+				} 
+				return (rtn);
+			}
 
 			map_iterator& operator+=(difference_type n)
 			{

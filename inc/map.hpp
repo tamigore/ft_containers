@@ -168,12 +168,18 @@ namespace ft
 
 			iterator				end()
 			{
-				return (iterator(_tree, _tree->maximum(_tree->getRoot())));
+				// return (iterator(_tree, _tree->maximum(_tree->getRoot())));
+				if (_tree->getRoot() == _tree->getNULL())
+					return (begin());
+				return (iterator(_tree, _tree->getNULL()));
 			}
 
 			const_iterator			end() const
 			{
-				return (const_iterator(_tree, _tree->maximum(_tree->getRoot())));
+				// return (const_iterator(_tree, _tree->maximum(_tree->getRoot())));
+				if (_tree->getRoot() == _tree->getNULL())
+					return (begin());
+				return (const_iterator(_tree, _tree->getNULL()));
 			}
 
 			reverse_iterator		rbegin()
@@ -302,37 +308,19 @@ namespace ft
 
 			ft::pair<iterator,iterator>				equal_range( const Key& key )
 			{
-				iterator	i = begin();
-
-				while (i != end())
-				{
-					i++;
-					if (!_comp(key, i->first) && !_comp(i->first, key))
-						return (make_pair(i, i));
-				}
-				i = upper_bound(key);
-				return (make_pair(i, i));
+				return (make_pair(lower_bound(key), upper_bound(key)));
 			}
 
 			ft::pair<const_iterator,const_iterator>	equal_range( const Key& key ) const
 			{
-				const_iterator	i = begin();
-
-				while (i != end())
-				{
-					i++;
-					if (!_comp(key, i->first) && !_comp(i->first, key))
-						return (make_pair(i, i));
-				}
-				i = upper_bound(key);
-				return (make_pair(i, i));
+				return (make_pair(lower_bound(key), upper_bound(key)));
 			}
 
 			iterator									lower_bound( const Key& key )
 			{
 				iterator	i = begin();
 
-				while (i != end() && !_comp(key, i->first))
+				while (i != end() && _comp(i->first, key))
 					i++;
 				return (i);
 			}
@@ -341,7 +329,7 @@ namespace ft
 			{
 				const_iterator	i = begin();
 
-				while (i != end() && !_comp(key, i->first))
+				while (i != end() && _comp(i->first, key))
 					i++;
 				return (i);
 			}
@@ -350,7 +338,9 @@ namespace ft
 			{
 				iterator	i = begin();
 
-				while (i != end() && _comp(key, i->first))
+				while (i != end() && _comp(i->first, key))
+					i++;
+				if (i != end() && !_comp(key, i->first))
 					i++;
 				return (i);
 			}
@@ -359,7 +349,9 @@ namespace ft
 			{
 				const_iterator	i = begin();
 
-				while (i != end() && !_comp(key, i->first))
+				while (i != end() && _comp(i->first, key))
+					i++;
+				if (i != end() && !_comp(key, i->first))
 					i++;
 				return (i);
 			}
