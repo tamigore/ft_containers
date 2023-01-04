@@ -300,7 +300,7 @@ namespace ft
 				return (const_iterator(_tree, _tree->searchTree(key)));
 			}
 
-			std::pair<iterator,iterator>				equal_range( const Key& key )
+			ft::pair<iterator,iterator>				equal_range( const Key& key )
 			{
 				iterator	i = begin();
 
@@ -314,7 +314,7 @@ namespace ft
 				return (make_pair(i, i));
 			}
 
-			std::pair<const_iterator,const_iterator>	equal_range( const Key& key ) const
+			ft::pair<const_iterator,const_iterator>	equal_range( const Key& key ) const
 			{
 				const_iterator	i = begin();
 

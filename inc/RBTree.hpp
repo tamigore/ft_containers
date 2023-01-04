@@ -446,7 +446,6 @@ namespace ft
 
 				Node<Key, T>* y = NULL;
 				Node<Key, T>* x = this->root;
-				printNode(node);
 				while (x != &TNULL)
 				{
 					y = x;

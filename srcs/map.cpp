@@ -65,43 +65,57 @@ void	printSizeVs(ft::map<Key ,T> const &ft_map, std::map<Key ,T> const &std_map,
 }
 
 // typedef SPACE_FT::map<T1, T2>::value_type		T3;
-// typedef SPACE_FT::map<T1, T2>::iterator			ft_iterator;
-// typedef SPACE_FT::map<T1, T2>::const_iterator	ft_const_iterator;
-// typedef SPACE_STD::map<T1, T2>::value_type		ST3;
-// typedef SPACE_STD::map<T1, T2>::iterator		std_iterator;
-// typedef SPACE_STD::map<T1, T2>::const_iterator	std_const_iterator;
+typedef SPACE_FT::map<T1, T2>::iterator			ft_iterator;
+typedef SPACE_FT::map<T1, T2>::const_iterator	ft_const_iterator;
+typedef SPACE_STD::map<T1, T2>::value_type		SFT3;
+typedef SPACE_STD::map<T1, T2>::iterator		std_iterator;
+typedef SPACE_STD::map<T1, T2>::const_iterator	std_const_iterator;
 
-// static int iter = 0;
+static int iter = 0;
 
-// template <typename MAP>
-// void	ft_bound(MAP &mp, const T1 &param)
-// {
-// 	ft_iterator ite = mp.end(), it[2];
-// 	ft::pair<ft_iterator, ft_iterator>	ft_range;
+void	ft_bound(ft::map<T1, T2> &mp, const T1 &param)
+{
+	ft_iterator ite = mp.end(), it[2];
+	ft::pair<ft_iterator, ft_iterator>	ft_range;
 
-// 	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-// 	std::cout << "with key [" << param << "]:" << std::endl;
-// 	it[0] = mp.lower_bound(param); it[1] = mp.upper_bound(param);
-// 	ft_range = mp.equal_range(param);
-// 	std::cout << "lower_bound: " << (it[0] == ite ? "end()" : printPair(it[0], false)) << std::endl;
-// 	std::cout << "upper_bound: " << (it[1] == ite ? "end()" : printPair(it[1], false)) << std::endl;
-// 	std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
-// }
+	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+	std::cout << "with key [" << param << "]:" << std::endl;
+	it[0] = mp.lower_bound(param); it[1] = mp.upper_bound(param);
+	ft_range = mp.equal_range(param);
+	std::cout << "lower_bound: ";
+	if (it[0] == ite)
+		std::cout << "end()" << std::endl;
+	else
+		std::cout << "[" << it[0]->first << "," << it[0]->second << "]" << std::endl;
+	std::cout << "upper_bound: ";
+	if (it[1] == ite)
+		std::cout << "end()" <<std::endl;
+	else
+		std::cout << "[" << it[1]->first << "," << it[1]->second << "]" << std::endl;
+	std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
+}
 
-// template <typename MAP>
-// void	std_bound(MAP &mp, const T1 &param)
-// {
-// 	std_iterator ite = mp.end(), it[2];
-// 	std::pair<std_iterator, std_iterator>	ft_range;
+void	std_bound(std::map<T1, T2> &mp, const T1 &param)
+{
+	std_iterator ite = mp.end(), it[2];
+	std::pair<std_iterator, std_iterator>	ft_range;
 
-// 	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-// 	std::cout << "with key [" << param << "]:" << std::endl;
-// 	it[0] = mp.lower_bound(param); it[1] = mp.upper_bound(param);
-// 	ft_range = mp.equal_range(param);
-// 	std::cout << "lower_bound: " << (it[0] == ite ? "end()" : printPair(it[0], false)) << std::endl;
-// 	std::cout << "upper_bound: " << (it[1] == ite ? "end()" : printPair(it[1], false)) << std::endl;
-// 	std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
-// }
+	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+	std::cout << "with key [" << param << "]:" << std::endl;
+	it[0] = mp.lower_bound(param); it[1] = mp.upper_bound(param);
+	ft_range = mp.equal_range(param);
+	std::cout << "lower_bound: ";
+	if (it[0] == ite)
+		std::cout << "end()" << std::endl;
+	else
+		std::cout << "[" << it[0]->first << "," << it[0]->second << "]" << std::endl;
+	std::cout << "upper_bound: ";
+	if (it[1] == ite)
+		std::cout << "end()" <<std::endl;
+	else
+		std::cout << "[" << it[1]->first << "," << it[1]->second << "]" << std::endl;
+	std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
+}
 
 // template <typename MAP>
 // void	ft_const_bound(const MAP &mp, const T1 &param)
@@ -113,8 +127,16 @@ void	printSizeVs(ft::map<Key ,T> const &ft_map, std::map<Key ,T> const &std_map,
 // 	std::cout << "with key [" << param << "]:" << std::endl;
 // 	it[0] = mp.lower_bound(param); it[1] = mp.upper_bound(param);
 // 	ft_range = mp.equal_range(param);
-// 	std::cout << "lower_bound: " << (it[0] == ite ? "end()" : printPair(it[0], false)) << std::endl;
-// 	std::cout << "upper_bound: " << (it[1] == ite ? "end()" : printPair(it[1], false)) << std::endl;
+// 	std::cout << "lower_bound: ";
+// 	if (it[0] == ite)
+// 		std::cout << "end()" << std::endl;
+// 	else
+// 		std::cout << "[" << it[0]->first << "," << it[0]->second << "]" << std::endl;
+// 	std::cout << "upper_bound: ";
+// 	if (it[1] == ite)
+// 		std::cout << "end()" <<std::endl;
+// 	else
+// 		std::cout << "[" << it[1]->first << "," << it[1]->second << "]" << std::endl;
 // 	std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
 // }
 
@@ -128,46 +150,54 @@ void	printSizeVs(ft::map<Key ,T> const &ft_map, std::map<Key ,T> const &std_map,
 // 	std::cout << "with key [" << param << "]:" << std::endl;
 // 	it[0] = mp.lower_bound(param); it[1] = mp.upper_bound(param);
 // 	ft_range = mp.equal_range(param);
-// 	std::cout << "lower_bound: " << (it[0] == ite ? "end()" : printPair(it[0], false)) << std::endl;
-// 	std::cout << "upper_bound: " << (it[1] == ite ? "end()" : printPair(it[1], false)) << std::endl;
+// 	std::cout << "lower_bound: ";
+// 	if (it[0] == ite)
+// 		std::cout << "end()" << std::endl;
+// 	else
+// 		std::cout << "[" << it[0]->first << "," << it[0]->second << "]" << std::endl;
+// 	std::cout << "upper_bound: ";
+// 	if (it[1] == ite)
+// 		std::cout << "end()" <<std::endl;
+// 	else
+// 		std::cout << "[" << it[1]->first << "," << it[1]->second << "]" << std::endl;
 // 	std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
 // }
 
-// int		map_bounds(void)
-// {
-// 	std::list<T3> lst;
-// 	unsigned int lst_size = 10;
-// 	for (unsigned int i = 0; i < lst_size; ++i)
-// 		lst.push_back(T3(i + 1, (i + 1) * 3));
-// 	SPACE_FT::map<T1, T2> mp(lst.begin(), lst.end());
-// 	SPACE_STD::map<T1, T2> smp(lst.begin(), lst.end());
-// 	printSizeVs(mp, smp);
+int		map_bounds(void)
+{
+	std::list<T3> lst;
+	unsigned int lst_size = 10;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(T3(i + 1, (i + 1) * 3));
+	SPACE_FT::map<T1, T2> mp(lst.begin(), lst.end());
+	SPACE_STD::map<T1, T2> smp(lst.begin(), lst.end());
+	printSizeVs(mp, smp);
 
-// 	ft_const_bound(mp, -10);
-// 	ft_const_bound(mp, 1);
-// 	ft_const_bound(mp, 5);
-// 	ft_const_bound(mp, 10);
-// 	ft_const_bound(mp, 50);
-// 	std_const_bound(smp, -10);
-// 	std_const_bound(smp, 1);
-// 	std_const_bound(smp, 5);
-// 	std_const_bound(smp, 10);
-// 	std_const_bound(smp, 50);
+	// ft_const_bound(mp, -10);
+	// ft_const_bound(mp, 1);
+	// ft_const_bound(mp, 5);
+	// ft_const_bound(mp, 10);
+	// ft_const_bound(mp, 50);
+	// std_const_bound(smp, -10);
+	// std_const_bound(smp, 1);
+	// std_const_bound(smp, 5);
+	// std_const_bound(smp, 10);
+	// std_const_bound(smp, 50);
 
-// 	printSizeVs(mp, smp);
+	printSizeVs(mp, smp);
 
-// 	mp.lower_bound(3)->second = 404;
-// 	mp.upper_bound(7)->second = 842;
-// 	ft_bound(mp, 5);
-// 	ft_bound(mp, 7);
-// 	smp.lower_bound(3)->second = 404;
-// 	smp.upper_bound(7)->second = 842;
-// 	std_bound(mp, 5);
-// 	std_bound(mp, 7);
+	mp.lower_bound(3)->second = 404;
+	mp.upper_bound(7)->second = 842;
+	ft_bound(mp, 5);
+	ft_bound(mp, 7);
+	smp.lower_bound(3)->second = 404;
+	smp.upper_bound(7)->second = 842;
+	std_bound(smp, 5);
+	std_bound(smp, 7);
 
-// 	printSizeVs(mp, smp);
-// 	return (0);
-// }
+	printSizeVs(mp, smp);
+	return (0);
+}
 
 
 void    map_construct()
@@ -234,6 +264,6 @@ void    map_construct()
 int	map_tester()
 {
     map_construct();
-	// map_bounds();
+	map_bounds();
 	return (0);
 }
