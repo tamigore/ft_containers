@@ -446,7 +446,7 @@ namespace ft
 				for (size_type i = 0; i < size() - dist; i++)
 					*(_start + pos + i) = *(_start + pos + dist + i);
 				while (dist--)
-					_alloc.destroy(_end--);
+					_alloc.destroy(--_end);
 				if (last == end())
 					return (end());
 				return (first);

@@ -48,6 +48,9 @@ namespace ft
 			pointer operator->(void)
 			{ return &(this->operator*()); }
 
+			pointer operator->(void) const
+			{ return &(this->operator*()); }
+
 			map_iterator& operator++(void)
 			{
 				_node = _tree->successor(_node);
@@ -116,10 +119,24 @@ namespace ft
 			operator map_iterator<const Key, T> () const
 			{ return (map_iterator<const Key, T>(this->_tree, this->_node)); }
 			
-		private:
+		public:
 			Tree		*_tree;
 			TNode		*_node;
 	};
+
+	template <class T1, class T2>
+	std::ostream	&operator<<(std::ostream &os, const map_iterator<T1,T2> &x)
+	{
+		if (x._node && x._tree && x._node != x._tree->getNULL())
+			os << "[" << x->first << "," << x->second << "]";
+		else if (!x._node)
+			os << "node NULL" << std::endl;
+		else if (!x._tree)
+			os << "tree NULL" << std::endl;
+		else
+			os << "NULL" << std::endl;
+		return (os);
+	}
 
 	template <class Key, class T>
 	typename ft::map_iterator<Key, T>::difference_type

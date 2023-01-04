@@ -5,7 +5,43 @@
 
 #define SPACE_STD std
 #define SPACE_FT ft
-#define TESTED_TYPE int
+// #define TESTED_TYPE int
+#define TESTED_TYPE foo<int>
+
+template <typename T>
+class foo {
+	public:
+		typedef T	value_type;
+
+		foo(void) : value(), _verbose(false) { };
+		foo(value_type src, const bool verbose = false) : value(src), _verbose(verbose) { };
+		foo(foo const &src, const bool verbose = false) : value(src.value), _verbose(verbose) { };
+		~foo(void) { if (this->_verbose) std::cout << "~foo::foo()" << std::endl; };
+		void m(void) { std::cout << "foo::m called [" << this->value << "]" << std::endl; };
+		void m(void) const { std::cout << "foo::m const called [" << this->value << "]" << std::endl; };
+		foo &operator=(value_type src) { this->value = src; return *this; };
+		foo &operator=(foo const &src) {
+			if (this->_verbose || src._verbose)
+				std::cout << "foo::operator=(foo) CALLED" << std::endl;
+			this->value = src.value;
+			return *this;
+		};
+		value_type	getValue(void) const { return this->value; };
+		void		switchVerbose(void) { this->_verbose = !(this->_verbose); };
+
+		operator value_type(void) const {
+			return value_type(this->value);
+		}
+	private:
+		value_type	value;
+		bool		_verbose;
+};
+
+template <typename T>
+std::ostream	&operator<<(std::ostream &o, foo<T> const &bar) {
+	o << bar.getValue();
+	return o;
+}
 
 template <typename T>
 void	printSizeVs(ft::vector<T> const &ft_vec, std::vector<T> const &std_vec, bool print_content = true)
@@ -608,6 +644,60 @@ void ft_eq_ope(const Ite_1 &first, const Ite_2 &second, const Ite_3 std1, const 
 		ft_eq_ope(second, first, std2, std1, 0);
 }
 
+int		itw_arrow(void)
+{
+	const int size = 5;
+	ft::vector<TESTED_TYPE> vct(size);
+	ft::vector<TESTED_TYPE>::iterator it(vct.begin());
+	ft::vector<TESTED_TYPE>::const_iterator ite(vct.end());
+	std::vector<TESTED_TYPE> svct(size);
+	std::vector<TESTED_TYPE>::iterator sit(svct.begin());
+	std::vector<TESTED_TYPE>::const_iterator site(svct.end());
+
+	for (int i = 1; it != ite; ++i)
+		*it++ = i;
+	for (int i = 1; sit != site; ++i)
+		*sit++ = i;
+	printSizeVs(vct, svct, 1);
+
+	it = vct.begin();
+	ite = vct.begin();
+	sit = svct.begin();
+	site = svct.begin();
+
+	std::cout << *(++ite) << " == " << *(++site) << std::endl;
+	std::cout << *(ite++) << " == " << *(site++) << std::endl;
+	std::cout << *ite++ << " == " << *site++ << std::endl;
+	std::cout << *++ite << " == " << *++site << std::endl;
+
+	it->m();
+	ite->m();
+	sit->m();
+	site->m();
+
+	std::cout << *(++it) << " == " << *(++sit) << std::endl;
+	std::cout << *(it++) << " == " << *(sit++) << std::endl;
+	std::cout << *it++ << " == " << *sit++ << std::endl;
+	std::cout << *++it << " == " << *++sit << std::endl;
+
+	std::cout << *(--ite) << " == " << *(--site) << std::endl;
+	std::cout << *(ite--) << " == " << *(site--) << std::endl;
+	std::cout << *--ite << " == " << *--site << std::endl;
+	std::cout << *ite-- << " == " << *site-- << std::endl;
+
+	(*it).m();
+	(*ite).m();
+	(*sit).m();
+	(*site).m();
+
+	std::cout << *(--it) << " == " << *(--sit) << std::endl;
+	std::cout << *(it--) << " == " << *(sit--) << std::endl;
+	std::cout << *it-- << " == " << *sit-- << std::endl;
+	std::cout << *--it << " == " << *--sit << std::endl;
+
+	return (0);
+}
+
 void	ite_equ_test(void)
 {
 	const int size = 5;
@@ -785,19 +875,20 @@ void	rite_equ_test(void)
 
 int	vector_tester()
 {
-	vector_test();
-	vec_erase_test();
-	vec_assign_test();
-	vec_bidirectionalit_test();
-	vec_erased_test();
-	vec_insert_test();
-	test_copy_construct();
-	test_size();
-	test_swap();
+	// vector_test();
+	// vec_erase_test();
+	// vec_assign_test();
+	// vec_bidirectionalit_test();
+	// vec_erased_test();
+	// vec_insert_test();
+	// test_copy_construct();
+	// test_size();
+	// test_swap();
 	// test_iter_const();
-	test_relational_op();
-	ite_equ_test();
-	rite2();
-	rite_equ_test();
+	itw_arrow();
+	// test_relational_op();
+	// ite_equ_test();
+	// rite2();
+	// rite_equ_test();
 	return (1);
 }

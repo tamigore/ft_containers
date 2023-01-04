@@ -365,14 +365,14 @@ namespace ft
 
 			Node<Key, T>* minimum(Node<Key, T>* node)// find the node with the minimum key
 			{
-				while (node && node->left != &TNULL)
+				while (node && node != &TNULL && node->left != &TNULL)
 					node = node->left;
 				return node;
 			}
 
 			Node<Key, T>* maximum(Node<Key, T>* node)// find the node with the maximum key
 			{
-				while (node && node->right != &TNULL)
+				while (node && node != &TNULL && node->right != &TNULL)
 					node = node->right;
 				return node;
 			}

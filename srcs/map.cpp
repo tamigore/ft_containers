@@ -2,13 +2,107 @@
 #include <map>
 #include <list>
 
-#define SPACE_STD std
-#define SPACE_FT ft
+#define std std
+#define ft ft
 #define TESTED_TYPE int
 
-#define T1 int
-#define T2 int
-typedef std::pair<const T1, T2> T3;
+# include <iostream>
+# include <string>
+
+typedef ft::map<int, int>::iterator			ft_iterator;
+typedef ft::map<int, int>::const_iterator	ft_const_iterator;
+typedef std::map<int, int>::iterator		std_iterator;
+typedef std::map<int, int>::const_iterator	std_const_iterator;
+
+// --- Class foo
+template <typename T>
+class foo {
+	public:
+		typedef T	value_type;
+
+		foo(void) : value(), _verbose(false) { };
+		foo(value_type src, const bool verbose = false) : value(src), _verbose(verbose) { };
+		foo(foo const &src, const bool verbose = false) : value(src.value), _verbose(verbose) { };
+		~foo(void) { if (this->_verbose) std::cout << "~foo::foo()" << std::endl; };
+		void m(void) { std::cout << "foo::m called [" << this->value << "]" << std::endl; };
+		void m(void) const { std::cout << "foo::m const called [" << this->value << "]" << std::endl; };
+		foo &operator=(value_type src) { this->value = src; return *this; };
+		foo &operator=(foo const &src) {
+			if (this->_verbose || src._verbose)
+				std::cout << "foo::operator=(foo) CALLED" << std::endl;
+			this->value = src.value;
+			return *this;
+		};
+		value_type	getValue(void) const { return this->value; };
+		void		switchVerbose(void) { this->_verbose = !(this->_verbose); };
+
+		operator value_type(void) const {
+			return value_type(this->value);
+		}
+	private:
+		value_type	value;
+		bool		_verbose;
+};
+
+template <typename T>
+std::ostream	&operator<<(std::ostream &o, foo<T> const &bar) {
+	o << bar.getValue();
+	return o;
+}
+// --- End of class foo
+
+template <typename T>
+T	inc(T it, int n)
+{
+	while (n-- > 0)
+		++it;
+	return (it);
+}
+
+template <typename T>
+T	dec(T it, int n)
+{
+	while (n-- > 0)
+		--it;
+	return (it);
+}
+
+template <typename T>
+std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
+{
+	o << "key: " << iterator->first << " | value: " << iterator->second;
+	if (nl)
+		o << std::endl;
+	return ("");
+}
+
+template <typename T_MAP>
+void	printSize(T_MAP const &mp, bool print_content = 1)
+{
+	std::cout << "size: " << mp.size() << std::endl;
+	std::cout << "max_size: " << mp.max_size() << std::endl;
+	if (print_content)
+	{
+		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << printPair(it, false) << std::endl;
+	}
+	std::cout << "###############################################" << std::endl;
+}
+
+template <typename U1, typename U2>
+void	printReverse(ft::map<U1, U2> &mp)
+{
+	typename ft::map<U1, U2>::iterator it = mp.end(), ite = mp.begin();
+
+	std::cout << "printReverse:" << std::endl;
+	while (it != ite) {
+		it--;
+		std::cout << "-> " << printPair(it, false) << std::endl;
+	}
+	std::cout << "_______________________________________________" << std::endl;
+}
 
 template <typename Key, typename T>
 void	printSizeVs(ft::map<Key ,T> const &ft_map, std::map<Key ,T> const &std_map, bool print_content = true)
@@ -25,11 +119,6 @@ void	printSizeVs(ft::map<Key ,T> const &ft_map, std::map<Key ,T> const &std_map,
 		typename ft::map<Key,T>::const_iterator ite = ft_map.end();
 		typename std::map<Key,T>::const_iterator s_it = std_map.begin();
 		typename std::map<Key,T>::const_iterator s_ite = std_map.end();
-
-		if (it != ite)
-			std::cout << "ft ite = " << *ite << std::endl;
-		if (s_it != s_ite)
-			std::cout << "std ite = [" << s_ite->first << "," << s_ite->second << "]" << std::endl;
 
 		std::cout << std::endl << "Content is:" << std::endl;
 		int i = 0;
@@ -64,16 +153,96 @@ void	printSizeVs(ft::map<Key ,T> const &ft_map, std::map<Key ,T> const &std_map,
 	std::cout << "_______________________________________________" << std::endl;
 }
 
-// typedef SPACE_FT::map<T1, T2>::value_type		T3;
-typedef SPACE_FT::map<T1, T2>::iterator			ft_iterator;
-typedef SPACE_FT::map<T1, T2>::const_iterator	ft_const_iterator;
-typedef SPACE_STD::map<T1, T2>::value_type		SFT3;
-typedef SPACE_STD::map<T1, T2>::iterator		std_iterator;
-typedef SPACE_STD::map<T1, T2>::const_iterator	std_const_iterator;
+int		TrickyMapConstruct(void)
+{
+	std::list<std::map<int, std::string>::value_type> lst;
+	std::list<std::map<int, std::string>::value_type>::iterator itlst;
+
+	lst.push_back(std::map<int, std::string>::value_type(42, "lol"));
+	lst.push_back(std::map<int, std::string>::value_type(50, "mdr"));
+	lst.push_back(std::map<int, std::string>::value_type(35, "funny"));
+	lst.push_back(std::map<int, std::string>::value_type(45, "bunny"));
+	lst.push_back(std::map<int, std::string>::value_type(21, "fizz"));
+	lst.push_back(std::map<int, std::string>::value_type(35, "this key is already inside"));
+	lst.push_back(std::map<int, std::string>::value_type(55, "fuzzy"));
+	lst.push_back(std::map<int, std::string>::value_type(38, "buzz"));
+	lst.push_back(std::map<int, std::string>::value_type(55, "inside too"));
+
+	std::cout << "List contains: " << lst.size() << " elements." << std::endl;
+	for (itlst = lst.begin(); itlst != lst.end(); ++itlst)
+		printPair(itlst);
+	std::cout << "---------------------------------------------" << std::endl;
+
+	ft::map<int, std::string> mp(lst.begin(), lst.end());
+	std::map<int, std::string> smp(lst.begin(), lst.end());
+	lst.clear();
+
+	printSize(mp);
+	printSizeVs(mp, smp);
+	return (0);
+}
+
+template <class MAP>
+void	cmp(const MAP &lhs, const MAP &rhs)
+{
+	static int i = 0;
+
+	std::cout << "############### [" << i++ << "] ###############"  << std::endl;
+	std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << std::endl;
+	std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
+	std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
+}
+
+int		relational_op(void)
+{
+	ft::map<char, int> mp1;
+	ft::map<char, int> mp2;
+	std::map<char, int> smp1;
+	std::map<char, int> smp2;
+
+	mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
+	mp2['a'] = 2; mp2['b'] = 3; mp2['c'] = 4; mp2['d'] = 5;
+	smp1['a'] = 2; smp1['b'] = 3; smp1['c'] = 4; smp1['d'] = 5;
+	smp2['a'] = 2; smp2['b'] = 3; smp2['c'] = 4; smp2['d'] = 5;
+
+	cmp(mp1, mp1); // 0
+	cmp(smp1, smp1); // 0
+	cmp(mp1, mp2); // 1
+	cmp(smp1, smp2); // 1
+
+	mp2['e'] = 6; mp2['f'] = 7; mp2['h'] = 8; mp2['h'] = 9;
+	smp2['e'] = 6; smp2['f'] = 7; smp2['h'] = 8; smp2['h'] = 9;
+
+	cmp(mp1, mp2); // 2
+	cmp(smp1, smp2); // 2
+	cmp(mp2, mp1); // 3
+	cmp(smp2, smp1); // 3
+
+	std::cout << mp1.begin() << std::endl;
+	mp1.begin()->second = 42;
+	smp1.begin()->second = 42;
+	// (++(++mp1.begin()))->second = 42;
+	// (++(++smp1.begin()))->second = 42;
+
+	cmp(mp1, mp2); // 4
+	cmp(smp1, smp2); // 4
+	cmp(mp2, mp1); // 5
+	cmp(smp2, smp1); // 5
+
+	swap(mp1, mp2);
+	swap(smp1, smp2);
+
+	cmp(mp1, mp2); // 6
+	cmp(smp1, smp2); // 6
+	cmp(mp2, mp1); // 7
+	cmp(smp2, smp1); // 7
+	
+	return (0);
+}
 
 static int iter = 0;
 
-void	ft_bound(ft::map<T1, T2> &mp, const T1 &param)
+void	ft_bound(ft::map<int, int> &mp, const int &param)
 {
 	ft_iterator ite = mp.end(), it[2];
 	ft::pair<ft_iterator, ft_iterator>	ft_range;
@@ -95,7 +264,7 @@ void	ft_bound(ft::map<T1, T2> &mp, const T1 &param)
 	std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
 }
 
-void	std_bound(std::map<T1, T2> &mp, const T1 &param)
+void	std_bound(std::map<int, int> &mp, const int &param)
 {
 	std_iterator ite = mp.end(), it[2];
 	std::pair<std_iterator, std_iterator>	ft_range;
@@ -117,7 +286,7 @@ void	std_bound(std::map<T1, T2> &mp, const T1 &param)
 	std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
 }
 
-void	ft_const_bound(const ft::map<T1, T2> &mp, const T1 &param)
+void	ft_const_bound(const ft::map<int, int> &mp, const int &param)
 {
 	ft_const_iterator ite = mp.end(), it[2];
 	ft::pair<ft_const_iterator, ft_const_iterator> ft_range;
@@ -139,7 +308,7 @@ void	ft_const_bound(const ft::map<T1, T2> &mp, const T1 &param)
 	std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
 }
 
-void	std_const_bound(const std::map<T1, T2> &mp, const T1 &param)
+void	std_const_bound(const std::map<int, int> &mp, const int &param)
 {
 	std_const_iterator ite = mp.end(), it[2];
 	std::pair<std_const_iterator, std_const_iterator> ft_range;
@@ -163,12 +332,12 @@ void	std_const_bound(const std::map<T1, T2> &mp, const T1 &param)
 
 int		map_bounds(void)
 {
-	std::list<T3> lst;
+	std::list<std::map<int, int>::value_type> lst;
 	unsigned int lst_size = 10;
 	for (unsigned int i = 0; i < lst_size; ++i)
-		lst.push_back(T3(i + 1, (i + 1) * 3));
-	SPACE_FT::map<T1, T2> mp(lst.begin(), lst.end());
-	SPACE_STD::map<T1, T2> smp(lst.begin(), lst.end());
+		lst.push_back(std::map<int, int>::value_type(i + 1, (i + 1) * 3));
+	ft::map<int, int> mp(lst.begin(), lst.end());
+	std::map<int, int> smp(lst.begin(), lst.end());
 	printSizeVs(mp, smp);
 
 	ft_const_bound(mp, -10);
@@ -197,48 +366,47 @@ int		map_bounds(void)
 	return (0);
 }
 
-
 void    map_construct()
 {
-    std::list<T3> lst;
+    std::list<std::map<int, int>::value_type> lst;
 	unsigned int lst_size = 7;
 	for (unsigned int i = 0; i < lst_size; ++i)
-		lst.push_back(T3(lst_size - i, i));
+		lst.push_back(std::map<int, int>::value_type(lst_size - i, i));
 
-	SPACE_FT::map<T1, T2> mp(lst.begin(), lst.end());
-	SPACE_FT::map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
-	SPACE_STD::map<T1, T2> smp(lst.begin(), lst.end());
-	SPACE_STD::map<T1, T2>::iterator sit = smp.begin(), site = smp.end();
+	ft::map<int, int> mp(lst.begin(), lst.end());
+	ft_iterator it = mp.begin(), ite = mp.end();
+	std::map<int, int> smp(lst.begin(), lst.end());
+	std_iterator sit = smp.begin(), site = smp.end();
 
 	printSizeVs(mp, smp);
-	SPACE_FT::map<T1, T2> mp_range(it, ite);
-	// SPACE_FT::map<T1, T2> mp_range(it, --(--ite));
+	// ft::map<int, int> mp_range(it, ite);
+	ft::map<int, int> mp_range(it, --(--ite));
 	for (int i = 0; it != ite; ++it)
 		it->second = ++i * 5;
-	SPACE_STD::map<T1, T2> smp_range(sit, site);
-	// SPACE_STD::map<T1, T2> smp_range(sit, --(--site));
+	// std::map<int, int> smp_range(sit, site);
+	std::map<int, int> smp_range(sit, --(--site));
 	for (int i = 0; sit != site; ++sit)
 		sit->second = ++i * 5;
 
-	it = mp.begin(); ite = mp.end();
-	// it = mp.begin(); ite = --(--mp.end());
-	SPACE_FT::map<T1, T2> mp_copy(mp);
+	// it = mp.begin(); ite = mp.end();
+	it = mp.begin(); ite = --(--mp.end());
+	ft::map<int, int> mp_copy(mp);
 	for (int i = 0; it != ite; ++it)
 		it->second = ++i * 7;
-	sit = smp.begin(); site = smp.end();
-	// sit = smp.begin(); site = --(--smp.end());
-	SPACE_STD::map<T1, T2> smp_copy(smp);
+	// sit = smp.begin(); site = smp.end();
+	sit = smp.begin(); site = --(--smp.end());
+	std::map<int, int> smp_copy(smp);
 	for (int i = 0; sit != site; ++sit)
 		sit->second = ++i * 7;
 
 
 	std::cout << "\t-- PART ONE --" << std::endl;
 	printSizeVs(mp, smp);
-	mp.get_tree()->prettyPrint();
+	// mp.get_tree()->prettyPrint();
 	printSizeVs(mp_range, smp_range);
-	mp_range.get_tree()->prettyPrint();
+	// mp_range.get_tree()->prettyPrint();
 	printSizeVs(mp_copy, smp_range);
-	mp_copy.get_tree()->prettyPrint();
+	// mp_copy.get_tree()->prettyPrint();
 
 	mp = mp_copy;
 	mp_copy = mp_range;
@@ -261,7 +429,9 @@ void    map_construct()
 
 int	map_tester()
 {
-    map_construct();
-	map_bounds();
+	// map_construct();
+	// map_bounds();
+	// TrickyMapConstruct();
+	relational_op();
 	return (0);
 }

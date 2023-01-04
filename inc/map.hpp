@@ -52,8 +52,6 @@ namespace ft
 		
 		private:
 			tree_type		*_tree;
-			node_type		*_begin;
-			node_type		*_end;
 			allocator_type	_alloc;
 			key_compare		_comp;
 			size_type		_size;
@@ -62,16 +60,6 @@ namespace ft
 			tree_type	*get_tree() const
 			{
 				return (_tree);
-			}
-
-			void		set_end()
-			{
-				_end = _tree->getNULL();
-			}
-
-			void		set_begin()
-			{
-				_begin = _tree->minimum();
 			}
 
 			bool	insert_tree(value_type val)
@@ -153,7 +141,14 @@ namespace ft
 			
 			T& operator[](const Key& key)
 			{
-				return (_tree->searchTree(key)->data.second);
+				ft::Node<Key, value_type> *search = _tree->searchTree(key);
+
+				if (search == _tree->getNULL())
+				{
+					value_type val = make_pair(key, T());
+					return (insert(val).first->second);
+				}
+				return (search->data.second);
 			}
 
 			iterator				begin()
@@ -406,7 +401,14 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare, class Alloc >
-	void swap( map<Key,T,Compare,Alloc>& lhs, map<Key,T,Compare,Alloc>& rhs );
+	void swap( map<Key,T,Compare,Alloc>& lhs, map<Key,T,Compare,Alloc>& rhs )
+	{
+		lhs.swap(rhs);
+		// ft::swap(lhs.get_tree(), rhs.get_tree());
+		// ft::swap(lhs.key_comp(), rhs.key_comp());
+		// ft::swap(lhs._size, rhs._size);
+		// ft::swap(lhs._alloc, rhs._alloc);
+	}
 
 }
 
