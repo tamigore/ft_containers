@@ -13,7 +13,13 @@ namespace ft
 	class map_iterator : ft::iterator<std::bidirectional_iterator_tag, T>
 	{		
 		public:
-			typedef typename ft::iterator_traits<T*>::iterator_category	iterator_category;
+			// typedef typename std::bidirectional_iterator_tag						iterator_category;
+			// typedef typename ft::iterator<iterator_category, T>::value_type		value_type;
+			// typedef typename ft::iterator<iterator_category, T>::difference_type	difference_type;
+			// typedef typename ft::iterator<iterator_category, T>::pointer			pointer;
+			// typedef typename ft::iterator<iterator_category, T>::reference			reference;
+
+			typedef typename std::bidirectional_iterator_tag			iterator_category;
 			typedef typename ft::iterator_traits<T*>::value_type		value_type;
 			typedef typename ft::iterator_traits<T*>::difference_type	difference_type;
 			typedef typename ft::iterator_traits<T*>::pointer			pointer;
@@ -21,17 +27,25 @@ namespace ft
 			typedef typename ft::RBTree<Key, T>							Tree;
 			typedef typename ft::Node<Key, T>							TNode;
 
-
 			map_iterator(void) : _tree(NULL), _node(NULL) {}
 
 			map_iterator(Tree *tree, TNode *node) : _tree(tree), _node(node) {}
 
 			map_iterator(const map_iterator& op) : _tree(op._tree), _node(op._node) {}
 
-			map_iterator &operator=(const map_iterator& op)
+			map_iterator<Key, T> &operator=(const map_iterator<Key, T>& op)
 			{
 				if (this == &op)
 					return (*this);
+				this->_tree = op._tree;
+				this->_node = op._node;
+				return (*this);
+			}
+
+			map_iterator<Key, const T> &operator=(const map_iterator<Key, T>& op) const
+			{
+				// if (this == &op)
+				// 	return (*this);
 				this->_tree = op._tree;
 				this->_node = op._node;
 				return (*this);
@@ -53,7 +67,10 @@ namespace ft
 
 			map_iterator& operator++(void)
 			{
-				_node = _tree->successor(_node);
+				if (!_node || _node == _tree->getNULL())
+					_node = _tree->getNULL();
+				else
+					_node = _tree->successor(_node);
 				return (*this);
 			}
 
@@ -66,7 +83,10 @@ namespace ft
 
 			map_iterator& operator--(void)
 			{
-				_node = _tree->predecessor(_node);
+				if (!_node || _node == _tree->getNULL())
+					_node = _tree->maximum(_tree->getRoot());
+				else
+					_node = _tree->predecessor(_node);
 				return (*this);
 			}
 
@@ -81,7 +101,7 @@ namespace ft
 			{
 				map_iterator rtn(*this);
 
-				while (n > 0 && rtn._node)
+				while (n > 0 && rtn._node != rtn._tree->getNULL())
 				{
 					rtn._node = rtn._tree->successor(rtn._node);
 					n--;
@@ -93,7 +113,7 @@ namespace ft
 			{
 				map_iterator rtn(*this);
 
-				while (n > 0 && rtn._node)
+				while (n > 0 && rtn._node != rtn._tree->getNULL())
 				{
 					rtn._node = rtn._tree->predecessor(rtn._node);
 					n--;
@@ -202,6 +222,132 @@ namespace ft
 	typename ft::map_iterator<Key_L, T_L>::difference_type
 	operator-(const ft::map_iterator<Key_L, T_L> lhs, const ft::map_iterator<Key_R, T_R> rhs)
 	{ return (lhs.base() - rhs.base()); }
+
+	// template <class Key, class T>
+	// class map_const_iterator : ft::iterator<std::bidirectional_iterator_tag, T>
+	// {		
+	// 		// typedef typename std::bidirectional_iterator_tag						iterator_category;
+	// 		// typedef typename ft::iterator<iterator_category, T>::value_type		value_type;
+	// 		// typedef typename ft::iterator<iterator_category, T>::difference_type	difference_type;
+	// 		// typedef typename ft::iterator<iterator_category, T>::pointer			pointer;
+	// 		// typedef typename ft::iterator<iterator_category, T>::reference			reference;
+	// 	public:
+
+	// 		typedef typename std::bidirectional_iterator_tag			iterator_category;
+	// 		typedef typename ft::iterator_traits<T*>::value_type		value_type;
+	// 		typedef typename ft::iterator_traits<T*>::difference_type	difference_type;
+	// 		typedef typename ft::iterator_traits<T*>::pointer			pointer;
+	// 		typedef typename ft::iterator_traits<T*>::reference			reference;
+	// 		typedef typename ft::RBTree<Key, T>							Tree;
+	// 		typedef typename ft::Node<Key, T>							TNode;
+
+	// 		map_const_iterator(void) : _tree(NULL), _node(NULL) {}
+
+	// 		map_const_iterator(Tree *tree, TNode *node) : _tree(tree), _node(node) {}
+
+	// 		map_const_iterator(const map_const_iterator& op) : _tree(op._tree), _node(op._node) {}
+
+	// 		map_const_iterator &operator=(const map_const_iterator& op)
+	// 		{
+	// 			if (this == &op)
+	// 				return (*this);
+	// 			this->_tree = op._tree;
+	// 			this->_node = op._node;
+	// 			return (*this);
+	// 		}
+
+	// 		virtual ~map_const_iterator() {}
+
+	// 		pointer base() const
+	// 		{ return (&(this->_node->data)); }
+
+	// 		reference operator*(void) const
+	// 		{ return (*base()); }
+
+	// 		pointer operator->(void)
+	// 		{ return &(this->operator*()); }
+
+	// 		pointer operator->(void) const
+	// 		{ return &(this->operator*()); }
+
+	// 		map_const_iterator& operator++(void)
+	// 		{
+	// 			if (!_node || _node == _tree->getNULL())
+	// 				_node = _tree->getNULL();
+	// 			else
+	// 				_node = _tree->successor(_node);
+	// 			return (*this);
+	// 		}
+
+	// 		map_const_iterator operator++(int)
+	// 		{
+	// 			map_const_iterator rtn(*this);
+	// 			operator++();
+	// 			return (rtn);
+	// 		}
+
+	// 		map_const_iterator& operator--(void)
+	// 		{
+	// 			if (!_node || _node == _tree->getNULL())
+	// 				_node = _tree->maximum(_tree->getRoot());
+	// 			else
+	// 				_node = _tree->predecessor(_node);
+	// 			return (*this);
+	// 		}
+
+	// 		map_const_iterator operator--(int)
+	// 		{
+	// 			map_const_iterator rtn(*this);
+	// 			operator--();
+	// 			return (rtn);
+	// 		}
+
+	// 		map_const_iterator operator+(difference_type n) const
+	// 		{
+	// 			map_const_iterator rtn(*this);
+
+	// 			while (n > 0 && rtn._node != rtn._tree->getNULL())
+	// 			{
+	// 				rtn._node = rtn._tree->successor(rtn._node);
+	// 				n--;
+	// 			} 
+	// 			return (rtn);
+	// 		}
+
+	// 		map_const_iterator operator-(difference_type n) const
+	// 		{
+	// 			map_const_iterator rtn(*this);
+
+	// 			while (n > 0 && rtn._node != rtn._tree->getNULL())
+	// 			{
+	// 				rtn._node = rtn._tree->predecessor(rtn._node);
+	// 				n--;
+	// 			} 
+	// 			return (rtn);
+	// 		}
+
+	// 		map_const_iterator& operator+=(difference_type n)
+	// 		{
+	// 			*this += n;
+	// 			return (*this);
+	// 		}
+
+	// 		map_const_iterator& operator-=(difference_type n)
+	// 		{
+	// 			*this -= n;
+	// 			return (*this);
+	// 		}
+
+	// 		reference operator[](difference_type n)
+	// 		{ return (*(operator+(n))); }
+
+	// 		operator map_const_iterator<const Key, T> () const
+	// 		{ return (map_const_iterator<const Key, T>(this->_tree, this->_node)); }
+			
+	// 	public:
+	// 		Tree		*_tree;
+	// 		TNode		*_node;
+	// };
 
 	template <class Iterator>
 	class reverse_map_iterator
@@ -348,6 +494,8 @@ namespace ft
 	typename reverse_map_iterator<Iterator_L>::difference_type
 	operator- (const reverse_map_iterator<Iterator_L>& lhs, const reverse_map_iterator<Iterator_R>& rhs)
 	{ return (rhs.base() - lhs.base()); } // revers for all ?
+
+	
 }
 
 #endif

@@ -2,6 +2,7 @@
 # define _RBTREE_HPP_
 
 # include "utility.hpp"
+// # include "map_iter.hpp"
 # include "pair.hpp"
 # include <cassert>
 # include <iostream>
@@ -47,7 +48,14 @@ namespace ft
 				color = BLACK;
 			}
 
-			Node<Key, T> operator=(Node<Key, T> &other)
+			Node(const Node<Key, T> &other) : key(other.key), data(other.data), parent(other.parent)
+			{
+				left = other.left;
+				right = other.right;
+				color = other.color;
+			}
+
+			Node<Key, T> operator=(const Node<Key, T> &other)
 			{
 				if (&other == NULL)
 					return (Node<Key, T>());
@@ -61,14 +69,14 @@ namespace ft
 	};
 
 	template <class Key, class T>
-	void	printNode(Node<Key, T> *x)
+	void	printNode(const Node<Key, T> *x)
 	{
 		std::cout << "_PrintNode_" << std::endl;
 		if (x)
 		{
 			if (x->key)
-				std::cout << "key :" << x->key<< std::endl;
-			std::cout << "color :" <<(x->color == BLACK ? "BLACK" : "RED") << std::endl;
+				std::cout << "key :" << x->key << std::endl;
+			std::cout << "color :" << (x->color == BLACK ? "BLACK" : "RED") << std::endl;
 			std::cout << "data :" << x->data << std::endl;
 		}
 		else
@@ -80,14 +88,23 @@ namespace ft
 	template <class Key, class T>
 	class RBTree
 	{
+		public:
+
+			/* Iterator on stored node */
+			// typedef ft::map_iterator<Key, T> iterator;
+
+			/* Same than iterator, here for base container template */
+			// typedef ft::map_const_iterator<Key, T> const_iterator;
+
 		private:
 			Node<Key, T>					*root;
 			Node<Key, T>					TNULL;
-			std::allocator<Node<Key, T> >	alloc;
+
+			// std::allocator<Node<Key, T> >	alloc;
 
 			Node<Key, T>	*searchTreeHelper(Node<Key, T> *node, Key key)
 			{
-				if (node == &TNULL || key == node->key)
+				if (node == getNULL() || key == node->key)
 					return node;
 				if (key < node->key)
 					return searchTreeHelper(node->left, key);
@@ -191,10 +208,10 @@ namespace ft
 			bool	deleteNodeHelper(Node<Key, T>* node, Key key)
 			{
 				// find the node containing key
-				Node<Key, T>	*z = &TNULL;
+				Node<Key, T>	*z = getNULL();
 				Node<Key, T>	*x, *y;
 
-				while (node != &TNULL)
+				while (node != getNULL())
 				{
 					if (node->key == key)
 						z = node;
@@ -203,16 +220,16 @@ namespace ft
 					else
 						node = node->left;
 				}
-				if (z == &TNULL)
+				if (z == getNULL())
 					return (false);
 				y = z;
 				bool y_original_color = y->color;
-				if (z->left == &TNULL)
+				if (z->left == getNULL())
 				{
 					x = z->right;
 					rbTransplant(z, z->right);
 				}
-				else if (z->right == &TNULL)
+				else if (z->right == getNULL())
 				{
 					x = z->left;
 					rbTransplant(z, z->left);
@@ -309,7 +326,7 @@ namespace ft
 			void printHelper(Node<Key, T>* root, std::string indent, bool last)
 			{
 				// print the tree structure on the screen
-				if (root != &TNULL)
+				if (root != getNULL())
 				{
 					std::cout << indent;
 					if (last)
@@ -333,7 +350,21 @@ namespace ft
 		public:
 			RBTree()
 			{
-				root = &TNULL;
+				root = getNULL();
+			}
+			
+			// usufull?
+			RBTree(const RBTree<Key, T> *tree)
+			{
+				root = getNULL();
+				Node<Key, T>	*tmp = tree->minimum(tree->getRoot());
+				Node<Key, T>	*val;
+				while (tmp && tmp != tree->getNULL())
+				{
+					val = new Node<Key, T>(tmp->key, tmp->data);
+					this->insert(tmp);
+					tmp = tree->successor(tmp);
+				}
 			}
 
 			~RBTree()
@@ -341,15 +372,15 @@ namespace ft
 				Node<Key, T> *min;
 				Node<Key, T> *max;
 
-				while (root && root != &TNULL)
+				while (root && root != getNULL())
 				{
 					min = this->minimum(root);
-					if (min && min != root && min != &TNULL)
+					if (min && min != root && min != getNULL())
 						deleteNode(min->key);
 					else
 					{
 						max = this->maximum(root);
-						if (max && max != root && max != min && max != &TNULL)
+						if (max && max != root && max != min && max != getNULL())
 							deleteNode(max->key);
 						deleteNode(root->key);
 						return ;
@@ -365,54 +396,62 @@ namespace ft
 
 			Node<Key, T>* minimum(Node<Key, T>* node)// find the node with the minimum key
 			{
-				while (node && node != &TNULL && node->left != &TNULL)
+				while (node && node != getNULL() && node->left != getNULL())
 					node = node->left;
 				return node;
 			}
 
 			Node<Key, T>* maximum(Node<Key, T>* node)// find the node with the maximum key
 			{
-				while (node && node != &TNULL && node->right != &TNULL)
+				while (node && node != getNULL() && node->right != getNULL())
 					node = node->right;
 				return node;
 			}
 
 			Node<Key, T> *successor(Node<Key, T> *x)
 			{
-				if (!x)
-					return (&TNULL);
+				// std::cout << "a" << std::endl;
+				if (x == NULL || x == getNULL())
+					return (getNULL());
 				// if the right subtree is not nullhe successor is the leftmost node in the right subtree
-				if (x->right != &TNULL)
+				// std::cout << "b" << std::endl;
+				if (x->right != NULL && x->right != getNULL())
 					return minimum(x->right);
 				// else it is the lowest ancestor of x whose left child is also an ancestor of x.
+				// std::cout << "c" << std::endl;
+				if (x->parent == NULL)
+					return (getNULL());
 				Node<Key, T> *y = x->parent;
-				while (y && y != &TNULL && x == y->right)
+				// std::cout << "d" << std::endl;
+				while (y && y != getNULL() && y->right && x == y->right)
 				{
 					x = y;
 					y = y->parent;
 				}
+				// std::cout << "e" << std::endl;
 				if (!y)
-					y = &TNULL;
+					return (getNULL());
+				// std::cout << "f" << std::endl;
 				return y;
 			}
 
 			// find the predecessor of a given node
 			Node<Key, T> *predecessor(Node<Key, T> *x)
 			{
-				if (!x)
-					return (&TNULL);
+				if (!x || x == getNULL())
+					return (getNULL());
 				// if the left subtree is not nullhe predecessor is the rightmost node in the left subtree
-				if (x->left != &TNULL)
+				if (x->left && x->left != getNULL())
 					return maximum(x->left);
 				// else it is the highest ancestor of x whose right child is also an ancestor of x.
 				Node<Key, T> *y = x->parent;
-				while (y && y != &TNULL && x == y->left)
+				while (y && y != getNULL() && y->left && x == y->left)
 				{
 					x = y;
 					y = y->parent;
 				}
 				if (!y)
-					y = &TNULL;
+					y = getNULL();
 				return y;
 			}
 
@@ -427,7 +466,7 @@ namespace ft
 				}
 				Node<Key, T>* y = x->child[r];
 				x->child[r] = y->child[l];
-				if (y->child[l] != &TNULL)
+				if (y->child[l] != getNULL())
 					y->child[l]->parent = x;
 				y->parent = x->parent;
 				if (x->parent == NULL)
@@ -444,13 +483,13 @@ namespace ft
 			void insert(Node<Key, T>* node)// Ordinary Binary Search Insertion
 			{
 				node->parent = NULL;
-				node->left = &TNULL;
-				node->right = &TNULL;
+				node->left = getNULL();
+				node->right = getNULL();
 				node->color = RED; // new node must be red
 
 				Node<Key, T>* y = NULL;
 				Node<Key, T>* x = this->root;
-				while (x != &TNULL)
+				while (x != getNULL())
 				{
 					y = x;
 					if (node->key < x->key)
@@ -506,7 +545,7 @@ namespace ft
 
 			void prettyPrint()// print the tree structure on the screen
 			{
-				if (root && root != &TNULL)
+				if (root && root != getNULL())
 					printHelper(this->root, "", true);
 				else
 					std::cout << "RBtree NULL..." << std::endl;

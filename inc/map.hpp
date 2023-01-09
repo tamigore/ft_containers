@@ -13,24 +13,24 @@ namespace ft
 	class map
 	{
 		public:
-			typedef Key											key_type;
-			typedef Allocator									allocator_type;
-			typedef T											mapped_type;
-			typedef ft::pair<const Key, T>						value_type;
-			typedef ft::pair<const Key, const T>				const_value_type;
-			typedef std::size_t									size_type;
-			typedef std::ptrdiff_t								difference_type;
-			typedef Compare										key_compare;
-			typedef value_type&									reference;
-			typedef const value_type&							const_reference;
-			typedef typename Allocator::pointer					pointer;
-			typedef typename Allocator::const_pointer			const_pointer;
-			typedef ft::map_iterator<key_type, value_type>		iterator;
-			typedef ft::map_iterator<key_type, value_type>		const_iterator;
-			typedef ft::reverse_map_iterator<iterator>			reverse_iterator;
-			typedef ft::reverse_map_iterator<const_iterator>	const_reverse_iterator;
-			typedef	ft::Node<key_type, value_type>				node_type;
-			typedef	ft::RBTree<key_type, value_type>			tree_type;
+			typedef Key												key_type;
+			typedef Allocator										allocator_type;
+			typedef T												mapped_type;
+			typedef ft::pair<const Key, T>							value_type;
+			typedef ft::pair<const Key, const T>					const_value_type;
+			typedef std::size_t										size_type;
+			typedef std::ptrdiff_t									difference_type;
+			typedef Compare											key_compare;
+			typedef value_type&										reference;
+			typedef const value_type&								const_reference;
+			typedef typename Allocator::pointer						pointer;
+			typedef	ft::RBTree<key_type, value_type>				tree_type;
+			typedef typename Allocator::const_pointer				const_pointer;
+			typedef	ft::Node<key_type, value_type>					node_type;
+			typedef ft::map_iterator<key_type, value_type>			iterator;
+			typedef ft::map_iterator<key_type, value_type>			const_iterator;
+			typedef ft::reverse_map_iterator<iterator>				reverse_iterator;
+			typedef ft::reverse_map_iterator<const_iterator>		const_reverse_iterator;
 
 			class value_compare
 			{
@@ -55,6 +55,11 @@ namespace ft
 			allocator_type	_alloc;
 			key_compare		_comp;
 			size_type		_size;
+
+			const_iterator	iterator_conv(iterator &it) const
+			{
+				return (const_iterator(it->first, ft::make_pair(it->first, it->second)));
+			}
 		
 		public: //for testing
 			tree_type	*get_tree() const
@@ -145,7 +150,7 @@ namespace ft
 
 				if (search == _tree->getNULL())
 				{
-					value_type val = make_pair(key, T());
+					value_type val = ft::make_pair(key, search->data.second);
 					return (insert(val).first->second);
 				}
 				return (search->data.second);
@@ -153,12 +158,17 @@ namespace ft
 
 			iterator				begin()
 			{
+				// if (_tree->getRoot() == _tree->getNULL())
+				// 	return (iterator(_tree, _tree->getRoot()));
 				return (iterator(_tree, _tree->minimum(_tree->getRoot())));
 			}
 
 			const_iterator			begin() const
 			{
+				// if (_tree->getRoot() == _tree->getNULL())
+				// 	return (iterator(_tree, _tree->getRoot()));
 				return (const_iterator(_tree, _tree->minimum(_tree->getRoot())));
+				// return (iterator_conv(iterator(_tree, _tree->minimum(_tree->getRoot()))));
 			}
 
 			iterator				end()
@@ -175,6 +185,7 @@ namespace ft
 				if (_tree->getRoot() == _tree->getNULL())
 					return (begin());
 				return (const_iterator(_tree, _tree->getNULL()));
+				// return (iterator_conv(iterator(_tree,  _tree->getNULL())));
 			}
 
 			reverse_iterator		rbegin()
@@ -247,17 +258,20 @@ namespace ft
 
 			void						erase( iterator pos )
 			{
+				if (!pos._node || pos._node == pos._tree->getNULL())
+					return ;
 				_tree->deleteNode(pos->first);
 				_size--;
 			}
 
 			void						erase( iterator first, iterator last )
 			{
+				iterator tmp;
+			
 				while (first != last)
 				{
-					_tree->deleteNode(first->first);
-					first++;
-					_size--;
+					tmp = first++;
+					erase(tmp);
 				}
 			}
 
@@ -283,9 +297,8 @@ namespace ft
 				size_type	ret = 0;
 				while (i != end())
 				{
-					ret++;
-					if (i->first == key)
-						break;
+					if (!_comp(i->first, key) && !_comp(key, i->first))
+						ret++;
 					i++;
 				}
 				return (ret);
@@ -358,7 +371,7 @@ namespace ft
 
 			value_compare				value_comp() const
 			{
-				return (value_compare());
+				return (value_compare(_comp));
 			}
 	};
 

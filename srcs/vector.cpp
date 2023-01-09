@@ -551,28 +551,28 @@ void	test_swap()
 
 // void	test_iter_const(void)
 // {
-// 	{
-// 		const int size = 5;
-// 		ft::vector<int> vct(size);
-// 		ft::vector<int>::iterator it = vct.begin();
-// 		ft::vector<int>::const_iterator ite = vct.begin();
-// 		for (int i = 0; i < size; ++i)
-// 				it[i] = i;
-// 		std::cout << "ok ?" << std::endl;
-// 		ite[1] = 42; // < -- error
-// 		std::cout << "KO !" << std::endl;
-// 	}
-// 	{
-// 		const int size = 5;
-// 		ft::vector<int> vct(size);
-// 		ft::vector<int>::iterator it = vct.begin();
-// 		ft::vector<int>::const_iterator ite = vct.begin();
-// 		for (int i = 0; i < size; ++i)
-// 			it[i] = i;
-// 		std::cout << "ok ?" << std::endl;
-// 		*ite = 42; // < -- error
-// 		std::cout << "KO !" << std::endl;
-// 	}
+	// {
+	// 	const int size = 5;
+	// 	ft::vector<int> vct(size);
+	// 	ft::vector<int>::iterator it = vct.begin();
+	// 	ft::vector<int>::const_iterator ite = vct.begin();
+	// 	for (int i = 0; i < size; ++i)
+	// 			it[i] = i;
+	// 	std::cout << "ok ?" << std::endl;
+	// 	ite[1] = 42; // < -- error
+	// 	std::cout << "KO !" << std::endl;
+	// }
+	// {
+	// 	const int size = 5;
+	// 	ft::vector<int> vct(size);
+	// 	ft::vector<int>::iterator it = vct.begin();
+	// 	ft::vector<int>::const_iterator ite = vct.begin();
+	// 	for (int i = 0; i < size; ++i)
+	// 		it[i] = i;
+	// 	std::cout << "ok ?" << std::endl;
+	// 	*ite = 42; // < -- error
+	// 	std::cout << "KO !" << std::endl;
+	// }
 // 	{
 // 		const int size = 5;
 // 		ft::vector<int> const vct(size);
