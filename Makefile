@@ -17,26 +17,26 @@ NAME = ft_containers
 DIR_S = srcs/
 
 SOURCES =	main.cpp	\
-			stack.cpp	\
-			vector.cpp	\
-			RBTree.cpp	\
 			map.cpp
+			# RBTree.cpp	\
+			# stack.cpp	\
+			# vector.cpp	\
 
 HEADER =	ft.hpp		\
-			stack.hpp	\
-			vector.hpp	\
-			usefull.hpp	\
 			pair.hpp	\
 			RBTree.hpp	\
 			map.hpp
+			# stack.hpp	\
+			# vector.hpp	\
+			# usefull.hpp	\
 
-INC = inc/
+INC = std_inc/
 
 SRCS = $(addprefix $(DIR_S),$(SOURCES))
 
 OBJS = $(SOURCES:.cpp=.o)
 
-FLAGS = -Wall -Werror -Wextra -std=c++98 #-fsanitize=address
+FLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
 
 all: $(NAME)
 
@@ -45,6 +45,16 @@ $(NAME): $(OBJS)
 
 $(OBJS): $(SRCS)
 	$(CXX) -c $(SRCS) $(FLAGS) -I $(INC)
+
+std:
+			$(eval FLAGS += $(M_STD))
+			$(CXX) $(FLAGS) -I $(INC) -g -c $(SRCS) -o $(OBJS)
+			$(CXX) $(FLAGS) $(OBJS) -o $(NAME) > test_std
+
+ft:			$(OBJS_FILE)
+			$(eval FLAGS += $(M_FT))
+			$(CXX) $(FLAGS) -I $(INC) -g -c $(SRCS) -o $(OBJS)
+			$(CXX) $(FLAGS) $(OBJS) -o $(NAME)
 
 bonus: all
 

@@ -1,7 +1,0 @@
-ft_containers_monkey_tester
-containers_test
-
-candidate function not viable: no known conversion from
-'ft::vector<char>::iterator' (aka 'random_access_iterator<char>')
-'std::vector<char>::iterator' (aka '__normal_iterator<char *, std::vector<char> >') for 2nd argument
-      erase(iterator __first, iterator __last)

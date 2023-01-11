@@ -2,8 +2,8 @@
 #include <map>
 #include <list>
 
-#define std std
-#define ft ft
+// #define std std
+// #define ft ft
 #define TESTED_TYPE int
 
 # include <iostream>
@@ -218,11 +218,11 @@ int		relational_op(void)
 	cmp(mp2, mp1); // 3
 	cmp(smp2, smp1); // 3
 
-	std::cout << mp1.begin() << std::endl;
+	// std::cout << mp1.begin() << std::endl;
 	mp1.begin()->second = 42;
 	smp1.begin()->second = 42;
-	// (++(++mp1.begin()))->second = 42;
-	// (++(++smp1.begin()))->second = 42;
+	(++(++mp1.begin()))->second = 42;
+	(++(++smp1.begin()))->second = 42;
 
 	cmp(mp1, mp2); // 4
 	cmp(smp1, smp2); // 4
@@ -445,36 +445,36 @@ void	ft_erase(MAP &mp, U param, V param2)
 	// printSize(mp);
 }
 
-// template <typename MAP1, typename MAP2>
-// void	ft_erase(MAP1 &fmp, MAP2 &smp, int pos)
-// {
-// 	std::cout << "\t-- [" << count_erase_1++ << "] --" << std::endl;
-// 	if (param == 1)
-// 	fmp.erase(param);
-// 	smp.erase(param);
-// 	printSizeVs(fmp, smp);
-// }
+template <typename MAP1, typename MAP2>
+void	ft_erase(MAP1 &fmp, MAP2 &smp, int pos)
+{
+	std::cout << "\t-- [" << count_erase++ << "] --" << std::endl;
+	if (param == 1)
+	fmp.erase(param);
+	smp.erase(param);
+	printSizeVs(fmp, smp);
+}
 
-// template <typename MAP1, typename MAP2>
-// void	ft_erase(MAP1 &fmp, MAP2 &smp, int pos1, int pose2)
-// {
-// 	ft_iterator start = fmp.begin(), stop = fmp.begin();
-// 	std_iterator start1 = smp.begin(), stop1 = smp.begin();
-// 	std::cout << "\t-- [" << count_erase_2++ << "] --" << std::endl;
-// 	if (pos1 < 0)
-// 	{
-// 		start = fmp.end();
-// 		start1 = smp.end();
-// 	}
-// 	if (pos2 < 0)
-// 	{
-// 		start = fmp.end();
-// 		start1 = smp.end();
-// 	}
-// 	fmp.erase(param, param2);
-// 	smp.erase(param, param2);
-// 	printSizeVs(fmp, smp);
-// }
+template <typename MAP1, typename MAP2>
+void	ft_erase(MAP1 &fmp, MAP2 &smp, int pos1, int pose2)
+{
+	ft_iterator start = fmp.begin(), stop = fmp.begin();
+	std_iterator start1 = smp.begin(), stop1 = smp.begin();
+	std::cout << "\t-- [" << count_erase++ << "] --" << std::endl;
+	if (pos1 < 0)
+	{
+		start = fmp.end();
+		start1 = smp.end();
+	}
+	if (pos2 < 0)
+	{
+		start = fmp.end();
+		start1 = smp.end();
+	}
+	fmp.erase(param, param2);
+	smp.erase(param, param2);
+	printSizeVs(fmp, smp);
+}
 
 int		erase(void)
 {
@@ -489,18 +489,18 @@ int		erase(void)
 	std::cout << "erase :" << i++ << std::endl;
 	ft_erase(mp, ++mp.begin());
 	ft_erase(smp, ++smp.begin());
-	mp.get_tree()->prettyPrint();
+	// mp.get_tree()->prettyPrint();
 	printSizeVs(mp, smp);
 
 	std::cout << "erase :" << i++ << std::endl;
 	ft_erase(mp, mp.begin());
 	ft_erase(smp, smp.begin());
-	mp.get_tree()->prettyPrint();
+	// mp.get_tree()->prettyPrint();
 	printSizeVs(mp, smp);
 	std::cout << "erase :" << i++ << std::endl;
 	ft_erase(mp, --mp.end());
 	ft_erase(smp, --smp.end());
-	mp.get_tree()->prettyPrint();
+	// mp.get_tree()->prettyPrint();
 	printSizeVs(mp, smp);
 
 	std::cout << "erase :" << i++ << std::endl;
@@ -512,12 +512,12 @@ int		erase(void)
 	// std::cout << ++(++(++mp.begin())) << std::endl;
 	ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
 	ft_erase(smp, smp.begin(), ++(++(++smp.begin())));
-	mp.get_tree()->prettyPrint();
+	// mp.get_tree()->prettyPrint();
 	printSizeVs(mp, smp);
 	std::cout << "erase :" << i++ << std::endl;
 	ft_erase(mp, --(--(--mp.end())), --mp.end());
 	ft_erase(smp, --(--(--smp.end())), --smp.end());
-	mp.get_tree()->prettyPrint();
+	// mp.get_tree()->prettyPrint();
 	printSizeVs(mp, smp);
 
 	std::cout << "[10] Hello insert" << std::endl;
@@ -526,11 +526,11 @@ int		erase(void)
 	std::cout << "[11] Hi there insert" << std::endl;
 	mp[11] = "Hi there";
 	smp[11] = "Hi there";
-	mp.get_tree()->prettyPrint();
+	// mp.get_tree()->prettyPrint();
 	printSizeVs(mp, smp);
 	ft_erase(mp, --(--(--mp.end())), mp.end());
 	ft_erase(smp, --(--(--smp.end())), smp.end());
-	mp.get_tree()->prettyPrint();
+	// mp.get_tree()->prettyPrint();
 	printSizeVs(mp, smp);
 
 	mp[12] = "ONE";
@@ -541,11 +541,11 @@ int		erase(void)
 	smp[14] = "THREE";
 	mp[15] = "FOUR";
 	smp[15] = "FOUR";
-	mp.get_tree()->prettyPrint();
+	// mp.get_tree()->prettyPrint();
 	printSizeVs(mp, smp);
 	ft_erase(mp, mp.begin(), mp.end());
 	ft_erase(smp, smp.begin(), smp.end());
-	mp.get_tree()->prettyPrint();
+	// mp.get_tree()->prettyPrint();
 	printSizeVs(mp, smp);
 	return (0);
 }
@@ -583,14 +583,57 @@ int		comp(void)
 	return (0);
 }
 
-int		ite_n1(void)
-{
-	ft::map<int, int> const mp;
-	ft::map<int, int>::iterator it = mp.begin(); // <-- error expected
+// int		ite_n1(void)
+// {
+// 	ft::map<int, int> const mp;
+// 	ft::map<int, int>::iterator it = mp.begin(); // <-- error expected
 
-	(void)it;
-	return (0);
-}
+// 	(void)it;
+// 	return (0);
+// }
+
+// int		ite_n2(void)
+// {
+// 	{
+// 		std::map<char,int> mymap;
+// 		mymap['b'] = 100;
+// 		mymap['a'] = 200;
+// 		mymap['c'] = 300;
+// 		// show content:
+// 		{
+// 			std::map<int, int>::const_iterator it = mymap.begin();
+// 			while (it != mymap.end())
+// 			{
+// 				std::cout << it->first << " => " << it->second << '\n';
+// 				it++;
+// 			}
+// 		}
+// 		{
+// 			for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+// 				std::cout << it->first << " => " << it->second << '\n';
+// 		}
+// 	}
+// 	// {
+// 	// 	ft::map<char,int> mymap;
+// 	// 	mymap['b'] = 100;
+// 	// 	mymap['a'] = 200;
+// 	// 	mymap['c'] = 300;
+// 	// 	// show content:
+// 	// 	{
+// 	// 		ft::map<int, int>::const_iterator it = mymap.begin();
+// 	// 		while (it != mymap.end())
+// 	// 		{
+// 	// 			std::cout << it->first << " => " << it->second << '\n';
+// 	// 			it++;
+// 	// 		}
+// 	// 	}
+// 	// 	{
+// 	// 		for (ft::map<char,int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
+// 	// 			std::cout << it->first << " => " << it->second << '\n';
+// 	// 	}
+// 	// }
+// 	return 0;
+// }
 
 typedef ft::map<int, std::string> ft_map;
 typedef ft::map<int, std::string>::iterator ft_it;
@@ -692,6 +735,7 @@ int		ite_arrow(void)
 	printPair(++ite);
 	printPair(++site);
 
+	std::cout << "FOO TEST:" << std::endl;
 	it->second.m();
 	ite->second.m();
 	sit->second.m();
@@ -715,9 +759,10 @@ int		ite_arrow(void)
 	printPair(ite--);
 	printPair(site--);
 
+	std::cout << "FOO TEST:" << std::endl;
 	(*it).second.m();
-	(*ite).second.m();
 	(*sit).second.m();
+	(*ite).second.m();
 	(*site).second.m();
 
 	printPair(--it);
@@ -733,14 +778,15 @@ int		ite_arrow(void)
 
 int	map_tester()
 {
-	// map_construct();
-	// map_bounds();
-	// TrickyMapConstruct();
-	// relational_op();
-	// erase();
-	// comp();
-	ite_n1(); //pls help
+	map_construct();
+	map_bounds();
+	TrickyMapConstruct();
+	relational_op();
+	erase();
+	comp();
+	// ite_n1(); //pls help
+	// ite_n2();
 	ite_arrow();
-	// find_count();
+	find_count();
 	return (0);
 }

@@ -22,13 +22,13 @@ namespace ft
 			typedef std::ptrdiff_t									difference_type;
 			typedef Compare											key_compare;
 			typedef value_type&										reference;
-			typedef const value_type&								const_reference;
+			typedef const_value_type&								const_reference;
 			typedef typename Allocator::pointer						pointer;
-			typedef	ft::RBTree<key_type, value_type>				tree_type;
 			typedef typename Allocator::const_pointer				const_pointer;
+			typedef	ft::RBTree<key_type, value_type>				tree_type;
 			typedef	ft::Node<key_type, value_type>					node_type;
-			typedef ft::map_iterator<key_type, value_type>			iterator;
-			typedef ft::map_iterator<key_type, value_type>			const_iterator;
+			typedef ft::map_iterator<const Key, T>					iterator;
+			typedef ft::map_iterator<const Key, const T>			const_iterator;
 			typedef ft::reverse_map_iterator<iterator>				reverse_iterator;
 			typedef ft::reverse_map_iterator<const_iterator>		const_reverse_iterator;
 
@@ -160,6 +160,7 @@ namespace ft
 			{
 				// if (_tree->getRoot() == _tree->getNULL())
 				// 	return (iterator(_tree, _tree->getRoot()));
+
 				return (iterator(_tree, _tree->minimum(_tree->getRoot())));
 			}
 

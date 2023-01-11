@@ -44,6 +44,10 @@ namespace ft
 			explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
 				: _alloc(alloc)
 			{
+				if (count <= 0)
+					return ;
+				if (count > max_size())
+					count = max_size();
 				_start = _alloc.allocate(count);
 				_end = _start;
 				_capacity = _start + count;
@@ -65,6 +69,10 @@ namespace ft
 			{
 				size_type	dist = ft::distance(first, last);
 
+				if (dist <= 0)
+					return ;
+				if (dist > max_size())
+					dist = max_size();
 				_start = _alloc.allocate(dist);
 				_end = _start;
 				_capacity = _start + dist;
@@ -329,20 +337,22 @@ namespace ft
 				size_type	i = 0;
 				iterator	ret = _start + len;
 
-				if (count == 0)
+				if (count <= 0)
 					return (ret);
-				if (count + size() > this->max_size())
+				if (count + size() > max_size())
 					throw (std::length_error("vector::insert (fill)"));
 				if (capacity() < size() + count)
 				{
 					pointer		old_start = _start;
 					size_type	old_size = size();
 					size_type	old_cap = capacity();
-					size_type	new_cap = (capacity() > 0 ?
-						(capacity() * 2 < count + size() ?
-						capacity() + count : capacity() * 2)
-						: count);
+					size_type	new_cap = (capacity() > 0 ? size() + count : count);
+					// size_type	new_cap = (capacity() > 0 ?
+					// 	(capacity() * 2 < count + size() ?
+					// 	capacity() + count : capacity() * 2)
+					// 	: count);
 
+					// std::cout << new_cap << std::endl;
 					_start = _alloc.allocate(new_cap);
 					_end = _start;
 					_capacity = _start + new_cap;
@@ -384,9 +394,9 @@ namespace ft
 				size_type	i = 0;
 				iterator	ret = _start + len;
 
-				if (first == last)
+				if (dist <= 0)
 					return (ret);
-				if (dist + size() > this->max_size())
+				if (dist + size() > max_size())
 					throw (std::length_error("vector::insert (fill)"));
 				if (capacity() < size() + dist)
 				{
@@ -395,8 +405,9 @@ namespace ft
 					size_type	old_cap = capacity();
 					size_type	new_cap = (capacity() > 0 ? size() + dist : dist);
 					// size_type	new_cap = (capacity() > 0 ?
-						// (capacity() * 2 < dist + size() ? capacity() + dist : capacity() * 2) : dist);
+					// 	(capacity() * 2 < dist + size() ? capacity() + dist : capacity() * 2) : dist);
 
+					// std::cout << new_cap << std::endl;
 					_start = _alloc.allocate(new_cap);
 					_end = _start;
 					_capacity = _start + new_cap;

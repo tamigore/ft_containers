@@ -66,6 +66,10 @@ namespace ft
 				right = other.right;
 				color = other.color;
 			}
+
+			operator Node<Key, const T>() const {
+				return Node<Key, const T>(*this);
+			}
 	};
 
 	template <class Key, class T>
@@ -101,6 +105,10 @@ namespace ft
 			Node<Key, T>					TNULL;
 
 			// std::allocator<Node<Key, T> >	alloc;
+
+			operator RBTree<Key, const T>() const {
+				return RBTree<Key, const T>(root);
+			};
 
 			Node<Key, T>	*searchTreeHelper(Node<Key, T> *node, Key key)
 			{
@@ -351,6 +359,35 @@ namespace ft
 			RBTree()
 			{
 				root = getNULL();
+			}
+
+			RBTree(Node<Key, T> *_root)
+			{
+				Node<Key, T> *tmp;
+				
+				tmp = _root;
+				if (!tmp)
+				{
+					root = getNULL();
+					return ;
+				}
+				else
+				{
+					root = new Node<Key, T>(_root);
+					if (tmp->right)
+						*root->right = new Node<Key, T>(*tmp->right);
+					if (tmp->left)
+						*root->left = new Node<Key, T>(*tmp->left);
+					if (!tmp->right || !tmp->left)
+						return ;
+				}
+				while (tmp && tmp != getNULL() && tmp->left != getNULL())
+					tmp = tmp->left;
+				while (tmp && tmp != getNULL())
+				{
+					tmp = successor(tmp);
+					insert(new Node<Key, T>(*tmp));
+				}
 			}
 			
 			// usufull?

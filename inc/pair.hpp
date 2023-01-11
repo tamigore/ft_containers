@@ -42,6 +42,11 @@ namespace ft
 				this->second = pr.second;
 				return (*this);
 			}
+
+			template<class U, class V>
+			operator pair<U, const V>() const {
+				return pair<U, const V>(first, second);
+			}
 	};
 	
 	template <class T1, class T2>
