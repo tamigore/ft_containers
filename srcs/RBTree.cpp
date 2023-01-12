@@ -1,217 +1,365 @@
-#include <iostream>
 #include "RBTree.hpp"
 
-void	second_test()
+static ft::Node_base*	localRBT_increment(ft::Node_base* __x) throw ()
 {
-	std::cout << "START \"RBTree\" TEST" << std::endl;
-	int i = 0;
-	ft::pair<int, int> tmp = ft::make_pair(2, 3);
-	ft::RBTree<int, ft::pair<int, int> > bst;
-	std::cout << "i = " << i++ << std::endl;
-	bst.insert(tmp.first, tmp);
-	bst.prettyPrint();
-	std::cout << "i = " << i++ << std::endl;
-	bst.insert(1);
-	bst.prettyPrint();
-	std::cout << "i = " << i++ << std::endl;
-	bst.insert(5, ft::make_pair(5, 100));
-	bst.prettyPrint();
-	std::cout << "i = " << i++ << std::endl;
-	bst.insert(15, ft::make_pair(15, 91));
-	bst.prettyPrint();
-	std::cout << "i = " << i++ << std::endl;
-	bst.insert(17, ft::make_pair(17, 2));
-	bst.prettyPrint();
-	std::cout << "i = " << i++ << std::endl;
-	bst.insert(25, ft::make_pair(25, 2));
-	bst.prettyPrint();
-	std::cout << "i = " << i++ << std::endl;
-	bst.insert(40, ft::make_pair(40, 1));
-	bst.prettyPrint();
-	std::cout << "i = " << i++ << std::endl;
-	bst.insert(80, ft::make_pair(80, 1));
-	bst.prettyPrint();
-	std::cout << "i = " << i++ << std::endl;
-	bst.deleteNode(25);
-	bst.prettyPrint();
-	std::cout << "min = ";
-	ft::printNode(bst.minimum(bst.getRoot()));
-	std::cout << "\nmax = ";
-	ft::printNode(bst.maximum(bst.getRoot()));
-	bst.insert(84, ft::make_pair(84, 42));
-	bst.insert(100, ft::make_pair(100, 1));
-	tmp.first = 74; tmp.second = 42;
-	bst.insert(tmp.first, tmp);
-	bst.prettyPrint();
-	std::cout << "search 100 = ";
-	ft::printNode(bst.searchTree(100));
-	std::cout << "search 100 parent = ";
-	ft::printNode(bst.searchTree(100)->parent);
-	std::cout << "END SECOND TEST" << std::endl;
+	if (__x->_M_right != 0) 
+	{
+		__x = __x->_M_right;
+		while (__x->_M_left != 0)
+			__x = __x->_M_left;
+	}
+	else 
+	{
+		ft::Node_base* __y = __x->_M_parent;
+		while (__x == __y->_M_right) 
+		{
+			__x = __y;
+			__y = __y->_M_parent;
+		}
+		if (__x->_M_right != __y)
+			__x = __y;
+	}
+	return __x;
 }
 
-void	first_test()
+ft::Node_base*	ft::RBT_increment(ft::Node_base* __x) throw ()
 {
-	ft::RBTree<int, int> bst;
-	bst.insert(8);
-	bst.insert(18);
-	bst.insert(5);
-	bst.insert(15);
-	bst.insert(17);
-	bst.insert(25);
-	bst.insert(40);
-	bst.insert(80);
-	bst.deleteNode(25);
-	bst.insert(19);
-	bst.insert(1);
-	bst.insert(541);
-	bst.insert(1001);
-	bst.prettyPrint();
-	std::cout << "min :" << std::endl;
-	ft::printNode(bst.minimum(bst.getRoot()));
-	std::cout << "max :" << std::endl;
-	ft::printNode(bst.maximum(bst.getRoot()));
-	bst.deleteNode(25);
-	bst.insert(100);
-	bst.insert(100);
-	bst.insert(100);
-	bst.insert(100);
-	bst.insert(100);
-	bst.insert(100);
-	bst.insert(100);
-	bst.insert(100);
-	bst.insert(100);
-	bst.insert(100);
-	bst.insert(101);
-	bst.prettyPrint();
-	std::cout << "search 100 :" << std::endl;
-	ft::printNode(bst.searchTree(100));
-	std::cout << "search 100 parent :" << std::endl;
-	ft::printNode(bst.searchTree(100)->parent);
-	std::cout << "END FIRST TEST" << std::endl;
+	return localRBT_increment(__x);
 }
 
-void	third_test()
+const ft::Node_base*	ft::RBT_increment(const ft::Node_base* __x) throw ()
 {
-	ft::RBTree<int, int> bst;
-	std::cout << "START THIRD TEST" << std::endl;
-	bst.prettyPrint();
-	std::cout << "okay not stupid" << std::endl;
-	bst.insert(8);
-	bst.insert(18);
-	bst.insert(5);
-	bst.insert(15);
-	bst.insert(17);
-	bst.insert(25);
-	bst.insert(40);
-	bst.insert(80);
-	bst.deleteNode(25);
-	bst.insert(19);
-	bst.insert(1);
-	bst.insert(541);
-	bst.insert(1001);
-	bst.prettyPrint();
-	std::cout << "min :" << std::endl;
-	ft::printNode(bst.minimum(bst.getRoot()));
-	std::cout << "max :" << std::endl;
-	ft::printNode(bst.maximum(bst.getRoot()));
-	bst.deleteNode(25);
-	bst.insert(100);
-	bst.insert(101);
-	bst.insert(102);
-	bst.insert(103);
-	bst.insert(104);
-	bst.insert(105);
-	bst.insert(106);
-	bst.insert(107);
-	bst.insert(108);
-	bst.insert(109);
-	bst.insert(110);
-	bst.prettyPrint();
-	std::cout << "search 100 :" << std::endl;
-	ft::printNode(bst.searchTree(100));
-	std::cout << "search 100 parent :" << std::endl;
-	ft::printNode(bst.searchTree(100)->parent);
-	std::cout << "END THIRD TEST" << std::endl;
+	return localRBT_increment(const_cast<ft::Node_base*>(__x));
 }
 
-void	fourth_test()
+static ft::Node_base*	localRBT_decrement(ft::Node_base* __x) throw ()
 {
-	ft::RBTree<int, int> bst;
-	std::cout << "START FOURTH TEST" << std::endl;
-	bst.prettyPrint();
-	std::cout << "okay not stupid" << std::endl;
-	bst.insert(8);
-	bst.insert(18);
-	bst.insert(5);
-	bst.insert(15);
-	bst.insert(17);
-	bst.insert(25);
-	bst.insert(40);
-	bst.insert(80);
-	bst.deleteNode(25);
-	bst.insert(19);
-	bst.insert(1);
-	bst.insert(541);
-	bst.insert(1001);
-	bst.prettyPrint();
-	std::cout << "min :" << std::endl;
-	ft::printNode(bst.minimum(bst.getRoot()));
-	std::cout << "max :" << std::endl;
-	ft::printNode(bst.maximum(bst.getRoot()));
-	bst.deleteNode(25);
-	bst.insert(100);
-	bst.insert(101);
-	bst.insert(102);
-	bst.insert(103);
-	bst.insert(104);
-	bst.insert(105);
-	bst.insert(106);
-	bst.insert(107);
-	bst.insert(108);
-	bst.insert(109);
-	bst.insert(110);
-	bst.prettyPrint();
-	std::cout << "delete 100 :" << (bst.deleteNode(100) ? "true" : "false") << std::endl;
-	std::cout << "delete 1 :" << (bst.deleteNode(1) ? "true" : "false") << std::endl;
-	std::cout << "delete 1001 :" << (bst.deleteNode(1) ? "true" : "false") << std::endl;
-	bst.prettyPrint();
-	std::cout << "bst mini -> max :" << std::endl;
-	ft::Node<int, int>	*ptr = bst.minimum(bst.getRoot());
-	for (int i = 0; i < 25; i++)
+	if (__x->_M_color == ft::RED && __x->_M_parent->_M_parent == __x)
+		__x = __x->_M_right;
+	else if (__x->_M_left != 0)
 	{
-		std::cout << ptr << std::endl;
-		ptr = bst.successor(ptr);
+		ft::Node_base* __y = __x->_M_left;
+		while (__y->_M_right != 0)
+			__y = __y->_M_right;
+		__x = __y;
 	}
-	std::cout << "bst mini-- :" << std::endl;
-	ptr = bst.minimum(bst.getRoot());
-	for (int i = 0; i < 4; i++)
+	else
 	{
-		std::cout << ptr << std::endl;
-		ptr = bst.predecessor(ptr);
+		ft::Node_base* __y = __x->_M_parent;
+		while (__x == __y->_M_left)
+		{
+			__x = __y;
+			__y = __y->_M_parent;
+		}
+		__x = __y;
 	}
-	std::cout << "bst max -> min :" << std::endl;
-	ptr = bst.maximum(bst.getRoot());
-	for (int i = 0; i < 25; i++)
-	{
-		std::cout << ptr << std::endl;
-		ptr = bst.predecessor(ptr);
-	}
-	std::cout << "bst max++ :" << std::endl;
-	ptr = bst.maximum(bst.getRoot());
-	for (int i = 0; i < 4; i++)
-	{
-		std::cout << ptr << std::endl;
-		ptr = bst.successor(ptr);
-	}
-	std::cout << "END FOURTH TEST" << std::endl;
+	return __x;
 }
 
-int RBTree_tester()
+ft::Node_base*	ft::RBT_decrement(ft::Node_base* __x) throw ()
 {
-	first_test();
-	second_test();
-	// third_test();
-	fourth_test();
-	return 0;
+	return localRBT_decrement(__x);
+}
+
+const ft::Node_base*	RBT_decrement(const ft::Node_base* __x) throw ()
+{
+	return localRBT_decrement(const_cast<ft::Node_base*>(__x));
+}
+
+unsigned int	ft::RBT_black_count(const ft::Node_base* __node, const ft::Node_base* __root) throw ()
+{
+	if (__node == 0)
+		return 0;
+	unsigned int __sum = 0;
+	do
+	{
+		if (__node->_M_color == ft::BLACK)
+			++__sum;
+		if (__node == __root)
+			break;
+		__node = __node->_M_parent;
+	}
+	while (1);
+	return __sum;
+}
+
+void	ft::RBT_rotate_left(ft::Node_base* const __x, ft::Node_base*& __root)
+{
+	ft::Node_base* const __y = __x->_M_right;
+
+	__x->_M_right = __y->_M_left;
+	if (__y->_M_left !=0)
+		__y->_M_left->_M_parent = __x;
+	__y->_M_parent = __x->_M_parent;
+
+	if (__x == __root)
+		__root = __y;
+	else if (__x == __x->_M_parent->_M_left)
+		__x->_M_parent->_M_left = __y;
+	else
+		__x->_M_parent->_M_right = __y;
+	__y->_M_left = __x;
+	__x->_M_parent = __y;
+}
+
+void	ft::RBT_rotate_right(ft::Node_base* const __x, ft::Node_base*& __root)
+{
+	ft::Node_base* const __y = __x->_M_left;
+
+	__x->_M_left = __y->_M_right;
+	if (__y->_M_right != 0)
+		__y->_M_right->_M_parent = __x;
+	__y->_M_parent = __x->_M_parent;
+
+	if (__x == __root)
+		__root = __y;
+	else if (__x == __x->_M_parent->_M_right)
+		__x->_M_parent->_M_right = __y;
+	else
+		__x->_M_parent->_M_left = __y;
+	__y->_M_right = __x;
+	__x->_M_parent = __y;
+}
+
+void	ft::RBT_insert_rebalance(const bool __insert_left, ft::Node_base* __x, ft::Node_base* __p, ft::Node_base& __header) throw ()
+{
+	ft::Node_base *& __root = __header._M_parent;
+
+	// Initialize fields in new node to insert.
+	__x->_M_parent = __p;
+	__x->_M_left = 0;
+	__x->_M_right = 0;
+	__x->_M_color = ft::RED;
+
+	// Insert.
+	// Make new node child of parent and maintain root, leftmost and
+	// rightmost nodes.
+	// N.B. First node is always inserted left.
+	if (__insert_left)
+	{
+		__p->_M_left = __x; // also makes leftmost = __x when __p == &__header
+
+		if (__p == &__header)
+		{
+			__header._M_parent = __x;
+			__header._M_right = __x;
+		}
+		else if (__p == __header._M_left)
+			__header._M_left = __x; // maintain leftmost pointing to min node
+	}
+	else
+	{
+		__p->_M_right = __x;
+
+		if (__p == __header._M_right)
+			__header._M_right = __x; // maintain rightmost pointing to max node
+	}
+	// Rebalance.
+	while (__x != __root && __x->_M_parent->_M_color == ft::RED)
+	{
+		ft::Node_base* const __xpp = __x->_M_parent->_M_parent;
+
+		if (__x->_M_parent == __xpp->_M_left)
+		{
+			ft::Node_base* const __y = __xpp->_M_right;
+			if (__y && __y->_M_color == ft::RED)
+			{
+				__x->_M_parent->_M_color = ft::BLACK;
+				__y->_M_color = ft::BLACK;
+				__xpp->_M_color = ft::RED;
+				__x = __xpp;
+			}
+			else
+			{
+				if (__x == __x->_M_parent->_M_right)
+				{
+					__x = __x->_M_parent;
+					RBT_rotate_left(__x, __root);
+				}
+				__x->_M_parent->_M_color = ft::BLACK;
+				__xpp->_M_color = ft::RED;
+				RBT_rotate_right(__xpp, __root);
+			}
+		}
+		else
+		{
+			ft::Node_base* const __y = __xpp->_M_left;
+			if (__y && __y->_M_color == ft::RED)
+			{
+				__x->_M_parent->_M_color = ft::BLACK;
+				__y->_M_color = ft::BLACK;
+				__xpp->_M_color = ft::RED;
+				__x = __xpp;
+			}
+			else
+			{
+				if (__x == __x->_M_parent->_M_left)
+				{
+					__x = __x->_M_parent;
+					RBT_rotate_right(__x, __root);
+				}
+				__x->_M_parent->_M_color = ft::BLACK;
+				__xpp->_M_color = ft::RED;
+				RBT_rotate_left(__xpp, __root);
+			}
+		}
+	}
+	__root->_M_color = ft::BLACK;
+}
+
+ft::Node_base*	ft::RBT_erase_rebalance(ft::Node_base* const __z, ft::Node_base& __header) throw ()
+{
+	ft::Node_base *& __root = __header._M_parent;
+	ft::Node_base *& __leftmost = __header._M_left;
+	ft::Node_base *& __rightmost = __header._M_right;
+	ft::Node_base* __y = __z;
+	ft::Node_base* __x = 0;
+	ft::Node_base* __x_parent = 0;
+
+	if (__y->_M_left == 0)     // __z has at most one non-null child. y == z.
+		__x = __y->_M_right;     // __x might be null.
+	else
+		if (__y->_M_right == 0)  // __z has exactly one non-null child. y == z.
+			__x = __y->_M_left;    // __x is not null.
+	else
+	{
+		// __z has two non-null children.  Set __y to
+		__y = __y->_M_right;   //   __z's successor.  __x might be null.
+		while (__y->_M_left != 0)
+			__y = __y->_M_left;
+		__x = __y->_M_right;
+	}
+	if (__y != __z)
+	{
+		// relink y in place of z.  y is z's successor
+		__z->_M_left->_M_parent = __y;
+		__y->_M_left = __z->_M_left;
+		if (__y != __z->_M_right)
+		{
+			__x_parent = __y->_M_parent;
+			if (__x) __x->_M_parent = __y->_M_parent;
+			__y->_M_parent->_M_left = __x;   // __y must be a child of _M_left
+			__y->_M_right = __z->_M_right;
+			__z->_M_right->_M_parent = __y;
+		}
+		else
+			__x_parent = __y;
+		if (__root == __z)
+			__root = __y;
+		else if (__z->_M_parent->_M_left == __z)
+			__z->_M_parent->_M_left = __y;
+		else
+			__z->_M_parent->_M_right = __y;
+		__y->_M_parent = __z->_M_parent;
+		std::swap(__y->_M_color, __z->_M_color);
+		__y = __z;
+		// __y now points to node to be actually deleted
+	}
+	else
+	{ // __y == __z
+		__x_parent = __y->_M_parent;
+		if (__x)
+			__x->_M_parent = __y->_M_parent;
+		if (__root == __z)
+			__root = __x;
+		else
+			if (__z->_M_parent->_M_left == __z)
+				__z->_M_parent->_M_left = __x;
+			else
+				__z->_M_parent->_M_right = __x;
+		if (__leftmost == __z)
+		{
+			if (__z->_M_right == 0)        // __z->_M_left must be null also
+				__leftmost = __z->_M_parent;
+			// makes __leftmost == _M_header if __z == __root
+			else
+				__leftmost = ft::Node_base::_S_minimum(__x);
+		}
+		if (__rightmost == __z)
+		{
+			if (__z->_M_left == 0)         // __z->_M_right must be null also
+				__rightmost = __z->_M_parent;
+			// makes __rightmost == _M_header if __z == __root
+			else                      // __x == __z->_M_left
+				__rightmost = ft::Node_base::_S_maximum(__x);
+		}
+	}
+	if (__y->_M_color != ft::RED)
+	{
+		while (__x != __root && (__x == 0 || __x->_M_color == ft::BLACK))
+		{
+			if (__x == __x_parent->_M_left)
+			{
+				ft::Node_base* __w = __x_parent->_M_right;
+				if (__w->_M_color == ft::RED)
+				{
+					__w->_M_color = ft::BLACK;
+					__x_parent->_M_color = ft::RED;
+					RBT_rotate_left(__x_parent, __root);
+					__w = __x_parent->_M_right;
+				}
+				if ((__w->_M_left == 0 || __w->_M_left->_M_color == ft::BLACK) &&
+					(__w->_M_right == 0 || __w->_M_right->_M_color == ft::BLACK))
+				{
+					__w->_M_color = ft::RED;
+					__x = __x_parent;
+					__x_parent = __x_parent->_M_parent;
+				}
+				else
+				{
+					if (__w->_M_right == 0 || __w->_M_right->_M_color == ft::BLACK)
+					{
+						__w->_M_left->_M_color = ft::BLACK;
+						__w->_M_color = ft::RED;
+						RBT_rotate_right(__w, __root);
+						__w = __x_parent->_M_right;
+					}
+					__w->_M_color = __x_parent->_M_color;
+					__x_parent->_M_color = ft::BLACK;
+					if (__w->_M_right)
+						__w->_M_right->_M_color = ft::BLACK;
+					RBT_rotate_left(__x_parent, __root);
+					break;
+				}
+			}
+			else
+			{
+				// same as above, with _M_right <-> _M_left.
+				ft::Node_base* __w = __x_parent->_M_left;
+				if (__w->_M_color == ft::RED)
+				{
+					__w->_M_color = ft::BLACK;
+					__x_parent->_M_color = ft::RED;
+					RBT_rotate_right(__x_parent, __root);
+					__w = __x_parent->_M_left;
+				}
+				if ((__w->_M_right == 0 || __w->_M_right->_M_color == ft::BLACK) &&
+					(__w->_M_left == 0 || __w->_M_left->_M_color == ft::BLACK))
+				{
+					__w->_M_color = ft::RED;
+					__x = __x_parent;
+					__x_parent = __x_parent->_M_parent;
+				}
+				else
+				{
+					if (__w->_M_left == 0 || __w->_M_left->_M_color == ft::BLACK)
+					{
+						__w->_M_right->_M_color = ft::BLACK;
+						__w->_M_color = ft::RED;
+						RBT_rotate_left(__w, __root);
+						__w = __x_parent->_M_left;
+					}
+					__w->_M_color = __x_parent->_M_color;
+					__x_parent->_M_color = ft::BLACK;
+					if (__w->_M_left)
+						__w->_M_left->_M_color = ft::BLACK;
+					RBT_rotate_right(__x_parent, __root);
+					break;
+				}
+			}
+		}
+		if (__x)
+			__x->_M_color = ft::BLACK;
+	}
+	return __y;
 }

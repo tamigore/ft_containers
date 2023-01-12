@@ -2,7 +2,7 @@
 # define _FT_HPP_
 
 # include "map.hpp"
-// # include "vector.hpp"
+# include "vector.hpp"
 // # include "stack.hpp"
 
 // #include <vector>

@@ -46,7 +46,6 @@ namespace ft
 
 		typedef __gnu_cxx::__alloc_traits<_Pair_alloc_type> _Alloc_traits;
 
-
 	public:
 		typedef typename _Alloc_traits::pointer				pointer;
 		typedef typename _Alloc_traits::const_pointer		const_pointer;
@@ -79,6 +78,8 @@ namespace ft
 			const allocator_type& __a = allocator_type())
 		: _M_t(__comp, _Pair_alloc_type(__a))
 		{ _M_t._M_insert_range_unique(__first, __last); }
+
+		virtual ~map() {}
 
 		map&	operator=(const map& __x)
 		{

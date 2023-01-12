@@ -6,6 +6,7 @@ namespace ft
 	template<typename _T1, typename _T2>
 	struct pair
 	{
+		typedef ft::pair<_T1, _T2> self;
 		typedef _T1 first_type;    ///< The type of the `first` member
 		typedef _T2 second_type;   ///< The type of the `second` member
 
@@ -20,6 +21,33 @@ namespace ft
 		template<typename _U1, typename _U2>
 		pair(const pair<_U1, _U2>& __p)
 		: first(__p.first), second(__p.second) { }
+		
+		template<typename _U1, typename _U2>
+		pair(const std::pair<_U1, _U2>& __p)
+		: first(__p.first), second(__p.second) { }
+
+		self&	operator=(const self& pr)
+		{
+			if (*this == pr)
+				return (*this);
+			this->first = pr.first;
+			this->second = pr.second;
+			return (*this);
+		}
+
+		template<class U, class V>
+		ft::pair<U, V>&	operator=(const std::pair<U, V>& pr)
+		{
+			this->first = pr.first;
+			this->second = pr.second;
+			return (*this);
+		}
+
+		template<class U, class V>
+		operator pair<U, const V>() const
+		{
+			return pair<U, const V>(first, second);
+		}
 	};
 
 	template<typename _T1, typename _T2>
