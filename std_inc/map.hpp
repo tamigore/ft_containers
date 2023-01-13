@@ -79,7 +79,7 @@ namespace ft
 		: _M_t(__comp, _Pair_alloc_type(__a))
 		{ _M_t._M_insert_range_unique(__first, __last); }
 
-		virtual ~map() {}
+		// virtual ~map() {}
 
 		map&	operator=(const map& __x)
 		{

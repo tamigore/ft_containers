@@ -1,11 +1,14 @@
 #ifndef _FT_PAIR_H
 # define _FT_PAIR_H
 
+#include <deque>
+
 namespace ft
 {
 	template<typename _T1, typename _T2>
-	struct pair
+	class pair
 	{
+	public:
 		typedef ft::pair<_T1, _T2> self;
 		typedef _T1 first_type;    ///< The type of the `first` member
 		typedef _T2 second_type;   ///< The type of the `second` member
@@ -13,7 +16,7 @@ namespace ft
 		_T1 first;                 ///< The first member
 		_T2 second;                ///< The second member
 
-		pair() : first(), second() { }
+		pair() : first(_T1()), second(_T2()) { }
 
 		pair(const _T1& __a, const _T2& __b)
 		: first(__a), second(__b) { }
@@ -25,6 +28,9 @@ namespace ft
 		template<typename _U1, typename _U2>
 		pair(const std::pair<_U1, _U2>& __p)
 		: first(__p.first), second(__p.second) { }
+
+		~pair() { }
+		// ~pair() { std::cout << "pair destructor" << std::endl; }
 
 		self&	operator=(const self& pr)
 		{
@@ -43,11 +49,30 @@ namespace ft
 			return (*this);
 		}
 
-		template<class U, class V>
-		operator pair<U, const V>() const
-		{
-			return pair<U, const V>(first, second);
-		}
+		// template<class U, class V>
+		// operator pair<U, V>() const
+		// {
+		// 	return (const_cast<pair< U, V> >(first, second));
+		// }
+
+		// template<class U, class V>
+		// operator pair<const U, const V>() const
+		// {
+		// 	return (const_cast<pair<const U, const V> >(first, second));
+		// }
+
+		// template<class U, class V>
+		// operator pair<const U, V>() const
+		// {
+		// 	return (const_cast<pair<const U, V> >(first, second));
+		// }
+
+
+		// template<class U, class V>
+		// operator pair<U, const V>() const
+		// {
+		// 	return (const_cast<pair<U, const V> >(first, second));
+		// }
 	};
 
 	template<typename _T1, typename _T2>

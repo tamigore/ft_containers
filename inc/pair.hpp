@@ -44,9 +44,8 @@ namespace ft
 			}
 
 			template<class U, class V>
-			operator pair<U, const V>() const {
-				return pair<U, const V>(first, second);
-			}
+			operator pair<U, const V>() const 
+			{ return pair<U, const V>(first, second); }
 	};
 	
 	template <class T1, class T2>
@@ -67,75 +66,51 @@ namespace ft
 
 	template <class T1, class T2>
 	bool	operator==(const ft::pair<T1,T2> &x, const ft::pair<T1,T2> &y)
-	{
-		return (x.first == y.first && x.second == y.second);
-	}
+	{ return (x.first == y.first && x.second == y.second); }
 
 	template <class T1, class T2>
 	bool	operator==(const ft::pair<T1,T2> &x, const std::pair<T1,T2> &y)
-	{
-		return (x.first == y.first && x.second == y.second);
-	}
+	{ return (x.first == y.first && x.second == y.second); }
 
 	template <class T1, class T2>
 	bool	operator!=(const ft::pair<T1,T2> &x, const ft::pair<T1,T2> &y)
-	{
-		return !(x == y);
-	}
+	{ return !(x == y); }
 
 	template <class T1, class T2>
 	bool	operator!=(const ft::pair<T1,T2> &x, const std::pair<T1,T2> &y)
-	{
-		return !(x == y);
-	}
+	{ return !(x == y); }
 	
 	template <class T1, class T2>
 	bool	operator<(const ft::pair<T1,T2>& x, const ft::pair<T1,T2>& y)
-	{
-		return (x.first < y.first || (!(y.first < x.first) && x.second < y.second));
-	}
+	{ return (x.first < y.first || (!(y.first < x.first) && x.second < y.second)); }
 
 	template <class T1, class T2>
 	bool	operator<(const ft::pair<T1,T2>& x, const std::pair<T1,T2>& y)
-	{
-		return (x.first < y.first || (!(y.first < x.first) && x.second < y.second));
-	}
+	{ return (x.first < y.first || (!(y.first < x.first) && x.second < y.second)); }
 
 	template <class T1, class T2>
 	bool	operator>(const ft::pair<T1,T2>& x, const ft::pair<T1,T2>& y)
-	{
-		return (x.first > y.first || (!(y.first > x.first) && x.second > y.second));
-	}
+	{ return (x.first > y.first || (!(y.first > x.first) && x.second > y.second)); }
 
 	template <class T1, class T2>
 	bool	operator>(const ft::pair<T1,T2>& x, const std::pair<T1,T2>& y)
-	{
-		return (x.first > y.first || (!(y.first > x.first) && x.second > y.second));
-	}
+	{ return (x.first > y.first || (!(y.first > x.first) && x.second > y.second)); }
 
 	template <class T1, class T2>
 	bool	operator>=(const ft::pair<T1,T2>& x, const ft::pair<T1,T2>& y)
-	{
-		return !(x < y);
-	}
+	{ return !(x < y); }
 
 	template <class T1, class T2>
 	bool	operator>=(const ft::pair<T1,T2>& x, const std::pair<T1,T2>& y)
-	{
-		return !(x < y);
-	}
+	{ return !(x < y); }
 
 	template <class T1, class T2>
 	bool	operator<=(const ft::pair<T1,T2>& x, const ft::pair<T1,T2>& y)
-	{
-		return !(y > x);
-	}
+	{ return !(y > x); }
 
 	template <class T1, class T2>
 	bool	operator<=(const ft::pair<T1,T2>& x, const std::pair<T1,T2>& y)
-	{
-		return !(y > x);
-	}
+	{ return !(y > x); }
 }
 
 #endif

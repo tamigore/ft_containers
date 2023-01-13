@@ -33,8 +33,9 @@ namespace ft
 
 	enum RBT_color { RED = false, BLACK = true };
 
-	struct Node_base
+	class Node_base
 	{
+	public:
 		typedef Node_base*		N_ptr;
 		typedef const Node_base*	N_Const_ptr;
 
@@ -43,28 +44,28 @@ namespace ft
 		N_ptr		_M_left;
 		N_ptr		_M_right;
 
-		static N_ptr	_S_minimum(N_ptr __x) _GLIBCXX_NOEXCEPT
+		static N_ptr	_S_minimum(N_ptr __x) 
 		{
 			while (__x->_M_left != 0)
 				__x = __x->_M_left;
 			return __x;
 		}
 
-		static N_Const_ptr	_S_minimum(N_Const_ptr __x) _GLIBCXX_NOEXCEPT
+		static N_Const_ptr	_S_minimum(N_Const_ptr __x) 
 		{
 			while (__x->_M_left != 0)
 				__x = __x->_M_left;
 			return __x;
 		}
 
-		static N_ptr	_S_maximum(N_ptr __x) _GLIBCXX_NOEXCEPT
+		static N_ptr	_S_maximum(N_ptr __x) 
 		{
 			while (__x->_M_right != 0)
 				__x = __x->_M_right;
 			return __x;
 		}
 
-		static N_Const_ptr	_S_maximum(N_Const_ptr __x) _GLIBCXX_NOEXCEPT
+		static N_Const_ptr	_S_maximum(N_Const_ptr __x) 
 		{
 			while (__x->_M_right != 0)
 				__x = __x->_M_right;
@@ -88,8 +89,9 @@ namespace ft
 
 	// Helper type offering value initialization guarantee on the compare functor.
 	template<typename _Key_compare>
-	struct RBT_key_compare
+	class RBT_key_compare
 	{
+	public:
 		_Key_compare	_M_key_compare;
 
 		RBT_key_compare()
@@ -105,12 +107,13 @@ namespace ft
 	};
 
 	// Helper type to manage default initialization of node count and header.
-	struct RBT_header
+	class RBT_header
 	{
+	public:
 		Node_base	_M_header;
 		std::size_t	_M_node_count; // Keeps track of size of tree.
 
-		RBT_header() _GLIBCXX_NOEXCEPT
+		RBT_header() 
 		{
 			_M_header._M_color = RED;
 			_M_reset();
@@ -152,8 +155,9 @@ namespace ft
 	};
 
 	template<typename _Tp>
-	struct RBT_iterator
+	class RBT_iterator
 	{
+	public:
 		typedef _Tp  value_type;
 		typedef _Tp& reference;
 		typedef _Tp* pointer;
@@ -165,57 +169,104 @@ namespace ft
 		typedef Node_base::N_ptr	N_ptr;
 		typedef RBT_Node<_Tp>*		_Link_type;
 
-		RBT_iterator() _GLIBCXX_NOEXCEPT
+		RBT_iterator() 
 		: _M_node() { }
 
-		explicit	RBT_iterator(N_ptr __x) _GLIBCXX_NOEXCEPT
+		explicit	RBT_iterator(N_ptr __x) 
 		: _M_node(__x) { }
 
-		reference	operator*() const _GLIBCXX_NOEXCEPT
+		reference	operator*() const 
 		{ return *static_cast<_Link_type>(_M_node)->_M_valptr(); }
 
-		pointer	operator->() const _GLIBCXX_NOEXCEPT
+		pointer	operator->() const 
 		{ return static_cast<_Link_type> (_M_node)->_M_valptr(); }
 
-		_Self&	operator++() _GLIBCXX_NOEXCEPT
+		// N_ptr			RBT_increment(N_ptr __x) throw ()
+		// {
+		// 	if (__x->_M_color == ft::RED && __x->_M_parent->_M_parent == __x)
+		// 		__x = __x->_M_right;
+		// 	else if (__x->_M_left != 0)
+		// 	{
+		// 		N_ptr __y = __x->_M_left;
+		// 		while (__y->_M_right != 0)
+		// 			__y = __y->_M_right;
+		// 		__x = __y;
+		// 	}
+		// 	else
+		// 	{
+		// 		N_ptr __y = __x->_M_parent;
+		// 		while (__x == __y->_M_left)
+		// 		{
+		// 			__x = __y;
+		// 			__y = __y->_M_parent;
+		// 		}
+		// 		__x = __y;
+		// 	}
+		// 	return __x;
+		// }
+
+		// N_ptr			RBT_decrement(N_ptr __x) throw ()
+		// {
+		// 	if (__x->_M_right != 0) 
+		// 	{
+		// 		__x = __x->_M_right;
+		// 		while (__x->_M_left != 0)
+		// 			__x = __x->_M_left;
+		// 	}
+		// 	else 
+		// 	{
+		// 		N_ptr __y = __x->_M_parent;
+		// 		while (__x == __y->_M_right) 
+		// 		{
+		// 			__x = __y;
+		// 			__y = __y->_M_parent;
+		// 		}
+		// 		if (__x->_M_right != __y)
+		// 			__x = __y;
+		// 	}
+		// 	return __x;
+		// }
+
+		_Self&	operator++() 
 		{
 			_M_node = RBT_increment(_M_node);
 			return *this;
 		}
 
-		_Self	operator++(int) _GLIBCXX_NOEXCEPT
+		_Self	operator++(int) 
 		{
 			_Self __tmp = *this;
 			_M_node = RBT_increment(_M_node);
 			return __tmp;
 		}
 
-		_Self&	operator--() _GLIBCXX_NOEXCEPT
+		_Self&	operator--() 
 		{
 			_M_node = RBT_decrement(_M_node);
 			return *this;
 		}
 
-		_Self	operator--(int) _GLIBCXX_NOEXCEPT
+		_Self	operator--(int) 
 		{
 			_Self __tmp = *this;
 			_M_node = RBT_decrement(_M_node);
 			return __tmp;
 		}
 
-		friend bool	operator==(const _Self& __x, const _Self& __y) _GLIBCXX_NOEXCEPT
+		friend bool	operator==(const _Self& __x, const _Self& __y) 
 		{ return __x._M_node == __y._M_node; }
 
 		friend bool
-		operator!=(const _Self& __x, const _Self& __y) _GLIBCXX_NOEXCEPT
+		operator!=(const _Self& __x, const _Self& __y) 
 		{ return __x._M_node != __y._M_node; }
 
 		N_ptr _M_node;
 	};
 
 	template<typename _Tp>
-	struct RBT_const_iterator
+	class RBT_const_iterator
 	{
+	public:
 		typedef _Tp	 value_type;
 		typedef const _Tp& reference;
 		typedef const _Tp* pointer;
@@ -229,55 +280,115 @@ namespace ft
 		typedef Node_base::N_Const_ptr	N_ptr;
 		typedef const RBT_Node<_Tp>*			_Link_type;
 
-		RBT_const_iterator() _GLIBCXX_NOEXCEPT
+		RBT_const_iterator() 
 		: _M_node() { }
 
-		explicit	RBT_const_iterator(N_ptr __x) _GLIBCXX_NOEXCEPT
+		explicit	RBT_const_iterator(N_ptr __x) 
 		: _M_node(__x) { }
 
-		RBT_const_iterator(const iterator& __it) _GLIBCXX_NOEXCEPT
+		RBT_const_iterator(const iterator& __it) 
 		: _M_node(__it._M_node) { }
 
-		iterator	_M_const_cast() const _GLIBCXX_NOEXCEPT
+		iterator	_M_const_cast() const 
 		{ return iterator(const_cast<typename iterator::N_ptr>(_M_node)); }
 
-		reference	operator*() const _GLIBCXX_NOEXCEPT
+		reference	operator*() const 
 		{ return *static_cast<_Link_type>(_M_node)->_M_valptr(); }
 
-		pointer	operator->() const _GLIBCXX_NOEXCEPT
+		pointer	operator->() const 
 		{ return static_cast<_Link_type>(_M_node)->_M_valptr(); }
 
-		_Self&	operator++() _GLIBCXX_NOEXCEPT
+		// private:
+		// static N_ptr	localRBT_increment(N_ptr __x) throw ()
+		// {
+		// 	if (__x->_M_right != 0) 
+		// 	{
+		// 		__x = __x->_M_right;
+		// 		while (__x->_M_left != 0)
+		// 			__x = __x->_M_left;
+		// 	}
+		// 	else 
+		// 	{
+		// 		N_ptr __y = __x->_M_parent;
+		// 		while (__x == __y->_M_right) 
+		// 		{
+		// 			__x = __y;
+		// 			__y = __y->_M_parent;
+		// 		}
+		// 		if (__x->_M_right != __y)
+		// 			__x = __y;
+		// 	}
+		// 	return __x;
+		// }
+
+		// static N_ptr	localRBT_decrement(N_ptr __x) throw ()
+		// {
+		// 	if (__x->_M_color == ft::RED && __x->_M_parent->_M_parent == __x)
+		// 		__x = __x->_M_right;
+		// 	else if (__x->_M_left != 0)
+		// 	{
+		// 		N_ptr __y = __x->_M_left;
+		// 		while (__y->_M_right != 0)
+		// 			__y = __y->_M_right;
+		// 		__x = __y;
+		// 	}
+		// 	else
+		// 	{
+		// 		N_ptr __y = __x->_M_parent;
+		// 		while (__x == __y->_M_left)
+		// 		{
+		// 			__x = __y;
+		// 			__y = __y->_M_parent;
+		// 		}
+		// 		__x = __y;
+		// 	}
+		// 	return __x;
+		// }
+
+	// public:
+		// N_ptr			RBT_increment(N_ptr __x) throw ()
+		// { return localRBT_increment(__x); }
+
+		// const N_ptr	RBT_increment(const N_ptr __x) throw ()
+		// { return localRBT_increment(const_cast<N_ptr>(__x)); }
+
+		// N_ptr			RBT_decrement(N_ptr __x) throw ()
+		// { return localRBT_decrement(__x); }
+
+		// const N_ptr		RBT_decrement(const N_ptr __x) throw ()
+		// { return localRBT_decrement(const_cast<N_ptr>(__x)); }
+
+		_Self&	operator++() 
 		{
 			_M_node = RBT_increment(_M_node);
 			return *this;
 		}
 
-		_Self	operator++(int) _GLIBCXX_NOEXCEPT
+		_Self	operator++(int) 
 		{
 			_Self __tmp = *this;
 			_M_node = RBT_increment(_M_node);
 			return __tmp;
 		}
 
-		_Self&	operator--() _GLIBCXX_NOEXCEPT
+		_Self&	operator--() 
 		{
 			_M_node = RBT_decrement(_M_node);
 			return *this;
 		}
 
-		_Self	operator--(int) _GLIBCXX_NOEXCEPT
+		_Self	operator--(int) 
 		{
 			_Self __tmp = *this;
 			_M_node = RBT_decrement(_M_node);
 			return __tmp;
 		}
 
-		friend bool	operator==(const _Self& __x, const _Self& __y) _GLIBCXX_NOEXCEPT
+		friend bool	operator==(const _Self& __x, const _Self& __y) 
 		{ return __x._M_node == __y._M_node; }
 
 		friend bool
-		operator!=(const _Self& __x, const _Self& __y) _GLIBCXX_NOEXCEPT
+		operator!=(const _Self& __x, const _Self& __y) 
 		{ return __x._M_node != __y._M_node; }
 
 		N_ptr _M_node;
@@ -287,16 +398,314 @@ namespace ft
 	typename _Compare, typename _Alloc = std::allocator<_Val> >
 	class _Rb_tree
 	{
+	private:
 		typedef typename __gnu_cxx::__alloc_traits<_Alloc>::template
 		rebind<RBT_Node<_Val> >::other _Node_allocator;
 
 		typedef __gnu_cxx::__alloc_traits<_Node_allocator> _Alloc_traits;
 
 		protected:
-		typedef Node_base* 		N_ptr;
-		typedef const Node_base* 	N_Const_ptr;
+		typedef Node_base* 				N_ptr;
+		typedef const Node_base* 		N_Const_ptr;
 		typedef RBT_Node<_Val>* 		_Link_type;
 		typedef const RBT_Node<_Val>*	_Const_Link_type;
+
+	public:
+		// unsigned int	RBT_black_count(N_ptr __node, N_ptr __root) throw ()
+		// {
+		// 	if (__node == 0)
+		// 		return 0;
+		// 	unsigned int __sum = 0;
+		// 	do
+		// 	{
+		// 		if (__node->_M_color == ft::BLACK)
+		// 			++__sum;
+		// 		if (__node == __root)
+		// 			break;
+		// 		__node = __node->_M_parent;
+		// 	}
+		// 	while (1);
+		// 	return __sum;
+		// }
+
+		// void	RBT_rotate_left(N_ptr const __x, N_ptr& __root)
+		// {
+		// 	N_ptr const __y = __x->_M_right;
+
+		// 	__x->_M_right = __y->_M_left;
+		// 	if (__y->_M_left !=0)
+		// 		__y->_M_left->_M_parent = __x;
+		// 	__y->_M_parent = __x->_M_parent;
+
+		// 	if (__x == __root)
+		// 		__root = __y;
+		// 	else if (__x == __x->_M_parent->_M_left)
+		// 		__x->_M_parent->_M_left = __y;
+		// 	else
+		// 		__x->_M_parent->_M_right = __y;
+		// 	__y->_M_left = __x;
+		// 	__x->_M_parent = __y;
+		// }
+
+		// void	RBT_rotate_right(N_ptr const __x, N_ptr& __root)
+		// {
+		// 	N_ptr const __y = __x->_M_left;
+
+		// 	__x->_M_left = __y->_M_right;
+		// 	if (__y->_M_right != 0)
+		// 		__y->_M_right->_M_parent = __x;
+		// 	__y->_M_parent = __x->_M_parent;
+
+		// 	if (__x == __root)
+		// 		__root = __y;
+		// 	else if (__x == __x->_M_parent->_M_right)
+		// 		__x->_M_parent->_M_right = __y;
+		// 	else
+		// 		__x->_M_parent->_M_left = __y;
+		// 	__y->_M_right = __x;
+		// 	__x->_M_parent = __y;
+		// }
+
+		// void			RBT_insert_rebalance(const bool __insert_left, N_ptr __x, N_ptr __p, Node_base& __header) throw ()
+		// {
+		// 	N_ptr& __root = __header._M_parent;
+		// 	// Initialize fields in new node to insert.
+		// 	__x->_M_parent = __p;
+		// 	__x->_M_left = 0;
+		// 	__x->_M_right = 0;
+		// 	__x->_M_color = ft::RED;
+		// 	// Insert.
+		// 	// Make new node child of parent and maintain root, leftmost and
+		// 	// rightmost nodes.
+		// 	// N.B. First node is always inserted left.
+		// 	if (__insert_left)
+		// 	{
+		// 		__p->_M_left = __x; // also makes leftmost = __x when __p == &__header
+
+		// 		if (__p == &__header)
+		// 		{
+		// 			__header._M_parent = __x;
+		// 			__header._M_right = __x;
+		// 		}
+		// 		else if (__p == __header._M_left)
+		// 			__header._M_left = __x; // maintain leftmost pointing to min node
+		// 	}
+		// 	else
+		// 	{
+		// 		__p->_M_right = __x;
+
+		// 		if (__p == __header._M_right)
+		// 			__header._M_right = __x; // maintain rightmost pointing to max node
+		// 	}
+		// 	// Rebalance.
+		// 	while (__x != __root && __x->_M_parent->_M_color == ft::RED)
+		// 	{
+		// 		N_ptr const __xpp = __x->_M_parent->_M_parent;
+
+		// 		if (__x->_M_parent == __xpp->_M_left)
+		// 		{
+		// 			N_ptr const __y = __xpp->_M_right;
+		// 			if (__y && __y->_M_color == ft::RED)
+		// 			{
+		// 				__x->_M_parent->_M_color = ft::BLACK;
+		// 				__y->_M_color = ft::BLACK;
+		// 				__xpp->_M_color = ft::RED;
+		// 				__x = __xpp;
+		// 			}
+		// 			else
+		// 			{
+		// 				if (__x == __x->_M_parent->_M_right)
+		// 				{
+		// 					__x = __x->_M_parent;
+		// 					RBT_rotate_left(__x, __root);
+		// 				}
+		// 				__x->_M_parent->_M_color = ft::BLACK;
+		// 				__xpp->_M_color = ft::RED;
+		// 				RBT_rotate_right(__xpp, __root);
+		// 			}
+		// 		}
+		// 		else
+		// 		{
+		// 			N_ptr const __y = __xpp->_M_left;
+		// 			if (__y && __y->_M_color == ft::RED)
+		// 			{
+		// 				__x->_M_parent->_M_color = ft::BLACK;
+		// 				__y->_M_color = ft::BLACK;
+		// 				__xpp->_M_color = ft::RED;
+		// 				__x = __xpp;
+		// 			}
+		// 			else
+		// 			{
+		// 				if (__x == __x->_M_parent->_M_left)
+		// 				{
+		// 					__x = __x->_M_parent;
+		// 					RBT_rotate_right(__x, __root);
+		// 				}
+		// 				__x->_M_parent->_M_color = ft::BLACK;
+		// 				__xpp->_M_color = ft::RED;
+		// 				RBT_rotate_left(__xpp, __root);
+		// 			}
+		// 		}
+		// 	}
+		// 	__root->_M_color = ft::BLACK;
+		// }
+
+		// Node_base*	RBT_erase_rebalance(Node_base* const __z, Node_base& __header) throw ()
+		// {
+		// 	N_ptr& __root = __header._M_parent;
+		// 	N_ptr& __leftmost = __header._M_left;
+		// 	N_ptr& __rightmost = __header._M_right;
+		// 	N_ptr __y = __z;
+		// 	N_ptr __x = 0;
+		// 	N_ptr __x_parent = 0;
+
+		// 	if (__y->_M_left == 0)     // __z has at most one non-null child. y == z.
+		// 		__x = __y->_M_right;     // __x might be null.
+		// 	else
+		// 		if (__y->_M_right == 0)  // __z has exactly one non-null child. y == z.
+		// 			__x = __y->_M_left;    // __x is not null.
+		// 	else
+		// 	{
+		// 		// __z has two non-null children.  Set __y to
+		// 		__y = __y->_M_right;   //   __z's successor.  __x might be null.
+		// 		while (__y->_M_left != 0)
+		// 			__y = __y->_M_left;
+		// 		__x = __y->_M_right;
+		// 	}
+		// 	if (__y != __z)
+		// 	{
+		// 		// relink y in place of z.  y is z's successor
+		// 		__z->_M_left->_M_parent = __y;
+		// 		__y->_M_left = __z->_M_left;
+		// 		if (__y != __z->_M_right)
+		// 		{
+		// 			__x_parent = __y->_M_parent;
+		// 			if (__x) __x->_M_parent = __y->_M_parent;
+		// 			__y->_M_parent->_M_left = __x;   // __y must be a child of _M_left
+		// 			__y->_M_right = __z->_M_right;
+		// 			__z->_M_right->_M_parent = __y;
+		// 		}
+		// 		else
+		// 			__x_parent = __y;
+		// 		if (__root == __z)
+		// 			__root = __y;
+		// 		else if (__z->_M_parent->_M_left == __z)
+		// 			__z->_M_parent->_M_left = __y;
+		// 		else
+		// 			__z->_M_parent->_M_right = __y;
+		// 		__y->_M_parent = __z->_M_parent;
+		// 		std::swap(__y->_M_color, __z->_M_color);
+		// 		__y = __z;
+		// 		// __y now points to node to be actually deleted
+		// 	}
+		// 	else
+		// 	{ // __y == __z
+		// 		__x_parent = __y->_M_parent;
+		// 		if (__x)
+		// 			__x->_M_parent = __y->_M_parent;
+		// 		if (__root == __z)
+		// 			__root = __x;
+		// 		else
+		// 			if (__z->_M_parent->_M_left == __z)
+		// 				__z->_M_parent->_M_left = __x;
+		// 			else
+		// 				__z->_M_parent->_M_right = __x;
+		// 		if (__leftmost == __z)
+		// 		{
+		// 			if (__z->_M_right == 0)        // __z->_M_left must be null also
+		// 				__leftmost = __z->_M_parent;
+		// 			// makes __leftmost == _M_header if __z == __root
+		// 			else
+		// 				__leftmost = ft::Node_base::_S_minimum(__x);
+		// 		}
+		// 		if (__rightmost == __z)
+		// 		{
+		// 			if (__z->_M_left == 0)         // __z->_M_right must be null also
+		// 				__rightmost = __z->_M_parent;
+		// 			// makes __rightmost == _M_header if __z == __root
+		// 			else                      // __x == __z->_M_left
+		// 				__rightmost = ft::Node_base::_S_maximum(__x);
+		// 		}
+		// 	}
+		// 	if (__y->_M_color != ft::RED)
+		// 	{
+		// 		while (__x != __root && (__x == 0 || __x->_M_color == ft::BLACK))
+		// 		{
+		// 			if (__x == __x_parent->_M_left)
+		// 			{
+		// 				N_ptr __w = __x_parent->_M_right;
+		// 				if (__w->_M_color == ft::RED)
+		// 				{
+		// 					__w->_M_color = ft::BLACK;
+		// 					__x_parent->_M_color = ft::RED;
+		// 					RBT_rotate_left(__x_parent, __root);
+		// 					__w = __x_parent->_M_right;
+		// 				}
+		// 				if ((__w->_M_left == 0 || __w->_M_left->_M_color == ft::BLACK) &&
+		// 					(__w->_M_right == 0 || __w->_M_right->_M_color == ft::BLACK))
+		// 				{
+		// 					__w->_M_color = ft::RED;
+		// 					__x = __x_parent;
+		// 					__x_parent = __x_parent->_M_parent;
+		// 				}
+		// 				else
+		// 				{
+		// 					if (__w->_M_right == 0 || __w->_M_right->_M_color == ft::BLACK)
+		// 					{
+		// 						__w->_M_left->_M_color = ft::BLACK;
+		// 						__w->_M_color = ft::RED;
+		// 						RBT_rotate_right(__w, __root);
+		// 						__w = __x_parent->_M_right;
+		// 					}
+		// 					__w->_M_color = __x_parent->_M_color;
+		// 					__x_parent->_M_color = ft::BLACK;
+		// 					if (__w->_M_right)
+		// 						__w->_M_right->_M_color = ft::BLACK;
+		// 					RBT_rotate_left(__x_parent, __root);
+		// 					break;
+		// 				}
+		// 			}
+		// 			else
+		// 			{
+		// 				// same as above, with _M_right <-> _M_left.
+		// 				N_ptr __w = __x_parent->_M_left;
+		// 				if (__w->_M_color == ft::RED)
+		// 				{
+		// 					__w->_M_color = ft::BLACK;
+		// 					__x_parent->_M_color = ft::RED;
+		// 					RBT_rotate_right(__x_parent, __root);
+		// 					__w = __x_parent->_M_left;
+		// 				}
+		// 				if ((__w->_M_right == 0 || __w->_M_right->_M_color == ft::BLACK) &&
+		// 					(__w->_M_left == 0 || __w->_M_left->_M_color == ft::BLACK))
+		// 				{
+		// 					__w->_M_color = ft::RED;
+		// 					__x = __x_parent;
+		// 					__x_parent = __x_parent->_M_parent;
+		// 				}
+		// 				else
+		// 				{
+		// 					if (__w->_M_left == 0 || __w->_M_left->_M_color == ft::BLACK)
+		// 					{
+		// 						__w->_M_right->_M_color = ft::BLACK;
+		// 						__w->_M_color = ft::RED;
+		// 						RBT_rotate_left(__w, __root);
+		// 						__w = __x_parent->_M_left;
+		// 					}
+		// 					__w->_M_color = __x_parent->_M_color;
+		// 					__x_parent->_M_color = ft::BLACK;
+		// 					if (__w->_M_left)
+		// 						__w->_M_left->_M_color = ft::BLACK;
+		// 					RBT_rotate_right(__x_parent, __root);
+		// 					break;
+		// 				}
+		// 			}
+		// 		}
+		// 		if (__x)
+		// 			__x->_M_color = ft::BLACK;
+		// 	}
+		// 	return __y;
+		// }
 
 	private:
 		// Functor recycling a pool of nodes and using allocation once the pool
@@ -395,20 +804,20 @@ namespace ft
 		typedef std::ptrdiff_t 			difference_type;
 		typedef _Alloc 				allocator_type;
 
-		_Node_allocator&	_M_get_Node_allocator() _GLIBCXX_NOEXCEPT
+		_Node_allocator&	_M_get_Node_allocator() 
 		{ return this->_M_impl; }
 
-		const _Node_allocator&	_M_get_Node_allocator() const _GLIBCXX_NOEXCEPT
+		const _Node_allocator&	_M_get_Node_allocator() const 
 		{ return this->_M_impl; }
 
-		allocator_type	get_allocator() const _GLIBCXX_NOEXCEPT
+		allocator_type	get_allocator() const 
 		{ return allocator_type(_M_get_Node_allocator()); }
 
 	protected:
 		_Link_type	_M_get_node()
 		{ return _Alloc_traits::allocate(_M_get_Node_allocator(), 1); }
 
-		void	_M_put_node(_Link_type __p) _GLIBCXX_NOEXCEPT
+		void	_M_put_node(_Link_type __p) 
 		{ _Alloc_traits::deallocate(_M_get_Node_allocator(), __p, 1); }
 
 		void	_M_construct_node(_Link_type __node, const value_type& __x)
@@ -429,12 +838,12 @@ namespace ft
 			return __tmp;
 		}
 		
-		void	_M_destroy_node(_Link_type __p) _GLIBCXX_NOEXCEPT
+		void	_M_destroy_node(_Link_type __p) 
 		{
 			get_allocator().destroy(__p->_M_valptr());
 		}
 
-		void	_M_drop_node(_Link_type __p) _GLIBCXX_NOEXCEPT
+		void	_M_drop_node(_Link_type __p) 
 		{
 			_M_destroy_node(__p);
 			_M_put_node(__p);
@@ -478,64 +887,64 @@ namespace ft
 		RBT_impl<_Compare> _M_impl;
 
 	protected:
-		N_ptr&	_M_root() _GLIBCXX_NOEXCEPT
+		N_ptr&	_M_root() 
 		{ return this->_M_impl._M_header._M_parent; }
 
-		N_Const_ptr	_M_root() const _GLIBCXX_NOEXCEPT
+		N_Const_ptr	_M_root() const 
 		{ return this->_M_impl._M_header._M_parent; }
 
-		N_ptr&	_M_leftmost() _GLIBCXX_NOEXCEPT
+		N_ptr&	_M_leftmost() 
 		{ return this->_M_impl._M_header._M_left; }
 
-		N_Const_ptr	_M_leftmost() const _GLIBCXX_NOEXCEPT
+		N_Const_ptr	_M_leftmost() const 
 		{ return this->_M_impl._M_header._M_left; }
 
-		N_ptr&	_M_rightmost() _GLIBCXX_NOEXCEPT
+		N_ptr&	_M_rightmost() 
 		{ return this->_M_impl._M_header._M_right; }
 
-		N_Const_ptr	_M_rightmost() const _GLIBCXX_NOEXCEPT
+		N_Const_ptr	_M_rightmost() const 
 		{ return this->_M_impl._M_header._M_right; }
 
-		_Link_type	_M_begin() _GLIBCXX_NOEXCEPT
+		_Link_type	_M_begin() 
 		{ return static_cast<_Link_type>(this->_M_impl._M_header._M_parent); }
 
-		_Const_Link_type	_M_begin() const _GLIBCXX_NOEXCEPT
+		_Const_Link_type	_M_begin() const 
 		{ return static_cast<_Const_Link_type>(this->_M_impl._M_header._M_parent); }
 
-		N_ptr	_M_end() _GLIBCXX_NOEXCEPT
+		N_ptr	_M_end() 
 		{ return &this->_M_impl._M_header; }
 
-		N_Const_ptr	_M_end() const _GLIBCXX_NOEXCEPT
+		N_Const_ptr	_M_end() const 
 		{ return &this->_M_impl._M_header; }
 
 		static const _Key&	_S_key(_Const_Link_type __x)
 		{ return _KeyOfValue()(*__x->_M_valptr()); }
 
-		static _Link_type	_S_left(N_ptr __x) _GLIBCXX_NOEXCEPT
+		static _Link_type	_S_left(N_ptr __x) 
 		{ return static_cast<_Link_type>(__x->_M_left); }
 
-		static _Const_Link_type	_S_left(N_Const_ptr __x) _GLIBCXX_NOEXCEPT
+		static _Const_Link_type	_S_left(N_Const_ptr __x) 
 		{ return static_cast<_Const_Link_type>(__x->_M_left); }
 
-		static _Link_type	_S_right(N_ptr __x) _GLIBCXX_NOEXCEPT
+		static _Link_type	_S_right(N_ptr __x) 
 		{ return static_cast<_Link_type>(__x->_M_right); }
 
-		static _Const_Link_type	_S_right(N_Const_ptr __x) _GLIBCXX_NOEXCEPT
+		static _Const_Link_type	_S_right(N_Const_ptr __x) 
 		{ return static_cast<_Const_Link_type>(__x->_M_right); }
 
 		static const _Key&	_S_key(N_Const_ptr __x)
 		{ return _S_key(static_cast<_Const_Link_type>(__x)); }
 
-		static N_ptr	_S_minimum(N_ptr __x) _GLIBCXX_NOEXCEPT
+		static N_ptr	_S_minimum(N_ptr __x) 
 		{ return Node_base::_S_minimum(__x); }
 
-		static N_Const_ptr	_S_minimum(N_Const_ptr __x) _GLIBCXX_NOEXCEPT
+		static N_Const_ptr	_S_minimum(N_Const_ptr __x) 
 		{ return Node_base::_S_minimum(__x); }
 
-		static N_ptr	_S_maximum(N_ptr __x) _GLIBCXX_NOEXCEPT
+		static N_ptr	_S_maximum(N_ptr __x) 
 		{ return Node_base::_S_maximum(__x); }
 
-		static N_Const_ptr	_S_maximum(N_Const_ptr __x) _GLIBCXX_NOEXCEPT
+		static N_Const_ptr	_S_maximum(N_Const_ptr __x) 
 		{ return Node_base::_S_maximum(__x); }
 
 	public:
@@ -613,10 +1022,10 @@ namespace ft
 		: _M_impl(__x._M_impl)
 		{
 			if (__x._M_root() != 0)
-			_M_root() = _M_copy(__x);
+				_M_root() = _M_copy(__x);
 		}
 
-		~_Rb_tree() _GLIBCXX_NOEXCEPT
+		~_Rb_tree() 
 		{ _M_erase(_M_begin()); }
 
 		_Rb_tree&	operator=(const _Rb_tree& __x);
@@ -625,37 +1034,37 @@ namespace ft
 		_Compare	key_comp() const
 		{ return _M_impl._M_key_compare; }
 
-		iterator	begin() _GLIBCXX_NOEXCEPT
+		iterator	begin() 
 		{ return iterator(this->_M_impl._M_header._M_left); }
 
-		const_iterator	begin() const _GLIBCXX_NOEXCEPT
+		const_iterator	begin() const 
 		{ return const_iterator(this->_M_impl._M_header._M_left); }
 
-		iterator	end() _GLIBCXX_NOEXCEPT
+		iterator	end() 
 		{ return iterator(&this->_M_impl._M_header); }
 
-		const_iterator	end() const _GLIBCXX_NOEXCEPT
+		const_iterator	end() const 
 		{ return const_iterator(&this->_M_impl._M_header); }
 
-		reverse_iterator	rbegin() _GLIBCXX_NOEXCEPT
+		reverse_iterator	rbegin() 
 		{ return reverse_iterator(end()); }
 
-		const_reverse_iterator	rbegin() const _GLIBCXX_NOEXCEPT
+		const_reverse_iterator	rbegin() const 
 		{ return const_reverse_iterator(end()); }
 
-		reverse_iterator	rend() _GLIBCXX_NOEXCEPT
+		reverse_iterator	rend() 
 		{ return reverse_iterator(begin()); }
 
-		const_reverse_iterator	rend() const _GLIBCXX_NOEXCEPT
+		const_reverse_iterator	rend() const 
 		{ return const_reverse_iterator(begin()); }
 
-		_GLIBCXX_NODISCARD bool	empty() const _GLIBCXX_NOEXCEPT
+		_GLIBCXX_NODISCARD bool	empty() const 
 		{ return _M_impl._M_node_count == 0; }
 
-		size_type	size() const _GLIBCXX_NOEXCEPT
+		size_type	size() const 
 		{ return _M_impl._M_node_count; }
 
-		size_type	max_size() const _GLIBCXX_NOEXCEPT
+		size_type	max_size() const 
 		{ return _Alloc_traits::max_size(_M_get_Node_allocator()); }
 
 		void	swap(_Rb_tree& __t)
@@ -728,7 +1137,7 @@ namespace ft
 		void	erase(const_iterator __first, const_iterator __last)
 		{ _M_erase_aux(__first, __last); }
 
-		void	clear() _GLIBCXX_NOEXCEPT
+		void	clear() 
 		{
 			_M_erase(_M_begin());
 			_M_impl._M_reset();
@@ -825,8 +1234,7 @@ namespace ft
 
 		_Link_type __z = __node_gen(_GLIBCXX_FORWARD(_Arg, __v));
 
-		RBT_insert_rebalance(__insert_left, __z, __p,
-			this->_M_impl._M_header);
+		RBT_insert_rebalance(__insert_left, __z, __p, this->_M_impl._M_header);
 		++_M_impl._M_node_count;
 		return iterator(__z);
 	}
@@ -842,8 +1250,7 @@ namespace ft
 
 		_Link_type __z = _M_create_node(_GLIBCXX_FORWARD(_Arg, __v));
 
-		RBT_insert_rebalance(__insert_left, __z, __p,
-			this->_M_impl._M_header);
+		RBT_insert_rebalance(__insert_left, __z, __p, this->_M_impl._M_header);
 		++_M_impl._M_node_count;
 		return iterator(__z);
 	}
@@ -879,7 +1286,7 @@ namespace ft
 		__try
 		{
 			if (__x->_M_right)
-			__top->_M_right = _M_copy(_S_right(__x), __top, __node_gen);
+				__top->_M_right = _M_copy(_S_right(__x), __top, __node_gen);
 			__p = __top;
 			__x = _S_left(__x);
 
@@ -889,7 +1296,7 @@ namespace ft
 			__p->_M_left = __y;
 			__y->_M_parent = __p;
 			if (__x->_M_right)
-			__y->_M_right = _M_copy(_S_right(__x), __y, __node_gen);
+				__y->_M_right = _M_copy(_S_right(__x), __y, __node_gen);
 			__p = __y;
 			__x = _S_left(__x);
 			}
@@ -910,7 +1317,8 @@ namespace ft
 		// Erase without rebalancing.
 		while (__x != 0)
 		{
-			_M_erase(_S_right(__x));
+			if (__x->_M_right)
+				_M_erase(_S_right(__x));
 			_Link_type __y = _S_left(__x);
 			_M_drop_node(__x);
 			__x = __y;

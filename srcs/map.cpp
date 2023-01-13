@@ -1,4 +1,4 @@
-#include "map.hpp"
+// #include "map.hpp"
 #include <map>
 #include <list>
 
@@ -288,138 +288,110 @@ void    map_construct()
 	printSize(mp);
 	printSize(mp_range);
 	printSize(mp_copy);
-	std::cout << "mp destroy" << std::endl;
-	mp.~map();
-	std::cout << "mp_range destroy" << std::endl;
-	mp_range.~map();
-	std::cout << "mp_copy destroy" << std::endl;
-	mp_copy.~map();
+	// std::cout << "mp destroy" << std::endl;
+	// mp.~map();
+	// std::cout << "mp_range destroy" << std::endl;
+	// mp_range.~map();
+	// std::cout << "mp_copy destroy" << std::endl;
+	// mp_copy.~map();
+	// std::cout << "WHY ????" << std::endl; 
+} // leaks here for destructor of std::map
+
+static int count_erase = 0;
+
+template <typename MAP, typename U>
+void	ft_erase(MAP &mp, U param)
+{
+	std::cout << "\t-- [" << count_erase++ << "] --" << std::endl;
+	mp.erase(param);
+	// printSize(mp);
 }
 
-// static int count_erase = 0;
+template <typename MAP, typename U, typename V>
+void	ft_erase(MAP &mp, U param, V param2)
+{
+	std::cout << "\t-- [" << count_erase++ << "] --" << std::endl;
+	mp.erase(param, param2);
+	// printSize(mp);
+}
 
-// template <typename MAP, typename U>
-// void	ft_erase(MAP &mp, U param)
-// {
-// 	std::cout << "\t-- [" << count_erase++ << "] --" << std::endl;
-// 	mp.erase(param);
-// 	// printSize(mp);
-// }
+int		erase(void)
+{
+	std::list<std::pair<const int, std::string> > lst;
+	unsigned int lst_size = 10;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(std::pair<const int, std::string>(i, std::string((lst_size - i), i + 65)));
+	NAMESPACE::map<int, std::string> mp(lst.begin(), lst.end());
+	printSize(mp);
+	int i = 0;
+	std::cout << "erase :" << i++ << std::endl;
+	ft_erase(mp, ++mp.begin());
+	printSize(mp);
 
-// template <typename MAP, typename U, typename V>
-// void	ft_erase(MAP &mp, U param, V param2)
-// {
-// 	std::cout << "\t-- [" << count_erase++ << "] --" << std::endl;
-// 	mp.erase(param, param2);
-// 	// printSize(mp);
-// }
+	std::cout << "erase :" << i++ << std::endl;
+	ft_erase(mp, mp.begin());
+	printSize(mp);
+	std::cout << "erase :" << i++ << std::endl;
+	ft_erase(mp, --mp.end());
+	printSize(mp);
 
-// int		erase(void)
-// {
-// 	std::list<std::pair<const int, std::string> > lst;
-// 	unsigned int lst_size = 10;
-// 	for (unsigned int i = 0; i < lst_size; ++i)
-// 		lst.push_back(std::pair<const int, std::string>(i, std::string((lst_size - i), i + 65)));
-// 	ft::map<int, std::string> mp(lst.begin(), lst.end());
-// 	std::map<int, std::string> smp(lst.begin(), lst.end());
-// 	printSizeVs(mp, smp);
-// 	int i = 0;
-// 	std::cout << "erase :" << i++ << std::endl;
-// 	ft_erase(mp, ++mp.begin());
-// 	ft_erase(smp, ++smp.begin());
-// 	// mp.get_tree()->prettyPrint();
-// 	printSizeVs(mp, smp);
+	std::cout << "erase :" << i++ << std::endl;
+	ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
+	printSize(mp);
+	std::cout << "erase :" << i++ << std::endl;
+	ft_erase(mp, --(--(--mp.end())), --mp.end());
+	printSize(mp);
 
-// 	std::cout << "erase :" << i++ << std::endl;
-// 	ft_erase(mp, mp.begin());
-// 	ft_erase(smp, smp.begin());
-// 	// mp.get_tree()->prettyPrint();
-// 	printSizeVs(mp, smp);
-// 	std::cout << "erase :" << i++ << std::endl;
-// 	ft_erase(mp, --mp.end());
-// 	ft_erase(smp, --smp.end());
-// 	// mp.get_tree()->prettyPrint();
-// 	printSizeVs(mp, smp);
+	std::cout << "[10] Hello insert" << std::endl;
+	mp[10] = "Hello";
+	std::cout << "[11] Hi there insert" << std::endl;
+	mp[11] = "Hi there";
+	printSize(mp);
+	ft_erase(mp, --(--(--mp.end())), mp.end());
+	printSize(mp);
 
-// 	std::cout << "erase :" << i++ << std::endl;
-// 	// ft::map<int, std::string>::iterator it = mp.begin();
-// 	// ++(++(++it));
-// 	// it++;
-// 	// it++;
-// 	// std::cout << it << std::endl;
-// 	// std::cout << ++(++(++mp.begin())) << std::endl;
-// 	ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
-// 	ft_erase(smp, smp.begin(), ++(++(++smp.begin())));
-// 	// mp.get_tree()->prettyPrint();
-// 	printSizeVs(mp, smp);
-// 	std::cout << "erase :" << i++ << std::endl;
-// 	ft_erase(mp, --(--(--mp.end())), --mp.end());
-// 	ft_erase(smp, --(--(--smp.end())), --smp.end());
-// 	// mp.get_tree()->prettyPrint();
-// 	printSizeVs(mp, smp);
+	mp[12] = "ONE";
+	mp[13] = "TWO";
+	mp[14] = "THREE";
+	mp[15] = "FOUR";
+	printSize(mp);
+	ft_erase(mp, mp.begin(), mp.end());
+	printSize(mp);
+	return (0);
+}
 
-// 	std::cout << "[10] Hello insert" << std::endl;
-// 	mp[10] = "Hello";
-// 	smp[10] = "Hello";
-// 	std::cout << "[11] Hi there insert" << std::endl;
-// 	mp[11] = "Hi there";
-// 	smp[11] = "Hi there";
-// 	// mp.get_tree()->prettyPrint();
-// 	printSizeVs(mp, smp);
-// 	ft_erase(mp, --(--(--mp.end())), mp.end());
-// 	ft_erase(smp, --(--(--smp.end())), smp.end());
-// 	// mp.get_tree()->prettyPrint();
-// 	printSizeVs(mp, smp);
+typedef ft::map<char, foo<float> >::const_iterator const_it;
 
-// 	mp[12] = "ONE";
-// 	smp[12] = "ONE";
-// 	mp[13] = "TWO";
-// 	smp[13] = "TWO";
-// 	mp[14] = "THREE";
-// 	smp[14] = "THREE";
-// 	mp[15] = "FOUR";
-// 	smp[15] = "FOUR";
-// 	// mp.get_tree()->prettyPrint();
-// 	printSizeVs(mp, smp);
-// 	ft_erase(mp, mp.begin(), mp.end());
-// 	ft_erase(smp, smp.begin(), smp.end());
-// 	// mp.get_tree()->prettyPrint();
-// 	printSizeVs(mp, smp);
-// 	return (0);
-// }
+static unsigned int i = 0;
 
-// typedef ft::map<char, foo<float> >::const_iterator const_it;
+void	ft_comp(const ft::map<char, foo<float> > &mp, const const_it &it1, const const_it &it2)
+{
+	bool res[2];
 
-// static unsigned int i = 0;
+	std::cout << "\t-- [" << ++i << "] --" << std::endl;
+	res[0] = mp.key_comp()(it1->first, it2->first);
+	res[1] = mp.value_comp()(*it1, *it2);
+	std::cout << "with [" << it1->first << " and " << it2->first << "]: ";
+	std::cout << "key_comp: " << res[0] << " | " << "value_comp: " << res[1] << std::endl;
+}
 
-// void	ft_comp(const ft::map<char, foo<float> > &mp, const const_it &it1, const const_it &it2)
-// {
-// 	bool res[2];
+int		comp(void)
+{
+	ft::map<char, foo<float> >	mp;
 
-// 	std::cout << "\t-- [" << ++i << "] --" << std::endl;
-// 	res[0] = mp.key_comp()(it1->first, it2->first);
-// 	res[1] = mp.value_comp()(*it1, *it2);
-// 	std::cout << "with [" << it1->first << " and " << it2->first << "]: ";
-// 	std::cout << "key_comp: " << res[0] << " | " << "value_comp: " << res[1] << std::endl;
-// }
+	mp['a'] = 2.3;
+	mp['b'] = 1.4;
+	mp['c'] = 0.3;
+	mp['d'] = 4.2;
+	printSize(mp);
 
-// int		comp(void)
-// {
-// 	ft::map<char, foo<float> >	mp;
+	for (const_it it1 = mp.begin(); it1 != mp.end(); ++it1)
+		for (const_it it2 = mp.begin(); it2 != mp.end(); ++it2)
+			ft_comp(mp, it1, it2);
 
-// 	mp['a'] = 2.3;
-// 	mp['b'] = 1.4;
-// 	mp['c'] = 0.3;
-// 	mp['d'] = 4.2;
-// 	printSize(mp);
-
-// 	for (const_it it1 = mp.begin(); it1 != mp.end(); ++it1)
-// 		for (const_it it2 = mp.begin(); it2 != mp.end(); ++it2)
-// 			ft_comp(mp, it1, it2);
-
-// 	printSize(mp);
-// 	return (0);
-// }
+	printSize(mp);
+	return (0);
+}
 
 // int		ite_n1(void)
 // {
@@ -448,131 +420,95 @@ void	ft_count(mapy mp, int const &k)
 	std::cout << "ft map::count(" << k << ")\treturned [" << mp.count(k) << "]" << std::endl;
 }
 
-// int		find_count(void)
-// {
-// 	ft_map mp;
-// 	ft_it it = mp.end();
-// 	std_map smp;
-// 	std_it sit = smp.end();
+int		find_count(void)
+{
+	mapy mp;
+	ity it = mp.end();
 
-// 	mp[42] = "fgzgxfn";
-// 	mp[25] = "funny";
-// 	mp[80] = "hey";
-// 	mp[12] = "no";
-// 	mp[27] = "bee";
-// 	mp[90] = "8";
-// 	smp[42] = "fgzgxfn";
-// 	smp[25] = "funny";
-// 	smp[80] = "hey";
-// 	smp[12] = "no";
-// 	smp[27] = "bee";
-// 	smp[90] = "8";
-// 	printSizeVs(mp, smp);
+	mp[42] = "fgzgxfn";
+	mp[25] = "funny";
+	mp[80] = "hey";
+	mp[12] = "no";
+	mp[27] = "bee";
+	mp[90] = "8";
+	printSize(mp);
 
-// 	std::cout << "\t-- FIND --" << std::endl;
-// 	ft_find(mp, smp, it, sit, 12);
-// 	ft_find(mp, smp, it, sit, 3);
-// 	ft_find(mp, smp, it, sit, 35);
-// 	ft_find(mp, smp, it, sit, 90);
-// 	ft_find(mp, smp, it, sit, 100);
+	std::cout << "\t-- FIND --" << std::endl;
+	ft_find(mp, it, 12);
+	ft_find(mp, it, 3);
+	ft_find(mp, it, 35);
+	ft_find(mp, it, 90);
+	ft_find(mp, it, 100);
 
-// 	std::cout << "\t-- COUNT --" << std::endl;
-// 	ft_count(mp, smp, -3);
-// 	ft_count(mp, smp, 12);
-// 	ft_count(mp, smp, 3);
-// 	ft_count(mp, smp, 35);
-// 	ft_count(mp, smp, 90);
-// 	ft_count(mp, smp, 100);
+	std::cout << "\t-- COUNT --" << std::endl;
+	ft_count(mp, -3);
+	ft_count(mp, 12);
+	ft_count(mp, 3);
+	ft_count(mp, 35);
+	ft_count(mp, 90);
+	ft_count(mp, 100);
 
-// 	mp.find(27)->second = "newly inserted mapped_value";
-// 	smp.find(27)->second = "newly inserted mapped_value";
+	mp.find(27)->second = "newly inserted mapped_value";
 
-// 	printSizeVs(mp, smp);
+	printSize(mp);
 
-// 	ft::map<int, std::string> const c_map(mp.begin(), mp.end());
-// 	std::map<int, std::string> const s_map(smp.begin(), smp.end());
-// 	std::cout << "const map.find(" << 42 << ")->second: [" << c_map.find(42)->second << "]" << std::endl;
-// 	std::cout << "const map.find(" << 42 << ")->second: [" << s_map.find(42)->second << "]" << std::endl;
-// 	std::cout << "const map.count(" << 80 << "): [" << c_map.count(80) << "]" << std::endl;
-// 	std::cout << "const map.count(" << 80 << "): [" << s_map.count(80) << "]" << std::endl;
-// 	return (0);
-// }
+	NAMESPACE::map<int, std::string> const c_map(mp.begin(), mp.end());
+	std::cout << "const map.find(" << 42 << ")->second: [" << c_map.find(42)->second << "]" << std::endl;
+	std::cout << "const map.count(" << 80 << "): [" << c_map.count(80) << "]" << std::endl;
+	return (0);
+}
 
-// int		ite_arrow(void)
-// {
-// 	std::list<std::pair<const float, foo<int> > > lst;
-// 	unsigned int lst_size = 5;
-// 	for (unsigned int i = 0; i < lst_size; ++i)
-// 		lst.push_back(std::pair<const float, foo<int> >(2.5 + i, i + 1));
+int		ite_arrow(void)
+{
+	std::list<std::pair<const float, foo<int> > > lst;
+	unsigned int lst_size = 5;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(std::pair<const float, foo<int> >(2.5 + i, i + 1));
 
-// 	ft::map<int, foo<int> > mp(lst.begin(), lst.end());
-// 	ft::map<int, foo<int> >::iterator it(mp.begin());
-// 	ft::map<int, foo<int> >::const_iterator ite(mp.begin());
-// 	std::map<int, foo<int> > smp(lst.begin(), lst.end());
-// 	std::map<int, foo<int> >::iterator sit(smp.begin());
-// 	std::map<int, foo<int> >::const_iterator site(smp.begin());
-// 	printSizeVs(mp, smp);
+	NAMESPACE::map<int, foo<int> > mp(lst.begin(), lst.end());
+	NAMESPACE::map<int, foo<int> >::iterator it(mp.begin());
+	NAMESPACE::map<int, foo<int> >::const_iterator ite(mp.begin());
+	printSize(mp);
 
-// 	printPair(++ite);
-// 	printPair(++site);
-// 	printPair(ite++);
-// 	printPair(site++);
-// 	printPair(ite++);
-// 	printPair(site++);
-// 	printPair(++ite);
-// 	printPair(++site);
+	printPair(++ite);
+	printPair(ite++);
+	printPair(ite++);
+	printPair(++ite);
 
-// 	std::cout << "FOO TEST:" << std::endl;
-// 	it->second.m();
-// 	ite->second.m();
-// 	sit->second.m();
-// 	site->second.m();
+	std::cout << "FOO TEST:" << std::endl;
+	it->second.m();
+	ite->second.m();
 
-// 	printPair(++it);
-// 	printPair(++sit);
-// 	printPair(it++);
-// 	printPair(sit++);
-// 	printPair(it++);
-// 	printPair(sit++);
-// 	printPair(++it);
-// 	printPair(++sit);
+	printPair(++it);
+	printPair(it++);
+	printPair(it++);
+	printPair(++it);
 
-// 	printPair(--ite);
-// 	printPair(--site);
-// 	printPair(ite--);
-// 	printPair(site--);
-// 	printPair(--ite);
-// 	printPair(--site);
-// 	printPair(ite--);
-// 	printPair(site--);
+	printPair(--ite);
+	printPair(ite--);
+	printPair(--ite);
+	printPair(ite--);
 
-// 	std::cout << "FOO TEST:" << std::endl;
-// 	(*it).second.m();
-// 	(*sit).second.m();
-// 	(*ite).second.m();
-// 	(*site).second.m();
+	std::cout << "FOO TEST:" << std::endl;
+	(*it).second.m();
+	(*ite).second.m();
 
-// 	printPair(--it);
-// 	printPair(--sit);
-// 	printPair(it--);
-// 	printPair(sit--);
-// 	printPair(it--);
-// 	printPair(sit--);
-// 	printPair(--it);
-// 	printPair(--sit);
-// 	return (0);
-// }
+	printPair(--it);
+	printPair(it--);
+	printPair(it--);
+	printPair(--it);
+	return (0);
+}
 
 int	map_tester()
 {
-	map_construct();
+	// map_construct();
 	// map_bounds();
 	// TrickyMapConstruct();
 	// relational_op();
-	// erase();
+	erase();
 	// comp();
 	// ite_n1();
-	// ite_n2();
 	// ite_arrow();
 	// find_count();
 	return (0);

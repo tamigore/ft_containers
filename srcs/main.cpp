@@ -125,7 +125,7 @@ int main(int argc, char** argv)
 {
 	(void)argc;
 	(void)argv;
-	std::cout << NAMESPACE << std::endl;
+	// std::cout << NAMESPACE << std::endl;
 	// vector_tester();
 	// stack_tester();
 	map_tester();
