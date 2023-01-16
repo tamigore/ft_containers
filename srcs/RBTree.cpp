@@ -38,7 +38,7 @@ static ft::Node_base*	localRBT_decrement(ft::Node_base* __x) throw ()
 		__x = __x->_M_right;
 	else if (__x->_M_left != 0)
 	{
-		ft::Node_base* __y = __x->_M_left;s
+		ft::Node_base* __y = __x->_M_left;
 		while (__y->_M_right != 0)
 			__y = __y->_M_right;
 		__x = __y;

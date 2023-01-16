@@ -23,11 +23,11 @@ namespace ft
 		: public std::binary_function<value_type, value_type, bool>
 		{
 			friend class map<_Key, _Tp, _Compare, _Alloc>;
+		
 		protected:
 			_Compare comp;
 
-			value_compare(_Compare __c)
-			: comp(__c) { }
+			value_compare(_Compare __c) : comp(__c) { }
 
 		public:
 			bool operator()(const value_type& __x, const value_type& __y) const
@@ -139,7 +139,7 @@ namespace ft
 		{
 			iterator __i = lower_bound(__k);
 			if (__i == end() || key_comp()(__k, (*__i).first))
-			std::__throw_out_of_range(__N("map::at"));
+				std::__throw_out_of_range(__N("map::at"));
 			return (*__i).second;
 		}
 

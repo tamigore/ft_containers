@@ -35,6 +35,7 @@ HEADER =	ft.hpp		\
 
 INC = std_inc/
 
+HEADERS = $(addprefix $(INC),$(HEADER))
 SRCS = $(addprefix $(DIR_S),$(SOURCES))
 MAIN = $(addprefix $(DIR_S),$(MAINS))
 
@@ -42,10 +43,10 @@ OBJS = $(MAINS:.cpp=.o)
 OBJS += $(SOURCES:.cpp=.o)
 
 FLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
+S_FLAG = NULL
 
 M_STD = -D STD
-
-m_FT = -D FT
+M_FT = -D FT
 
 all: $(NAME)
 
@@ -57,23 +58,25 @@ $(OBJS): $(SRCS) $(MAIN)
 	$(CXX) -c $(MAIN) $(FLAGS) -I $(INC)
 
 std:
-			$(eval FLAGS += $(M_STD))
-			$(CXX) -c $(SRCS) $(FLAGS) -I $(INC)
-			$(CXX) -c $(MAIN) $(FLAGS) -I $(INC)
-			$(CXX) $(OBJS) $(FLAGS) -o $(SNAME)
+		$(eval S_FLAG = $(M_STD))
+		$(CXX) -c $(MAIN) $(FLAGS) $(S_FLAG) -I $(INC)
+		$(CXX) $(OBJS) $(FLAGS) $(S_FLAG) -o $(SNAME)
 
-ft:			$(SRCS)
-			$(eval FLAGS += $(M_FT))
-			$(CXX) -c $(SRCS) $(FLAGS) -I $(INC)
-			$(CXX) -c $(MAIN) $(FLAGS) -I $(INC)
-			$(CXX) $(OBJS) $(FLAGS) -o $(NAME)
+ft:
+		$(eval S_FLAG = $(M_FT))
+		$(CXX) -c $(SRCS) $(FLAGS) $(S_FLAG) -I $(INC)
+		$(CXX) -c $(MAIN) $(FLAGS) $(S_FLAG) -I $(INC)
+		$(CXX) $(OBJS) $(FLAGS) $(S_FLAG) -o $(NAME)
 
 bonus: all
 
 clean:
 	@rm -rf $(OBJS)
+	@rm -f test_ft.txt
+	@rm -f test_std.txt
 
 fclean: clean
 	@rm -f $(NAME)
+	@rm -f $(SNAME)
 
 re: fclean all

@@ -97,8 +97,7 @@ namespace ft
 	};
 
 	template <typename T>
-	typename ft::random_access_iterator<T>::difference_type
-	operator==(const ft::random_access_iterator<T> lhs, const ft::random_access_iterator<T> rhs)
+	bool	operator==(const ft::random_access_iterator<T> lhs, const ft::random_access_iterator<T> rhs)
 	{ return (lhs.base() == rhs.base()); }
 
 	template<typename T_L, typename T_R>

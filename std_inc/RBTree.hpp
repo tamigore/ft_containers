@@ -1,17 +1,9 @@
 #ifndef _FT_TREE_H
 # define _FT_TREE_H
 
-// #pragma GCC system_header
-
-// #include <bits/stl_algobase.h>
-// #include <bits/allocator.h>
-// #include <bits/stl_function.h>
-// #include <bits/cpp_type_traits.h>
-// #include <ext/alloc_traits.h>
-
 # include <iostream>
-# include <utility>
-#include "pair.hpp"
+# include "utility.hpp"
+# include "pair.hpp"
 
 namespace ft
 {
@@ -181,52 +173,6 @@ namespace ft
 		pointer	operator->() const 
 		{ return static_cast<_Link_type> (_M_node)->_M_valptr(); }
 
-		// N_ptr			RBT_increment(N_ptr __x) throw ()
-		// {
-		// 	if (__x->_M_color == ft::RED && __x->_M_parent->_M_parent == __x)
-		// 		__x = __x->_M_right;
-		// 	else if (__x->_M_left != 0)
-		// 	{
-		// 		N_ptr __y = __x->_M_left;
-		// 		while (__y->_M_right != 0)
-		// 			__y = __y->_M_right;
-		// 		__x = __y;
-		// 	}
-		// 	else
-		// 	{
-		// 		N_ptr __y = __x->_M_parent;
-		// 		while (__x == __y->_M_left)
-		// 		{
-		// 			__x = __y;
-		// 			__y = __y->_M_parent;
-		// 		}
-		// 		__x = __y;
-		// 	}
-		// 	return __x;
-		// }
-
-		// N_ptr			RBT_decrement(N_ptr __x) throw ()
-		// {
-		// 	if (__x->_M_right != 0) 
-		// 	{
-		// 		__x = __x->_M_right;
-		// 		while (__x->_M_left != 0)
-		// 			__x = __x->_M_left;
-		// 	}
-		// 	else 
-		// 	{
-		// 		N_ptr __y = __x->_M_parent;
-		// 		while (__x == __y->_M_right) 
-		// 		{
-		// 			__x = __y;
-		// 			__y = __y->_M_parent;
-		// 		}
-		// 		if (__x->_M_right != __y)
-		// 			__x = __y;
-		// 	}
-		// 	return __x;
-		// }
-
 		_Self&	operator++() 
 		{
 			_M_node = RBT_increment(_M_node);
@@ -298,66 +244,6 @@ namespace ft
 		pointer	operator->() const 
 		{ return static_cast<_Link_type>(_M_node)->_M_valptr(); }
 
-		// private:
-		// static N_ptr	localRBT_increment(N_ptr __x) throw ()
-		// {
-		// 	if (__x->_M_right != 0) 
-		// 	{
-		// 		__x = __x->_M_right;
-		// 		while (__x->_M_left != 0)
-		// 			__x = __x->_M_left;
-		// 	}
-		// 	else 
-		// 	{
-		// 		N_ptr __y = __x->_M_parent;
-		// 		while (__x == __y->_M_right) 
-		// 		{
-		// 			__x = __y;
-		// 			__y = __y->_M_parent;
-		// 		}
-		// 		if (__x->_M_right != __y)
-		// 			__x = __y;
-		// 	}
-		// 	return __x;
-		// }
-
-		// static N_ptr	localRBT_decrement(N_ptr __x) throw ()
-		// {
-		// 	if (__x->_M_color == ft::RED && __x->_M_parent->_M_parent == __x)
-		// 		__x = __x->_M_right;
-		// 	else if (__x->_M_left != 0)
-		// 	{
-		// 		N_ptr __y = __x->_M_left;
-		// 		while (__y->_M_right != 0)
-		// 			__y = __y->_M_right;
-		// 		__x = __y;
-		// 	}
-		// 	else
-		// 	{
-		// 		N_ptr __y = __x->_M_parent;
-		// 		while (__x == __y->_M_left)
-		// 		{
-		// 			__x = __y;
-		// 			__y = __y->_M_parent;
-		// 		}
-		// 		__x = __y;
-		// 	}
-		// 	return __x;
-		// }
-
-	// public:
-		// N_ptr			RBT_increment(N_ptr __x) throw ()
-		// { return localRBT_increment(__x); }
-
-		// const N_ptr	RBT_increment(const N_ptr __x) throw ()
-		// { return localRBT_increment(const_cast<N_ptr>(__x)); }
-
-		// N_ptr			RBT_decrement(N_ptr __x) throw ()
-		// { return localRBT_decrement(__x); }
-
-		// const N_ptr		RBT_decrement(const N_ptr __x) throw ()
-		// { return localRBT_decrement(const_cast<N_ptr>(__x)); }
-
 		_Self&	operator++() 
 		{
 			_M_node = RBT_increment(_M_node);
@@ -410,304 +296,6 @@ namespace ft
 		typedef RBT_Node<_Val>* 		_Link_type;
 		typedef const RBT_Node<_Val>*	_Const_Link_type;
 
-	public:
-		// unsigned int	RBT_black_count(N_ptr __node, N_ptr __root) throw ()
-		// {
-		// 	if (__node == 0)
-		// 		return 0;
-		// 	unsigned int __sum = 0;
-		// 	do
-		// 	{
-		// 		if (__node->_M_color == ft::BLACK)
-		// 			++__sum;
-		// 		if (__node == __root)
-		// 			break;
-		// 		__node = __node->_M_parent;
-		// 	}
-		// 	while (1);
-		// 	return __sum;
-		// }
-
-		// void	RBT_rotate_left(N_ptr const __x, N_ptr& __root)
-		// {
-		// 	N_ptr const __y = __x->_M_right;
-
-		// 	__x->_M_right = __y->_M_left;
-		// 	if (__y->_M_left !=0)
-		// 		__y->_M_left->_M_parent = __x;
-		// 	__y->_M_parent = __x->_M_parent;
-
-		// 	if (__x == __root)
-		// 		__root = __y;
-		// 	else if (__x == __x->_M_parent->_M_left)
-		// 		__x->_M_parent->_M_left = __y;
-		// 	else
-		// 		__x->_M_parent->_M_right = __y;
-		// 	__y->_M_left = __x;
-		// 	__x->_M_parent = __y;
-		// }
-
-		// void	RBT_rotate_right(N_ptr const __x, N_ptr& __root)
-		// {
-		// 	N_ptr const __y = __x->_M_left;
-
-		// 	__x->_M_left = __y->_M_right;
-		// 	if (__y->_M_right != 0)
-		// 		__y->_M_right->_M_parent = __x;
-		// 	__y->_M_parent = __x->_M_parent;
-
-		// 	if (__x == __root)
-		// 		__root = __y;
-		// 	else if (__x == __x->_M_parent->_M_right)
-		// 		__x->_M_parent->_M_right = __y;
-		// 	else
-		// 		__x->_M_parent->_M_left = __y;
-		// 	__y->_M_right = __x;
-		// 	__x->_M_parent = __y;
-		// }
-
-		// void			RBT_insert_rebalance(const bool __insert_left, N_ptr __x, N_ptr __p, Node_base& __header) throw ()
-		// {
-		// 	N_ptr& __root = __header._M_parent;
-		// 	// Initialize fields in new node to insert.
-		// 	__x->_M_parent = __p;
-		// 	__x->_M_left = 0;
-		// 	__x->_M_right = 0;
-		// 	__x->_M_color = ft::RED;
-		// 	// Insert.
-		// 	// Make new node child of parent and maintain root, leftmost and
-		// 	// rightmost nodes.
-		// 	// N.B. First node is always inserted left.
-		// 	if (__insert_left)
-		// 	{
-		// 		__p->_M_left = __x; // also makes leftmost = __x when __p == &__header
-
-		// 		if (__p == &__header)
-		// 		{
-		// 			__header._M_parent = __x;
-		// 			__header._M_right = __x;
-		// 		}
-		// 		else if (__p == __header._M_left)
-		// 			__header._M_left = __x; // maintain leftmost pointing to min node
-		// 	}
-		// 	else
-		// 	{
-		// 		__p->_M_right = __x;
-
-		// 		if (__p == __header._M_right)
-		// 			__header._M_right = __x; // maintain rightmost pointing to max node
-		// 	}
-		// 	// Rebalance.
-		// 	while (__x != __root && __x->_M_parent->_M_color == ft::RED)
-		// 	{
-		// 		N_ptr const __xpp = __x->_M_parent->_M_parent;
-
-		// 		if (__x->_M_parent == __xpp->_M_left)
-		// 		{
-		// 			N_ptr const __y = __xpp->_M_right;
-		// 			if (__y && __y->_M_color == ft::RED)
-		// 			{
-		// 				__x->_M_parent->_M_color = ft::BLACK;
-		// 				__y->_M_color = ft::BLACK;
-		// 				__xpp->_M_color = ft::RED;
-		// 				__x = __xpp;
-		// 			}
-		// 			else
-		// 			{
-		// 				if (__x == __x->_M_parent->_M_right)
-		// 				{
-		// 					__x = __x->_M_parent;
-		// 					RBT_rotate_left(__x, __root);
-		// 				}
-		// 				__x->_M_parent->_M_color = ft::BLACK;
-		// 				__xpp->_M_color = ft::RED;
-		// 				RBT_rotate_right(__xpp, __root);
-		// 			}
-		// 		}
-		// 		else
-		// 		{
-		// 			N_ptr const __y = __xpp->_M_left;
-		// 			if (__y && __y->_M_color == ft::RED)
-		// 			{
-		// 				__x->_M_parent->_M_color = ft::BLACK;
-		// 				__y->_M_color = ft::BLACK;
-		// 				__xpp->_M_color = ft::RED;
-		// 				__x = __xpp;
-		// 			}
-		// 			else
-		// 			{
-		// 				if (__x == __x->_M_parent->_M_left)
-		// 				{
-		// 					__x = __x->_M_parent;
-		// 					RBT_rotate_right(__x, __root);
-		// 				}
-		// 				__x->_M_parent->_M_color = ft::BLACK;
-		// 				__xpp->_M_color = ft::RED;
-		// 				RBT_rotate_left(__xpp, __root);
-		// 			}
-		// 		}
-		// 	}
-		// 	__root->_M_color = ft::BLACK;
-		// }
-
-		// Node_base*	RBT_erase_rebalance(Node_base* const __z, Node_base& __header) throw ()
-		// {
-		// 	N_ptr& __root = __header._M_parent;
-		// 	N_ptr& __leftmost = __header._M_left;
-		// 	N_ptr& __rightmost = __header._M_right;
-		// 	N_ptr __y = __z;
-		// 	N_ptr __x = 0;
-		// 	N_ptr __x_parent = 0;
-
-		// 	if (__y->_M_left == 0)     // __z has at most one non-null child. y == z.
-		// 		__x = __y->_M_right;     // __x might be null.
-		// 	else
-		// 		if (__y->_M_right == 0)  // __z has exactly one non-null child. y == z.
-		// 			__x = __y->_M_left;    // __x is not null.
-		// 	else
-		// 	{
-		// 		// __z has two non-null children.  Set __y to
-		// 		__y = __y->_M_right;   //   __z's successor.  __x might be null.
-		// 		while (__y->_M_left != 0)
-		// 			__y = __y->_M_left;
-		// 		__x = __y->_M_right;
-		// 	}
-		// 	if (__y != __z)
-		// 	{
-		// 		// relink y in place of z.  y is z's successor
-		// 		__z->_M_left->_M_parent = __y;
-		// 		__y->_M_left = __z->_M_left;
-		// 		if (__y != __z->_M_right)
-		// 		{
-		// 			__x_parent = __y->_M_parent;
-		// 			if (__x) __x->_M_parent = __y->_M_parent;
-		// 			__y->_M_parent->_M_left = __x;   // __y must be a child of _M_left
-		// 			__y->_M_right = __z->_M_right;
-		// 			__z->_M_right->_M_parent = __y;
-		// 		}
-		// 		else
-		// 			__x_parent = __y;
-		// 		if (__root == __z)
-		// 			__root = __y;
-		// 		else if (__z->_M_parent->_M_left == __z)
-		// 			__z->_M_parent->_M_left = __y;
-		// 		else
-		// 			__z->_M_parent->_M_right = __y;
-		// 		__y->_M_parent = __z->_M_parent;
-		// 		std::swap(__y->_M_color, __z->_M_color);
-		// 		__y = __z;
-		// 		// __y now points to node to be actually deleted
-		// 	}
-		// 	else
-		// 	{ // __y == __z
-		// 		__x_parent = __y->_M_parent;
-		// 		if (__x)
-		// 			__x->_M_parent = __y->_M_parent;
-		// 		if (__root == __z)
-		// 			__root = __x;
-		// 		else
-		// 			if (__z->_M_parent->_M_left == __z)
-		// 				__z->_M_parent->_M_left = __x;
-		// 			else
-		// 				__z->_M_parent->_M_right = __x;
-		// 		if (__leftmost == __z)
-		// 		{
-		// 			if (__z->_M_right == 0)        // __z->_M_left must be null also
-		// 				__leftmost = __z->_M_parent;
-		// 			// makes __leftmost == _M_header if __z == __root
-		// 			else
-		// 				__leftmost = ft::Node_base::_S_minimum(__x);
-		// 		}
-		// 		if (__rightmost == __z)
-		// 		{
-		// 			if (__z->_M_left == 0)         // __z->_M_right must be null also
-		// 				__rightmost = __z->_M_parent;
-		// 			// makes __rightmost == _M_header if __z == __root
-		// 			else                      // __x == __z->_M_left
-		// 				__rightmost = ft::Node_base::_S_maximum(__x);
-		// 		}
-		// 	}
-		// 	if (__y->_M_color != ft::RED)
-		// 	{
-		// 		while (__x != __root && (__x == 0 || __x->_M_color == ft::BLACK))
-		// 		{
-		// 			if (__x == __x_parent->_M_left)
-		// 			{
-		// 				N_ptr __w = __x_parent->_M_right;
-		// 				if (__w->_M_color == ft::RED)
-		// 				{
-		// 					__w->_M_color = ft::BLACK;
-		// 					__x_parent->_M_color = ft::RED;
-		// 					RBT_rotate_left(__x_parent, __root);
-		// 					__w = __x_parent->_M_right;
-		// 				}
-		// 				if ((__w->_M_left == 0 || __w->_M_left->_M_color == ft::BLACK) &&
-		// 					(__w->_M_right == 0 || __w->_M_right->_M_color == ft::BLACK))
-		// 				{
-		// 					__w->_M_color = ft::RED;
-		// 					__x = __x_parent;
-		// 					__x_parent = __x_parent->_M_parent;
-		// 				}
-		// 				else
-		// 				{
-		// 					if (__w->_M_right == 0 || __w->_M_right->_M_color == ft::BLACK)
-		// 					{
-		// 						__w->_M_left->_M_color = ft::BLACK;
-		// 						__w->_M_color = ft::RED;
-		// 						RBT_rotate_right(__w, __root);
-		// 						__w = __x_parent->_M_right;
-		// 					}
-		// 					__w->_M_color = __x_parent->_M_color;
-		// 					__x_parent->_M_color = ft::BLACK;
-		// 					if (__w->_M_right)
-		// 						__w->_M_right->_M_color = ft::BLACK;
-		// 					RBT_rotate_left(__x_parent, __root);
-		// 					break;
-		// 				}
-		// 			}
-		// 			else
-		// 			{
-		// 				// same as above, with _M_right <-> _M_left.
-		// 				N_ptr __w = __x_parent->_M_left;
-		// 				if (__w->_M_color == ft::RED)
-		// 				{
-		// 					__w->_M_color = ft::BLACK;
-		// 					__x_parent->_M_color = ft::RED;
-		// 					RBT_rotate_right(__x_parent, __root);
-		// 					__w = __x_parent->_M_left;
-		// 				}
-		// 				if ((__w->_M_right == 0 || __w->_M_right->_M_color == ft::BLACK) &&
-		// 					(__w->_M_left == 0 || __w->_M_left->_M_color == ft::BLACK))
-		// 				{
-		// 					__w->_M_color = ft::RED;
-		// 					__x = __x_parent;
-		// 					__x_parent = __x_parent->_M_parent;
-		// 				}
-		// 				else
-		// 				{
-		// 					if (__w->_M_left == 0 || __w->_M_left->_M_color == ft::BLACK)
-		// 					{
-		// 						__w->_M_right->_M_color = ft::BLACK;
-		// 						__w->_M_color = ft::RED;
-		// 						RBT_rotate_left(__w, __root);
-		// 						__w = __x_parent->_M_left;
-		// 					}
-		// 					__w->_M_color = __x_parent->_M_color;
-		// 					__x_parent->_M_color = ft::BLACK;
-		// 					if (__w->_M_left)
-		// 						__w->_M_left->_M_color = ft::BLACK;
-		// 					RBT_rotate_right(__x_parent, __root);
-		// 					break;
-		// 				}
-		// 			}
-		// 		}
-		// 		if (__x)
-		// 			__x->_M_color = ft::BLACK;
-		// 	}
-		// 	return __y;
-		// }
-
-	private:
 		// Functor recycling a pool of nodes and using allocation once the pool
 		// is empty.
 		struct ReuseAlloc_node
@@ -742,7 +330,6 @@ namespace ft
 				return _M_t._M_create_node(_GLIBCXX_FORWARD(_Arg, __arg));
 			}
 
-		private:
 			N_ptr	_M_extract()
 			{
 				if (!_M_nodes)
@@ -859,7 +446,6 @@ namespace ft
 			return __tmp;
 		}
 
-	protected:
 		// Unused _Is_pod_comparator is kept as it is part of mangled name.
 		template<typename _Key_compare>
 		struct RBT_impl : public _Node_allocator
@@ -886,7 +472,6 @@ namespace ft
 
 		RBT_impl<_Compare> _M_impl;
 
-	protected:
 		N_ptr&	_M_root() 
 		{ return this->_M_impl._M_header._M_parent; }
 
@@ -1169,17 +754,15 @@ namespace ft
 		// Debugging.
 		bool	__rb_verify() const;
 
-		friend bool	operator==(const _Rb_tree& __x, const _Rb_tree& __y)
-		{
-			return (__x.size() == __y.size()
-			&& std::equal(__x.begin(), __x.end(), __y.begin()));
-		}
-
 		friend bool
 		operator<(const _Rb_tree& __x, const _Rb_tree& __y)
 		{
-			return std::lexicographical_compare(__x.begin(), __x.end(),
-								__y.begin(), __y.end());
+			return ft::lexicographical_compare(__x.begin(), __x.end(), __y.begin(), __y.end());
+		}
+
+		friend bool	operator==(const _Rb_tree& __x, const _Rb_tree& __y)
+		{
+			return (__x.size() == __y.size() && !(__x < __y) && !(__y < __x));
 		}
 
 		friend bool _GLIBCXX_DEPRECATED	operator!=(const _Rb_tree& __x, const _Rb_tree& __y)

@@ -3,8 +3,8 @@
 #include <list>
 
 #ifndef STD
-	#include <ft.hpp>
-	// #include <map.hpp>
+	// #include <ft.hpp>
+	#include <map.hpp>
 	// #include <stack.hpp>
 	// #include <vector.hpp>
 	#define NAMESPACE ft
@@ -288,13 +288,13 @@ void    map_construct()
 	printSize(mp);
 	printSize(mp_range);
 	printSize(mp_copy);
-	// std::cout << "mp destroy" << std::endl;
-	// mp.~map();
-	// std::cout << "mp_range destroy" << std::endl;
-	// mp_range.~map();
-	// std::cout << "mp_copy destroy" << std::endl;
-	// mp_copy.~map();
-	// std::cout << "WHY ????" << std::endl; 
+	std::cout << "mp destroy" << std::endl;
+	mp.~map();
+	std::cout << "mp_range destroy" << std::endl;
+	mp_range.~map();
+	std::cout << "mp_copy destroy" << std::endl;
+	mp_copy.~map();
+	std::cout << "WHY ????" << std::endl; 
 } // leaks here for destructor of std::map
 
 static int count_erase = 0;
@@ -360,11 +360,11 @@ int		erase(void)
 	return (0);
 }
 
-typedef ft::map<char, foo<float> >::const_iterator const_it;
+typedef NAMESPACE::map<char, foo<float> >::const_iterator const_it;
 
 static unsigned int i = 0;
 
-void	ft_comp(const ft::map<char, foo<float> > &mp, const const_it &it1, const const_it &it2)
+void	ft_comp(const NAMESPACE::map<char, foo<float> > &mp, const const_it &it1, const const_it &it2)
 {
 	bool res[2];
 
@@ -377,7 +377,7 @@ void	ft_comp(const ft::map<char, foo<float> > &mp, const const_it &it1, const co
 
 int		comp(void)
 {
-	ft::map<char, foo<float> >	mp;
+	NAMESPACE::map<char, foo<float> >	mp;
 
 	mp['a'] = 2.3;
 	mp['b'] = 1.4;
@@ -502,14 +502,14 @@ int		ite_arrow(void)
 
 int	map_tester()
 {
-	// map_construct();
-	// map_bounds();
-	// TrickyMapConstruct();
-	// relational_op();
+	map_construct();
+	map_bounds();
+	TrickyMapConstruct();
+	relational_op();
 	erase();
-	// comp();
+	comp();
 	// ite_n1();
-	// ite_arrow();
-	// find_count();
+	ite_arrow();
+	find_count();
 	return (0);
 }

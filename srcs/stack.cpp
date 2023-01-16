@@ -1,9 +1,20 @@
-#include "stack.hpp"
-#include <stack>
 #include <iostream>
 #include <string>
 #include <deque>
 #include <stdlib.h>
+
+#ifndef STD
+	// #include <ft.hpp>
+	// #include <map.hpp>
+	#include <stack.hpp>
+	// #include <vector.hpp>
+	#define NAMESPACE ft
+#else
+	// #include <map>
+	#include <stack>
+	#include <vector>
+	#define NAMESPACE std
+#endif
 
 #define MAX_RAM 4294967296
 #define BUFFER_SIZE 4096
@@ -18,7 +29,7 @@ struct Buffer
 #define COUNT (MAX_RAM / (int)sizeof(Buffer))
 
 template<typename T>
-class MutantStack : public ft::stack<T>
+class MutantStack : public NAMESPACE::stack<T>
 {
 	public:
 		MutantStack() {}
@@ -30,7 +41,7 @@ class MutantStack : public ft::stack<T>
 		}
 		~MutantStack() {}
 
-		typedef typename ft::stack<T>::container_type::iterator iterator;
+		typedef typename NAMESPACE::stack<T>::container_type::iterator iterator;
 
 		iterator begin() { return this->c.begin(); }
 		iterator end() { return this->c.end(); }
@@ -38,11 +49,9 @@ class MutantStack : public ft::stack<T>
 
 int stack_tester()
 {
-	ft::stack<int>							test_stack_int;
-	ft::stack<int>							f_stack_int;
-	ft::stack<Buffer, ft::vector<Buffer> >	f_stack_deq_buffer;
-	std::stack<int>							s_stack_int;
-	std::stack<Buffer, std::deque<Buffer> >	s_stack_deq_buffer;
+	NAMESPACE::stack<int>							test_stack_int;
+	NAMESPACE::stack<int>							f_stack_int;
+	NAMESPACE::stack<Buffer, NAMESPACE::vector<Buffer> >	f_stack_deq_buffer;
 
 	test_stack_int.push(100);
 	test_stack_int.push(10);
@@ -59,14 +68,7 @@ int stack_tester()
 	f_stack_int.push(5);
 	f_stack_int.push(2);
 
-	s_stack_int.push(100);
-	s_stack_int.push(10);
-	s_stack_int.push(1);
-	s_stack_int.push(5);
-	s_stack_int.push(4);
-	s_stack_int.push(5);
-
-	std::cout << "ft stack top:" << f_stack_int.top() << "\ntest stack top:"<< test_stack_int.top() << "\nstd stack top:"<< s_stack_int.top() << std::endl;
+	std::cout << "ft stack top:" << f_stack_int.top() << "\ntest stack top:"<< test_stack_int.top() << std::endl;
 	if (f_stack_int == test_stack_int)
 		std::cout << "fd == std" << std::endl;
 	if (f_stack_int < test_stack_int)
@@ -80,7 +82,7 @@ int stack_tester()
 	if (f_stack_int >= test_stack_int)
 		std::cout << "fd >= std" << std::endl;
 	
-	std::cout << "ft stack top:" << f_stack_int.top() << "\ntest stack top:"<< test_stack_int.top() << "\nstd stack top:"<< s_stack_int.top() << std::endl;
+	std::cout << "ft stack top:" << f_stack_int.top() << "\ntest stack top:"<< test_stack_int.top() << std::endl;
 	MutantStack<char> iterable_stack;
 	for (char letter = 'a'; letter <= 'z'; letter++)
 		iterable_stack.push(letter);
