@@ -118,8 +118,20 @@ namespace ft
 					clear();
 				if (count > capacity())
 				{
-					_alloc.deallocate(_start, capacity());
-					_start = _alloc.allocate(count);
+					if (_start)
+					{
+						_alloc.deallocate(_start, capacity());
+						_start = NULL;
+					}
+					try
+					{
+						_start = _alloc.allocate(count);
+					}
+					catch(const std::exception& e)
+					{
+						_start = NULL;
+						return ;
+					}
 				}
 				_end = _start;
 				_capacity = _start + count;
@@ -182,7 +194,11 @@ namespace ft
 
 			// 23.2.4.2 capacity:
 			size_type size() const
-			{ return (_end - _start); }
+			{
+				if (_start)
+					return (_end - _start);
+				return (size_type());
+			}
 
 			size_type max_size() const
 			{ return (_alloc.max_size()); }
@@ -191,12 +207,8 @@ namespace ft
 			{
 				if (count > max_size())
 					throw (std::length_error("vector::resize"));
-				// std::cout << "size = " << size() << " | count = " <<  count << std::endl;
 				if (count > size())
-				{
 					insert(end(), count - size(), value);
-					// std::cout << size() << std::endl;
-				}
 				else
 				{
 					while (count < size())
@@ -208,7 +220,11 @@ namespace ft
 			}
 
 			size_type capacity() const
-			{ return (_capacity - _start); }
+			{
+				if (_start)
+					return (_capacity - _start);
+				return (size_type());
+			}
 
 			bool empty() const
 			{ return (size() == 0 ? true : false); }
@@ -239,10 +255,14 @@ namespace ft
 
 			// element access:
 			reference operator[](size_type n)
-			{ return (*(_start + n)); }
+			{
+				return (*(_start + n));
+			}
 
 			const_reference operator[](size_type n) const
-			{ return (*(_start + n)); }
+			{
+				return (*(_start + n));
+			}
 
 			reference at(size_type n)
 			{
@@ -283,7 +303,10 @@ namespace ft
 			}
 
 			void pop_back()
-			{ _alloc.destroy(--_end); }
+			{
+				if (_end && _end != _start)
+					_alloc.destroy(--_end);
+			}
 
 			iterator insert(const_iterator pos, const T& value)
 			{
@@ -344,10 +367,6 @@ namespace ft
 					size_type	old_size = size();
 					size_type	old_cap = capacity();
 					size_type	new_cap = (capacity() > 0 ? size() + count : count);
-					// size_type	new_cap = (capacity() > 0 ?
-					// 	(capacity() * 2 < count + size() ?
-					// 	capacity() + count : capacity() * 2)
-					// 	: count);
 
 					_start = _alloc.allocate(new_cap);
 					_end = _start;
@@ -367,10 +386,10 @@ namespace ft
 				}
 				else
 				{
-					_end += count;
+					_end = _end + count;
 					i = size() - 1;
 					ret = _start + len;
-					while (i >= len)
+					while (i > len)
 					{
 						if (i < len + count)
 							_alloc.construct(_start + i, value);
@@ -378,6 +397,10 @@ namespace ft
 							_alloc.construct(_start + i, *(_start + i - count));
 						i--;
 					}
+					if (i < len + count)
+						_alloc.construct(_start + i, value);
+					else
+						_alloc.construct(_start + i, *(_start + i - count));
 				}
 				return (ret);
 			}
@@ -401,10 +424,7 @@ namespace ft
 					size_type	old_size = size();
 					size_type	old_cap = capacity();
 					size_type	new_cap = (capacity() > 0 ? size() + dist : dist);
-					// size_type	new_cap = (capacity() > 0 ?
-					// 	(capacity() * 2 < dist + size() ? capacity() + dist : capacity() * 2) : dist);
 
-					// std::cout << new_cap << std::endl;
 					_start = _alloc.allocate(new_cap);
 					_end = _start;
 					_capacity = _start + new_cap;
@@ -437,27 +457,35 @@ namespace ft
 			{
 				if (position == end())
 					return (end());
-				size_type dist = position - begin();
-				for (size_type i = dist; i < size() - 1; i++)
-					*(_start + i) = *(_start + i + 1);
-				_end--;
-				_alloc.destroy(_end);
-				return (_start + dist);
+				if (_start && _start != _end)
+				{
+					size_type dist = position - begin();
+					for (size_type i = dist; i < size() - 1; i++)
+						*(_start + i) = *(_start + i + 1);
+					_end--;
+					_alloc.destroy(_end);
+					return (_start + dist);
+				}
+				return (iterator());
 			}
 
 			iterator	erase(iterator first, iterator last)
 			{
 				if (first == last)
 					return (last);
-				size_type dist = ft::distance(first, last);
-				size_type pos = first - begin();
-				for (size_type i = 0; pos + dist + i < size(); i++)
-					*(_start + pos + i) = *(_start + pos + dist + i);
-				while (dist--)
-					_alloc.destroy(--_end);
-				if (last == end())
-					return (end());
-				return (iterator(_start + pos));
+				if (_start && _start != _end)
+				{
+					size_type dist = ft::distance(first, last);
+					size_type pos = first - begin();
+					for (size_type i = 0; pos + dist + i < size(); i++)
+						*(_start + pos + i) = *(_start + pos + dist + i);
+					while (dist--)
+						_alloc.destroy(--_end);
+					if (last == end())
+						return (end());
+					return (iterator(_start + pos));
+				}
+				return (iterator());
 			}
 
 			void	swap(vector &other)
@@ -474,39 +502,27 @@ namespace ft
 	
 	template <class T, class Alloc>
 	bool operator< (const vector<T,Alloc>& x, const vector<T,Alloc>& y)
-	{
-		return (ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()));
-	}
+	{ return (ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end())); }
 
 	template <class T, class Alloc>
 	bool operator==(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
-	{
-		return (!(x < y) && !(y < x));
-	};
+	{ return (!(x < y) && !(y < x)); };
 
 	template <class T, class Alloc>
 	bool operator!=(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
-	{
-		return (!(x == y));
-	}
+	{ return (!(x == y)); }
 
 	template <class T, class Alloc>
 	bool operator<=(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
-	{
-		return (!(x > y));
-	}
+	{ return (!(x > y)); }
 
 	template <class T, class Alloc>
 	bool operator> (const vector<T,Alloc>& x, const vector<T,Alloc>& y)
-	{
-		return (ft::lexicographical_compare(y.begin(), y.end(), x.begin(), x.end()));
-	}
+	{ return (ft::lexicographical_compare(y.begin(), y.end(), x.begin(), x.end())); }
 
 	template <class T, class Alloc>
 	bool operator>=(const vector<T,Alloc>& x, const vector<T,Alloc>& y)
-	{
-		return (!(x < y));
-	}
+	{ return (!(x < y)); }
 
 	// specialized algorithms:
 	template <class T, class Alloc>

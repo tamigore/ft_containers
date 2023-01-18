@@ -60,7 +60,6 @@ void	printSize(T_VEC const &vec, bool print_content = 1)
 	std::cout << "___________________printSize___________________" << std::endl;
 	std::cout << "size: " << size << std::endl;
 	std::cout << "capacity is ok ? : " << ((capacity >= size) ? "OK" : "KO") << std::endl;
-	// std::cout << "capacity: " << capacity << " | capacity is ok ? : " << ((capacity >= size) ? "OK" : "KO") << std::endl;
 	std::cout << "max_size: " << vec.max_size() << std::endl;
 	if (print_content)
 	{
@@ -161,13 +160,16 @@ int		at(void)
 	std::cout << "front(): " << vct.front() << " " << vct_c.front() << std::endl;
 	std::cout << "back(): " << vct.back() << " " <<  vct_c.back() << std::endl;
 
-	try {
+	try
+	{
 		vct.at(10) = 42;
 	}
-	catch (std::out_of_range &e) {
+	catch (std::out_of_range &e)
+	{
 		std::cout << "Catch out_of_range exception!" << std::endl;
 	}
-	catch (std::exception &e) {
+	catch (std::exception &e)
+	{
 		std::cout << "Catch exception: " << e.what() << std::endl;
 	}
 	return (0);
@@ -341,15 +343,16 @@ int vec_all()
 	vct_two.erase(++(vct_two.begin()), --(vct_two.end()));
 	vct_three.erase(++(++vct_three.begin()));
 	vct_four.erase(--(--vct_four.end()));
-	std::cout << "afte all" << std::endl;
-	vct.~vector();
-	std::cout << "vec destroyed" << std::endl;
-	vct_two.~vector();
-	std::cout << "vec_two destroyed" << std::endl;
-	vct_three.~vector();
-	std::cout << "vec_three destroyed" << std::endl;
-	vct_four.~vector();
-	std::cout << "vec_four destroyed" << std::endl;
+	// This causes abort of std::vector XD
+	// std::cout << "afte all" << std::endl;
+	// vct.~vector();
+	// std::cout << "vec destroyed" << std::endl;
+	// vct_two.~vector();
+	// std::cout << "vec_two destroyed" << std::endl;
+	// vct_three.~vector();
+	// std::cout << "vec_three destroyed" << std::endl;
+	// vct_four.~vector();
+	// std::cout << "vec_four destroyed" << std::endl;
 	return (1);
 }
 
@@ -426,14 +429,13 @@ void	vec_insert()
 			vec[i] = (vec.size() - i) * 3;
 		printSize(vec);
 
-		// vec2.resize(4);
+		vec2.resize(4);
 		vec2.insert(vec2.end(), 42);
 		printSize(vec2);
 
 		vec2.insert(vec2.begin(), 2, 21);
 		printSize(vec2);
 
-		// std::cout << *(vec2.end() - 2) << " || " << (vec2._end - 2) << std::endl;
 		vec2.insert(vec2.end() - 2, 42);
 		printSize(vec2);
 
