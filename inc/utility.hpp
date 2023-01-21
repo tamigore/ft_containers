@@ -3,32 +3,58 @@
 
 # include <iostream>
 
-// class nullptr_ft
-// {
-// 	public:
-// 		// For conversion to any type of null non-member pointer.
-// 		template<class T>
-// 		operator T*() const { return (0); }
-
-// 		// For conversion to any type of null member pointer.
-// 		template<class C, class T>
-// 		operator T C::*() const { return (0); }
-
-// 	private:
-// 		// It's imposible to get an address of a nullptr.
-// 		void operator&() const;
-
-// }	ft_nullptr = {};
-
 namespace ft
 {
-	// template<class T>
-	// void	swap(T *x, T *y)
-	// {
-	// 	T	tmp = *x;
-	// 	*x = *y;
-	// 	*y = *tmp;
-	// }
+	template<typename Alloc, typename = typename Alloc::value_type>
+	struct alloc_traits
+	{
+		typedef typename Alloc::pointer                pointer;
+		typedef typename Alloc::const_pointer          const_pointer;
+		typedef typename Alloc::value_type             value_type;
+		typedef typename Alloc::reference              reference;
+		typedef typename Alloc::const_reference        const_reference;
+		typedef typename Alloc::size_type              size_type;
+		typedef typename Alloc::difference_type        difference_type;
+
+		static pointer	allocate(Alloc& all, size_type size)
+		{ return all.allocate(size); }
+
+		template<typename Hint>
+		static pointer	allocate(Alloc& all, size_type size, Hint __hint)
+		{ return all.allocate(size, __hint); }
+
+		static void deallocate(Alloc& all, pointer ptr, size_type size)
+		{ all.deallocate(ptr, size); }
+
+		template<typename _Tp>
+		static void construct(Alloc& all, pointer ptr, const _Tp& allrg)
+		{ all.construct(ptr, allrg); }
+
+		static void destroy(Alloc& all, pointer ptr)
+		{ all.destroy(ptr); }
+
+		static size_type max_size(const Alloc& all)
+		{ return all.max_size(); }
+
+		static const Alloc& _S_select_on_copy(const Alloc& all) { return all; }
+
+		static void _S_on_swap(Alloc& all, Alloc& __b)
+		{	std::__alloc_swap<Alloc>::_S_do_it(all, __b); }
+
+		template<typename _Tp>
+		struct rebind
+		{ typedef typename Alloc::template rebind<_Tp>::other other; };
+	};
+
+	template<typename T>
+	struct Identity
+	{
+		T&		operator()(T& __x) const
+		{ return __x; }
+
+		const T&	operator()(const T& __x) const
+		{ return __x; }
+	};
 
 	template<class T>
 	void	swap(T &x, T &y)
@@ -91,17 +117,24 @@ namespace ft
 			typename std::iterator_traits<It>::iterator_category());
 	}
 
-	// binary_function https://cplusplus.com/reference/functional/binary_function/?kw=binary_function
-	template <class Arg1, class Arg2, class Result>
-	struct binary_function
-	{
-		typedef Arg1	first_argument_type;
-		typedef Arg2	second_argument_type;
-		typedef Result	result_type;
-	};
+	// template <class Arg1, class Arg2, class Result>
+	// struct unary_function
+	// {
+	// 	typedef Arg1	argument_type;
+	// 	typedef Result	result_type;
+	// };
+	
+	// // binary_function https://cplusplus.com/reference/functional/binary_function/?kw=binary_function
+	// template <class Arg1, class Arg2, class Result>
+	// struct binary_function
+	// {
+	// 	typedef Arg1	first_argument_type;
+	// 	typedef Arg2	second_argument_type;
+	// 	typedef Result	result_type;
+	// };
 
 	template <class T>
-	struct less : binary_function<T, T, bool> // less(a, b) a < b
+	struct less //: binary_function<T, T, bool> // less(a, b) a < b
 	{
 		bool operator() (const T& x, const T& y) const { return (x < y); }
 	};

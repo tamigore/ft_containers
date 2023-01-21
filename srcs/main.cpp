@@ -123,9 +123,10 @@ int main(int argc, char** argv)
 		std::cout << "NAMESPACE is : std" << std::endl;
 	else
 		std::cout << "NAMESPACE is : ft" << std::endl;
-	vector_tester();
-	stack_tester();
-	map_tester();
-	main42();
+	// vector_tester();
+	// stack_tester();
+	// map_tester();
+	// main42();
+	set_tester();
 	return (0);
 }

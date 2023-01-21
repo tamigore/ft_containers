@@ -18,12 +18,11 @@ NAME = ft_containers
 
 DIR_S = srcs/
 
-SOURCES =	RBTree.cpp
-
-MAINS =	main.cpp	\
-		stack.cpp	\
-		vector.cpp	\
-		map.cpp
+SOURCES =	main.cpp	\
+			stack.cpp	\
+			vector.cpp	\
+			set.cpp		\
+			map.cpp
 
 HEADER =	ft.hpp		\
 			pair.hpp	\
@@ -33,14 +32,12 @@ HEADER =	ft.hpp		\
 			usefull.hpp	\
 			map.hpp
 
-INC = std_inc/
+INC = inc/
 
 HEADERS = $(addprefix $(INC),$(HEADER))
 SRCS = $(addprefix $(DIR_S),$(SOURCES))
-MAIN = $(addprefix $(DIR_S),$(MAINS))
 
-OBJS = $(MAINS:.cpp=.o)
-OBJS += $(SOURCES:.cpp=.o)
+OBJS = $(SOURCES:.cpp=.o)
 
 FLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
 S_FLAG = NULL
@@ -53,19 +50,17 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CXX) $(OBJS) $(FLAGS) -o $(NAME)
 
-$(OBJS): $(SRCS) $(MAIN)
+$(OBJS): $(SRCS)
 	$(CXX) -c $(SRCS) $(FLAGS) -I $(INC)
-	$(CXX) -c $(MAIN) $(FLAGS) -I $(INC)
 
 std:
 		$(eval S_FLAG = $(M_STD))
-		$(CXX) -c $(MAIN) $(FLAGS) $(S_FLAG) -I $(INC)
+		$(CXX) -c $(SRCS) $(FLAGS) $(S_FLAG) -I $(INC)
 		$(CXX) $(OBJS) $(FLAGS) $(S_FLAG) -o $(SNAME)
 
 ft:
 		$(eval S_FLAG = $(M_FT))
 		$(CXX) -c $(SRCS) $(FLAGS) $(S_FLAG) -I $(INC)
-		$(CXX) -c $(MAIN) $(FLAGS) $(S_FLAG) -I $(INC)
 		$(CXX) $(OBJS) $(FLAGS) $(S_FLAG) -o $(NAME)
 
 bonus: all

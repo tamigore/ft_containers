@@ -882,159 +882,20 @@ int		map_tricky_erase(void)
 
 	printSize(mp);
 
-	/* A classic btree should give this:
-	 *                                      42
-	 *                     /                                            \
-	 *                    25                                            50
-	 *           /                 \                         /                       \
-	 *          21                 30                       46                       55
-	 *      /       \           /      \                /       \             /           \
-	 *     18       23        28        35            44         48         53             80
-	 *   /   \    /    \    /    \     /   \        /   \       /   \     /    \         /     \
-	 *  12   20  22    24  27    29  33    38     43    45    47    49   51    54       60      90
-	 *
-	 * */
-
 	ft_erase(mp, 25); // right != NULL; left != NULL
 	ft_erase(mp, 55); // right != NULL; left != NULL
-
-	/* After deleting 25 and 55, I would get:
-	 *                                      42
-	 *                     /                                            \
-	 *                    24                                            50
-	 *           /                 \                         /                      \
-	 *          21                 30                       46                      54
-	 *      /       \           /      \                /       \             /           \
-	 *     18       23        28        35            44         48         53             80
-	 *   /   \    /         /    \     /   \        /   \       /   \     /              /     \
-	 *  12   20  22        27    29  33    38     43    45    47    49   51             60      90
-	 *
-	 * */
-
 	ft_erase(mp, 24); // right != NULL; left != NULL
 	ft_erase(mp, 54); // right != NULL; left != NULL
-
-	/* After deleting 24 and 54, I would get:
-	 *                                      42
-	 *                     /                                            \
-	 *                    23                                            50
-	 *           /                 \                         /                      \
-	 *          21                 30                       46                      53
-	 *      /       \           /      \                /       \             /           \
-	 *     18       22        28        35            44         48         51             80
-	 *   /   \              /    \     /   \        /   \       /   \                    /     \
-	 *  12   20            27    29  33    38     43    45    47    49                  60      90
-	 *
-	 * */
-
 	ft_erase(mp, 22); // right == NULL; left == NULL
 	ft_erase(mp, 51); // right == NULL; left == NULL
-
 	ft_erase(mp, 21); // right == NULL; left != NULL
 	ft_erase(mp, 53); // right != NULL; left == NULL
-
-	/* After deleting 22, 51 and then 21, 53, I would get:
-	 *                                      42
-	 *                     /                                            \
-	 *                    23                                            50
-	 *           /                 \                         /                      \
-	 *          20                 30                       46                      80
-	 *      /                   /      \                /       \                /        \
-	 *     18                 28        35            44         48             60         90
-	 *   /                  /    \     /   \        /   \       /   \
-	 *  12                 27    29  33    38     43    45    47    49
-	 *
-	 * */
-
 	ft_erase(mp, 20); // right == NULL; left != NULL
-
-	/* After deleting 20, I would get:
-	 *                                      42
-	 *                     /                                            \
-	 *                    23                                            50
-	 *           /                 \                         /                      \
-	 *          18                 30                       46                      80
-	 *      /                   /      \                /       \                /        \
-	 *     12                 28        35            44         48             60         90
-	 *                      /    \     /   \        /   \       /   \
-	 *                     27    29  33    38     43    45    47    49
-	 *
-	 * */
-
 	ft_erase(mp, 23); // right != NULL; left != NULL
-
-	/* After deleting 23, I would get:
-	 *                                      42
-	 *                     /                                            \
-	 *                    18                                            50
-	 *           /                 \                         /                      \
-	 *          12                 30                       46                      80
-	 *                          /      \                /       \                /        \
-	 *                        28        35            44         48             60         90
-	 *                      /    \     /   \        /   \       /   \
-	 *                     27    29  33    38     43    45    47    49
-	 *
-	 * */
-
 	ft_erase(mp, 42); // right != NULL; left != NULL; parent == NULL
-
-	/* After deleting 42, I would get:
-	 *                                      38
-	 *                     /                                            \
-	 *                    18                                            50
-	 *           /                 \                         /                      \
-	 *          12                 30                       46                      80
-	 *                          /      \                /       \                /        \
-	 *                        28        35            44         48             60         90
-	 *                      /    \     /            /   \       /   \
-	 *                     27    29  33           43    45    47    49
-	 *
-	 * */
-
 	ft_erase(mp, 38); // right != NULL; left != NULL; parent == NULL
-
-	/* After deleting 38, I would get:
-	 *                                      35
-	 *                     /                                            \
-	 *                    18                                            50
-	 *           /                 \                         /                      \
-	 *          12                 30                       46                      80
-	 *                          /      \                /       \                /        \
-	 *                        28        33            44         48             60         90
-	 *                      /    \                  /   \       /   \
-	 *                     27    29               43    45    47    49
-	 *
-	 * */
-
 	ft_erase(mp, 35); // right != NULL; left != NULL; parent == NULL
-
-	/* After deleting 35, I would get:
-	 *                                      33
-	 *                     /                                            \
-	 *                    18                                            50
-	 *           /                 \                         /                      \
-	 *          12                 30                       46                      80
-	 *                          /                       /       \                /        \
-	 *                        28                      44         48             60         90
-	 *                      /    \                  /   \       /   \
-	 *                     27    29               43    45    47    49
-	 *
-	 * */
-
 	ft_erase(mp, 33); // right != NULL; left != NULL; parent == NULL
-
-	/* After deleting 33, I would get:
-	 *                                      30
-	 *                     /                                            \
-	 *                    18                                            50
-	 *           /                 \                         /                      \
-	 *          12                 28                       46                      80
-	 *                          /      \                /       \                /        \
-	 *                        27       29             44         48             60         90
-	 *                                              /   \       /   \
-	 *                                            43    45    47    49
-	 *
-	 * */
 
 	return (0);
 }
