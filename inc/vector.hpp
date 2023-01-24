@@ -206,16 +206,17 @@ namespace ft
 			void resize(size_type count, T value = T())
 			{
 				if (count > max_size())
-					throw (std::length_error("vector::resize"));
+					return ;
 				if (count > size())
-					insert(end(), count - size(), value);
-				else
+				{
+					reserve(std::max(size() * 2, count));
+					while (size() < count)
+						_alloc.construct(_end++, value);
+				}
+				else if (count < size())
 				{
 					while (count < size())
-					{
-						_end--;
-						_alloc.destroy(_end);
-					}
+						_alloc.destroy(--_end);
 				}
 			}
 
@@ -295,7 +296,7 @@ namespace ft
 			{
 				if (_end == _capacity)
 				{
-					size_type cap = (capacity() > 0 ? capacity() * 2 : 2);
+					size_type cap = (capacity() > 0 ? capacity() * 2 : 1);
 					reserve(cap);
 				}
 				_alloc.construct(_end, x);

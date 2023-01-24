@@ -136,6 +136,7 @@ void	print_res_set(int i, std::string name)
 		case 2 : std::cout << " size = ";
 		break;
 		case 100 : std::cout << " So nice to have you here! Let's survive to this together..." << std::endl;
+		break;
 		default : std::cout << "###### " << " " << name << "######" << std::endl;
 
 	}
