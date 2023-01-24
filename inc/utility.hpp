@@ -2,6 +2,7 @@
 # define _USEFULL_HPP_
 
 # include <iostream>
+# include <algorithm>
 
 namespace ft
 {
@@ -92,30 +93,30 @@ namespace ft
 		return (first1 == last1) && (first2 != last2);
 	}
 
-	template<class It>
-	typename std::iterator_traits<It>::difference_type	do_distance(It first, It last, std::input_iterator_tag)
-	{
-		typename std::iterator_traits<It>::difference_type result = 0;
-		while (first != last)
-		{
-			++first;
-			++result;
-		}
-		return result;
-	}
+	// template<class It>
+	// typename std::iterator_traits<It>::difference_type	do_distance(It first, It last, std::input_iterator_tag)
+	// {
+	// 	typename std::iterator_traits<It>::difference_type result = 0;
+	// 	while (first != last)
+	// 	{
+	// 		++first;
+	// 		++result;
+	// 	}
+	// 	return result;
+	// }
 	
-	template<class It>
-	typename std::iterator_traits<It>::difference_type  do_distance(It first, It last, std::random_access_iterator_tag)
-	{
-		return last - first;
-	}
+	// template<class It>
+	// typename std::iterator_traits<It>::difference_type  do_distance(It first, It last, std::random_access_iterator_tag)
+	// {
+	// 	return last - first;
+	// }
 	
-	template<class It>
-	typename std::iterator_traits<It>::difference_type distance(It first, It last)
-	{
-		return do_distance(first, last,
-			typename std::iterator_traits<It>::iterator_category());
-	}
+	// template<class It>
+	// typename std::iterator_traits<It>::difference_type distance(It first, It last)
+	// {
+	// 	return do_distance(first, last,
+	// 		typename std::iterator_traits<It>::iterator_category());
+	// }
 
 	// template <class Arg1, class Arg2, class Result>
 	// struct unary_function

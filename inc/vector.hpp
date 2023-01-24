@@ -36,13 +36,11 @@ namespace ft
 
 		public:
 			// constructor
-			vector() : _alloc(), _start(NULL), _end(NULL), _capacity(NULL) {}
-
-			explicit vector( const Allocator& alloc )
+			explicit vector( const Allocator& alloc = Allocator())
 				: _alloc(alloc), _start(NULL), _end(NULL), _capacity(NULL) {}
 
 			explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
-				: _alloc(alloc)
+				: _alloc(alloc), _start(NULL), _end(NULL), _capacity(NULL)
 			{
 				if (count <= 0)
 					return ;
@@ -60,9 +58,9 @@ namespace ft
 
 			template <class InputIt>
 			vector(InputIt first, typename enable_if<!is_integral<InputIt>::value, InputIt>::type last,
-				const Allocator& alloc = Allocator()) : _alloc(alloc)
+				const Allocator& alloc = Allocator()) : _alloc(alloc), _start(NULL), _end(NULL), _capacity(NULL)
 			{
-				size_type	dist = ft::distance(first, last);
+				size_type	dist = std::distance(first, last);
 
 				if (dist <= 0)
 					return ;
@@ -82,9 +80,9 @@ namespace ft
 			// destructor
 			~vector()
 			{
-				clear();
 				if (_start)
 				{
+					clear();
 					_alloc.deallocate(_start, capacity());
 					_start = NULL;
 				}
@@ -114,55 +112,19 @@ namespace ft
 
 			void assign(size_type count, const T& value)
 			{
-				if (!empty())
+				if (_start)
 					clear();
-				if (count > capacity())
-				{
-					if (_start)
-					{
-						_alloc.deallocate(_start, capacity());
-						_start = NULL;
-					}
-					try
-					{
-						_start = _alloc.allocate(count);
-					}
-					catch(const std::exception& e)
-					{
-						_start = NULL;
-						return ;
-					}
-				}
-				_end = _start;
-				_capacity = _start + count;
-				for (size_type i = 0; i < count; i++)
-				{
-					_alloc.destroy(_end);
-					_alloc.construct(_end, value);
-					_end++;
-				}
+				reserve(count);
+				insert(begin(), count, value);
 			}
 
 			template< class InputIt >
 			void assign(InputIt first, typename enable_if<!is_integral<InputIt>::value, InputIt>::type last)
 			{
-				size_type dist = ft::distance(first, last);
-				if (!empty())
+				if (_start)
 					clear();
-				if (dist > capacity())
-				{
-					_alloc.deallocate(_start, capacity());
-					_start = _alloc.allocate(dist);
-				}
-				_end = _start;
-				_capacity = _start + dist;
-				for (size_type i = 0; i < dist; i++)
-				{
-					_alloc.destroy(_end);
-					_alloc.construct(_end, *first);
-					first++;
-					_end++;
-				}
+				reserve(std::distance(first, last));
+				insert(begin(), first, last);
 			}
 
 			allocator_type get_allocator() const
@@ -207,12 +169,8 @@ namespace ft
 			{
 				if (count > max_size())
 					return ;
-				if (count > size())
-				{
-					reserve(std::max(size() * 2, count));
-					while (size() < count)
-						_alloc.construct(_end++, value);
-				}
+				else if (count > size())
+					insert(end(), count - size(), value);
 				else if (count < size())
 				{
 					while (count < size())
@@ -241,13 +199,13 @@ namespace ft
 					size_type	old_size = size();
 					size_type	old_cap = capacity();
 
+					clear();
 					_start = _alloc.allocate(new_cap);
 					_end = _start;
 					_capacity = _start + new_cap;
 					while (old_start != old_end)
 					{
-						_alloc.construct(_end, *old_start);
-						_end++;
+						_alloc.construct(_end++, *old_start);
 						old_start++;
 					}
 					_alloc.deallocate(old_start - old_size, old_cap);
@@ -256,14 +214,10 @@ namespace ft
 
 			// element access:
 			reference operator[](size_type n)
-			{
-				return (*(_start + n));
-			}
+			{ return (*(_start + n)); }
 
 			const_reference operator[](size_type n) const
-			{
-				return (*(_start + n));
-			}
+			{ return (*(_start + n)); }
 
 			reference at(size_type n)
 			{
@@ -294,13 +248,9 @@ namespace ft
 			// 23.2.4.3 modifiers:
 			void push_back(const T& x)
 			{
-				if (_end == _capacity)
-				{
-					size_type cap = (capacity() > 0 ? capacity() * 2 : 1);
-					reserve(cap);
-				}
-				_alloc.construct(_end, x);
-				_end++;
+				if (capacity() < size() + 1)
+					reserve(std::max(size() * 2, (size_type)2));
+				_alloc.construct(_end++, x);
 			}
 
 			void pop_back()
@@ -411,7 +361,7 @@ namespace ft
 				typename enable_if<!is_integral<InputIt>::value, InputIt>::type last)
 			{
 				size_type	len = pos - begin();
-				size_type	dist = ft::distance(first, last);
+				size_type	dist = std::distance(first, last);
 				size_type	i = 0;
 				iterator	ret = _start + len;
 
@@ -441,6 +391,7 @@ namespace ft
 							_alloc.construct(_end++, *(old_start + i++));
 					}
 					_alloc.deallocate(old_start, old_cap);
+					old_start = NULL;
 				}
 				else
 				{
@@ -476,7 +427,7 @@ namespace ft
 					return (last);
 				if (_start && _start != _end)
 				{
-					size_type dist = ft::distance(first, last);
+					size_type dist = std::distance(first, last);
 					size_type pos = first - begin();
 					for (size_type i = 0; pos + dist + i < size(); i++)
 						*(_start + pos + i) = *(_start + pos + dist + i);
@@ -498,7 +449,10 @@ namespace ft
 			}
 
 			void	clear()
-			{ erase(begin(), end()); }
+			{
+				if (_start && _start != _end)
+					erase(begin(), end());
+			}
 	};
 	
 	template <class T, class Alloc>

@@ -39,7 +39,7 @@ SRCS = $(addprefix $(DIR_S),$(SOURCES))
 
 OBJS = $(SOURCES:.cpp=.o)
 
-FLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
+FLAGS = -Wall -Werror -Wextra -std=c++98 -g3 #-fsanitize=address
 S_FLAG = NULL
 
 M_STD = -D STD
