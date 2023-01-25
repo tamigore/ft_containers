@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/13 14:26:46 by user42            #+#    #+#              #
-#    Updated: 2022/12/06 16:38:54 by user42           ###   ########.fr        #
+#    Updated: 2023/01/24 21:52:45 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ SRCS = $(addprefix $(DIR_S),$(SOURCES))
 
 OBJS = $(SOURCES:.cpp=.o)
 
-FLAGS = -Wall -Werror -Wextra -std=c++98 -g3 #-fsanitize=address
+FLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
 S_FLAG = NULL
 
 M_STD = -D STD
