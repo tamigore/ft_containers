@@ -171,54 +171,26 @@ namespace ft
 			bool empty() const
 			{ return (!_size ? true : false); }
 
-
 			void reserve(size_type n)
 			{
 				if (n > max_size())
 					throw std::length_error("vector::reserve");
-				else if (_capacity > n)
-					return ;
-				else
+				else if (n > _capacity)
 				{
 					vector tmp = *this;
 					size_type old_size = _size;
 					size_type old_capacity = _capacity;
 					pointer old_start = _start;
 					clear();
+					_alloc.deallocate(old_start, old_capacity);
 					_capacity = n;
 					if (_capacity)
 						_start = _alloc.allocate(_capacity);
-					_size = old_size;
-
-					for (size_type i = 0; i < _size; i++){
-						_alloc.construct(&_start[i], tmp[i]);
-					}
-					_alloc.deallocate(old_start, old_capacity);
+					_size = 0;
+					for (;_size < old_size; _size++)
+						_alloc.construct(&_start[_size], tmp[_size]);
 				}
 			}
-
-			// void reserve(size_type new_cap)
-			// {
-			// 	if (new_cap > max_size())
-			// 		throw (std::length_error("vector::reserve"));
-			// 	else if (new_cap > _capacity)
-			// 	{
-			// 		pointer		old_start = _start;
-			// 		size_type	old_size = _size;
-			// 		size_type	old_cap = _capacity;
-
-			// 		clear();
-			// 		_start = _alloc.allocate(new_cap);
-			// 		_size = 0;
-			// 		_capacity = new_cap;
-			// 		while (_size != old_size)
-			// 		{
-			// 			_alloc.construct(&_start[_size], old_start[_size]);
-			// 			_size++;
-			// 		}
-			// 		_alloc.deallocate(old_start, old_cap);
-			// 	}
-			// }
 
 			// element access:
 			reference operator[](size_type n)
@@ -257,7 +229,7 @@ namespace ft
 			void push_back(const T& x)
 			{
 				if (_capacity < _size + 1)
-					reserve(std::max(size() * 2, (size_type)2));
+					reserve(std::max(size() * 2, (size_type)1));
 				_alloc.construct(&_start[_size++], x);
 			}
 
@@ -278,16 +250,13 @@ namespace ft
 					if (_size + 1 > _capacity)
 						reserve(_size * 2);
 					clear();
-
 					for (iterator it2 = tmp_v.begin(); it2 != tmp_it; it2++)
 						push_back(*it2);
 					push_back(val);
 					for (iterator it2 = tmp_it; it2 != tmp_v.end(); it2++)
 						push_back(*it2);
-
 					return (&_start[tmp_s]);
 				}
-
 				catch(const std::exception &e)
 				{
 					throw std::length_error("cannot create std::vector larger than max_size()");
@@ -310,7 +279,6 @@ namespace ft
 					if (s > _capacity)
 						reserve(std::max(s, _size * 2));
 					clear();
-
 					for (iterator it2 = tmp_v.begin(); it2 != tmp_it; it2++)
 						push_back(*it2);
 					while (i != n)
@@ -318,11 +286,9 @@ namespace ft
 						push_back(val);
 						i++;
 					}
-
 					for (iterator it2 = tmp_it; it2 != tmp_v.end(); it2++)
 						push_back(*it2);
 				}
-
 				catch(const std::exception &e)
 				{
 					throw std::length_error("vector::_M_fill_insert");
@@ -353,8 +319,8 @@ namespace ft
 					for (iterator it2 = tmp_it; it2< tmp_v.end(); it2++)
 						push_back(*it2);
 				}
-
-				catch(const std::exception &e){
+				catch(const std::exception &e)
+				{
 					throw std::length_error("vector::_M_fill_insert"); 
 				}
 			}

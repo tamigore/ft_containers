@@ -1489,6 +1489,43 @@ int vec_string_main()
 	return (0);
 }
 
+int vec_reserve()
+{
+	vector<int>::size_type sz;
+
+	vector<int> foo;
+	sz = foo.capacity();
+	cout << "making foo grow:\n";
+	for (int i=0; i<100; ++i)
+	{
+		foo.push_back(i);
+		if (sz!=foo.capacity())
+		{
+		sz = foo.capacity();
+		cout << "capacity changed: " << sz << '\n';
+		}
+	}
+
+	vector<int> bar;
+	sz = bar.capacity();
+	bar.reserve(100);   // this is the only difference with foo above
+	cout << "making bar grow:\n";
+	for (int i=0; i<100; ++i)
+	{
+		bar.push_back(i);
+		if (sz != bar.capacity())
+		{
+			sz = bar.capacity();
+			cout << "capacity changed: " << sz << '\n';
+		}
+	}
+	try
+	{
+		bar.reserve(bar.max_size() * 2);
+	}
+	catch(std::exception& e) { cout << e.what(); }
+	return 0;
+}
 
 int	vector_tester()
 {
@@ -1508,7 +1545,8 @@ int	vector_tester()
 	vec_relational_op();
 	vec_rite2();
 	vec_rite_equ();
-	main_mazoi();
 	vec_string_main();
+	main_mazoi();
+	vec_reserve();
 	return (1);
 }
